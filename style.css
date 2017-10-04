@@ -1,0 +1,74 @@
+#sidebar {
+  width: 450px;
+}
+
+.panel-heading{
+   width: 450px;
+}
+.panel-body{
+  width: 450px;
+  margin-bottom: 15px;
+}
+.feature-row {
+  cursor: pointer;
+  width: 450px;
+}
+
+/* Query widget */
+#btnRunQuery {
+  position: absolute;
+  margin-top: 10px;
+  margin-left: 305px;
+  z-index: 1001;
+}
+
+.pagination, .dataTables_info {
+  font-size: 10px;
+}
+
+/* Shift the Data Tables Search box to the left to fit the narrow sidebar */
+#tblQueryResults_filter {
+  margin-left: -28px;
+  margin-top: 10px;	
+}
+
+table.dataTable {
+	font-size: 12px;
+}
+
+div.dataTables_wrapper div.dataTables_paginate {
+	text-align: center;
+}
+
+#drawQueryWidget {
+  display: none;
+  height: 20px;
+  margin-top: 10px;
+}
+
+#queryDrawControlHelp {
+  position: absolute;
+  top: 35px;
+  left: 35px;
+}
+
+.airbnb {
+  background-color: #0cb9f9;
+}
+
+.airbnb div.cluster-25 {
+  background-color: rgba(12, 185, 249, 0.5);
+  margin-top: -2px !important;
+}
+
+.airbnb div.cluster-35 {
+  background-color: rgba(18, 127, 168, 0.5);
+}
+
+.airbnb div.cluster-45 {
+  background-color: rgba(14, 91, 119, 0.5);
+}
+
+.airbnb div.cluster-55 {
+  background-color: rgba(14, 91, 119, 0.5);
+}
