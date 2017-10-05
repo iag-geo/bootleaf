@@ -48,11 +48,11 @@ The application comprises:
 
 Use these steps to create a map based on the current version of the Bootleaf template:
 
-- download the code from [here](https://github.customerlabs.com.au/bootleafcl/geo_web/archive/master.zip)
+- download the code from [here](https://github.com/iag-geo/bootleaf/archive/master.zip)
 - unzip the file into a temp directory
-- copy the _bootleaf_ directory from *geo_web-master\Leaflet\bootleaf* into a suitable directory on VMGEOSPATIALDEV
+- copy the _bootleaf_ directory from *geo_web-master\Leaflet\bootleaf* into a suitable directory on your server
 - rename the *bootleaf* folder to the name of your app (*your_app*)
-- open your application via http://vmgeospatialdev/path/your_app and verify that it works correctly
+- open your application via http://your_server/path/your_app and verify that it works correctly
 
 **Deployment and upgrades**
 - to deploy your app to another server, copy the *your_app* directory to the server. This will include both the Bootleaf code (in the _src_ directory) and your custom app as a stand-alone package
@@ -65,7 +65,7 @@ All configuration options for the map are controlled via the *config.js* file, s
 The format of this file is JSON, which uses key/value pairs holding parameters and their values, eg:
 
 ```
-"title": "Location Engineering template map",
+"title": "Bootleaf template map",
 "start": {
 	"center": [42, -85],
 	"zoom": 5,
