@@ -128,6 +128,13 @@ Various basemaps may be included on the map, by listing the basemap IDs as shown
  
 (MapBox Basemaps require a valid `mapboxKey` parameter in the config file)
 
+[Bing basemaps](https://developers.arcgis.com/javascript/3/jsapi/vetiledlayer-amd.html):
+ - Aerial
+ - AerialWithLabels
+ - Road
+
+(Bing basemaps require a valid `bing_key` parameter in the config file)
+
 [Leaflet Tiled basemaps](http://leafletjs.com/reference-1.0.2.html#tilelayer):
  - `OpenStreetMap`
 
