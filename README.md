@@ -35,6 +35,7 @@ Additional functionality includes:
  - spatial Bookmarks
  - address search using [OpenStreetMap](https://nominatim.openstreetmap.org/), Google or ArcGIS
  - ability to share the map with current location and visible layers
+ - tooltips and info-windows
 
 The application comprises:
  - `index.html` - defines the elements on the page, including the map, sidebar, navigation, buttons, etc. References all of the other files
