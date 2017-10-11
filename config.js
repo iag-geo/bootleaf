@@ -171,7 +171,7 @@ var config = {
 			"layers": [3],
 			"format": 'png24',
 			"transparent": true,
-			"layerDefs": {3:"POP2000 > 1000000"},
+			//"layerDefs": {3:"POP2000 > 1000000"},
 			"useCors": false,
 			"visible": false,
 			"identify": {
