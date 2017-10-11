@@ -178,7 +178,7 @@ var config = {
 				"layerLabel": "Census counties",
 				"layerName": "Coarse Counties",
 				"primaryField": "NAME",
-				"fields": [
+				"outFields": [
 					{"name": "STATE_NAME", "alias": "State"},
 					{"name": "POP2007", "alias": "Population"}
 				],
@@ -213,7 +213,7 @@ var config = {
 			"identify": {
 				"layerName": "states",
 				"primaryField": "STATE_NAME",
-				"fields": [
+				"outFields": [
 					{"name": "STATE_NAME", "alias": "State"},
 					{"name": "POP2007", "alias": "Population", "thousands": true},
 					{"name": "POP07_SQMI", "alias": "Population density", "decimals": 0}
