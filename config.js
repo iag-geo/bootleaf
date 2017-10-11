@@ -33,7 +33,7 @@ var config = {
 			"position": "bottomleft"
 		},
 		"bookmarks": {
-			"position": "topleft",
+			"position": "bottomright",
 			"places": [
 				{
 				"latlng": [
