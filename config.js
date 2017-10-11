@@ -8,8 +8,8 @@ var config = {
 		"zoomControl": false
 	},
 	"about": {
-		"title": "Add a map title here",
-		"contents": "<p>Add the About page's contents here</p>"
+		"title": "Bootleaf application template",
+		"contents": "<p>This is an open-source version of the excellent <a href='https://github.com/bmcbride/bootleaf'>Bootleaf map </a>started by Bryan McBride.</p><p>It's designed for rapid web map development. See <a href='https://github.com/iag-geo/bootleaf'>https://github.com/iag-geo/bootleaf</a> for more information.</p><p>Chage this message in the config file</p>"
 	},
 	"controls": {
 		"zoom": {
