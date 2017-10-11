@@ -696,6 +696,7 @@ function setBasemap(basemap){
     var options = {
       "bingMapsKey": config.bing_key,
       "imagerySet": basemap.id
+    }
     bootleaf.basemapLayer = L.tileLayer(basemap.url, options);
   } else if (basemap.type === 'mapbox'){
     var mapboxKey = config.mapboxKey || "";
