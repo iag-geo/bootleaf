@@ -50,7 +50,7 @@ Use these steps to create a map based on the current version of the Bootleaf tem
 
 - download the code from [here](https://github.com/iag-geo/bootleaf/archive/master.zip)
 - unzip the file into a temp directory
-- copy the _bootleaf_ directory from *geo_web-master\Leaflet\bootleaf* into a suitable directory on your server
+- copy the _bootleaf_ directory into a suitable directory on your server
 - rename the *bootleaf* folder to the name of your app (*your_app*)
 - open your application via http://your_server/path/your_app and verify that it works correctly
 
