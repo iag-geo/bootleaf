@@ -105,28 +105,31 @@ When editing these values, ensure that the key *names* are quoted. *Textual valu
 ## [Basemaps](#basemaps)
 Various basemaps may be included on the map, by listing the basemap IDs as shown below. The first basemap listed is the default.
 
-`"basemaps" : ['Streets', 'Gray', 'Oceans']`
+`"basemaps" : ['esriStreets', 'MapboxLight', 'OpenStreetMap']`
 
 [Esri basemaps](https://developers.arcgis.com/javascript/3/jsapi/esri.basemaps-amd.html):
- - Streets
- - Topographic
- - Imagery
- - ShadedRelief
- - Terrain
- - Gray
- - DarkGray
- - NationalGeographic
- - Oceans
+ - `esriStreets`
+ - `esriTopographic`
+ - `esriImagery`
+ - `esriShadedRelief`
+ - `esriTerrain`
+ - `esriGray`
+ - `esriDarkGray`
+ - `esriNationalGeographic`
+ - `esriOceans`
 
-[Bing basemaps](https://developers.arcgis.com/javascript/3/jsapi/vetiledlayer-amd.html):
- - Aerial
- - AerialWithLabels
- - Road 
-
-(Bing Basemaps require a valid `bing_key` parameter)
+[MapBox basemaps](https://www.mapbox.com/api-documentation/#maps)
+- `MapboxStreets`
+- `MapboxLight`
+- `MapboxDark`
+- `MapboxSatellite`
+- `MapboxSatelliteStreets`
+- `MapboxHighContrast`
+ 
+(MapBox Basemaps require a valid `mapboxKey` parameter in the config file)
 
 [Leaflet Tiled basemaps](http://leafletjs.com/reference-1.0.2.html#tilelayer):
- - OpenStreetMap
+ - `OpenStreetMap`
 
 ![basemaps screenshot](https://i.imgur.com/ja3Z9q1.png)
 

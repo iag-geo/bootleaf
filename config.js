@@ -50,8 +50,9 @@ var config = {
 		}
 	},
 	// "activeTool": "identify", // options are identify/coordinates/queryWidget
-	"basemaps": ['Gray', 'DarkGray', 'Streets', 'OpenStreetMap'],
-	"bing_key": "abcxyz",
+	"basemaps": ['esriGray', 'esriDarkGray', 'esriStreets', 'OpenStreetMap'],
+	"bing_key": "enter your Bing Maps key",
+	"mapboxKey": "enter your MapBox key",
 	// "defaultIcon": {
 	// 	"imagePath": "http://leafletjs.com/examples/custom-icons/",
 	// 	"iconUrl": "leaf-green.png",

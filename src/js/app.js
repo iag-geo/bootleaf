@@ -15,20 +15,23 @@ var bootleaf = {
   "queryTasks": [],
   "queryReults": {},
   "visibleLayers": [],
-  "basemaps": [ 
-    {"id": "Streets", "type": "esri", "name": "streets"},
-    {"id": "Gray", "type": "esri", "name": "light gray"}, 
-    {"id": "Topographic", "type": "esri", "name": "topo"},
-    {"id": "Imagery", "type": "esri", "name": "satellite"},
-    {"id": "ShadedRelief", "type": "esri", "name": "shaded relief"},
-    {"id": "Terrain", "type": "esri", "name": "terrain"},
-    {"id": "DarkGray", "type": "esri", "name": "dark gray"},
-    {"id": "NationalGeographic", "type": "esri", "name": "National Geographic"},
-    {"id": "Oceans", "type": "esri", "name": "oceans"},
-    {"id": "OpenStreetMap", "type": "tiled", "name": "OpenStreetMap", "url": "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"},
-    {"id": "Aerial", "type": "bing", "name": "Bing satellite"},
-    {"id": "AerialWithLabels", "type": "bing", "name": "Bing satellite labels"},
-    {"id": "Road", "type": "bing", "name": "Bing streets"}
+  "basemaps": [
+    {"id": "MapboxStreets", "type": "mapbox", "theme": "streets", "label": "Streets (MapBox)"},
+    {"id": "MapboxLight", "type": "mapbox", "theme": "light", "label": "Light (MapBox)"},
+    {"id": "MapboxDark", "type": "mapbox", "theme": "dark", "label": "Dark (MapBox)"},
+    {"id": "MapboxSatellite", "type": "mapbox", "theme": "satellite", "label": "Satellite (MapBox)"},
+    {"id": "MapboxSatelliteStreets", "type": "mapbox", "theme": "streets-satellite", "label": "Streets with Satellite (MapBox)"},
+    {"id": "MapboxHighContrast", "type": "mapbox", "theme": "high-contrast", "label": "High-contrast (MapBox)"},
+    {"id": "esriStreets", "type": "esri", "theme": "Streets", "label": "Streets (ArcGIS)"},
+    {"id": "esriGray", "type": "esri", "theme": "Gray", "label": "Light gray (ArcGIS)"}, 
+    {"id": "esriTopographic", "type": "esri", "theme": "Topograhic", "label": "Topographics (ArcGIS)"},
+    {"id": "esriImagery", "type": "esri", "theme": "Imagery", "label": "Satellite (ArcGIS)"},
+    {"id": "esriShadedRelief", "type": "esri", "theme": "ShadedRelief", "label": "Shaded relief (ArcGIS)"},
+    {"id": "esriTerrain", "type": "esri", "theme": "Terrain", "label": "Terrain (ArcGIS"},
+    {"id": "esriDarkGray", "type": "esri", "theme": "DarkGray", "label": "Dark gray (ArcGIS)"},
+    {"id": "esriNationalGeographic", "type": "esri", "theme": "NationalGeographic", "label": "National Geographic (ArcGIS)"},
+    {"id": "esriOceans", "type": "esri", "theme": "Oceans", "label": "Oceans (ArcGIS)"},
+    {"id": "OpenStreetMap", "type": "tiled", "label": "OpenStreetMap", "url": "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"}
   ]
 };
 
@@ -494,11 +497,11 @@ $(document).ready(function(){
   $.map( bootleaf.basemaps || [], function( basemap, i ) {
     if(config.basemaps === undefined || $.inArray(basemap.id, config.basemaps) > -1){
       var html = '<li data-basemapId="' + basemap.id + '">';
-      html += '<a href="#" data-toggle="collapse" data-target=".navbase-collapse.in" class="liBasemap" data-type="' + basemap.type + '"';
+      html += '<a href="#" data-toggle="collapse" data-target=".navbase-collapse.in" class="liBasemap" data-type="' + basemap.type + '" data-theme="' + basemap.theme + '"';
       if(basemap.url){
         html += 'data-url="' + basemap.url + '"';
       }
-      html += ' data-id="' + basemap.id + '">' + basemap.name + '</a></li>';
+      html += ' data-id="' + basemap.id + '">' + basemap.label + '</a></li>';
       $("#ulBasemap").append(html);
     }
 
@@ -525,7 +528,11 @@ $(document).ready(function(){
       // Update the Active class for this basemap
       $("#ulBasemap li").removeClass("active");
       $('*[data-basemapId="' + this.id + '"]').addClass("active");
-      var basemap = {"type": this.dataset['type'], "id": this.dataset.id};
+      var basemap = {
+        "type": this.dataset['type'],
+        "id": this.dataset.id,
+        "theme": this.dataset.theme
+      };
       if (this.dataset['url']) {basemap.url = this.dataset['url']}
       setBasemap(basemap);
     });
@@ -672,19 +679,34 @@ function addLayer(layer){
 
 function setBasemap(basemap){
   if (bootleaf.basemapLayer) {bootleaf.map.removeLayer(bootleaf.basemapLayer);}
+  var options = {
+    "maxZoomLevel": 23,
+    "maxZoom": 23,
+    "maxNativeZoom": 19,
+  }
   if (basemap.type === "esri") {
-    bootleaf.basemapLayer = L.esri.basemapLayer(basemap.id);
+    if ($.inArray(basemap.id, ["esriGray", "esriDarkGray"]) > -1) {
+      options.maxNativeZoom = 16;
+    }
+    var esriTheme = basemap.theme || "Streets";
+    bootleaf.basemapLayer = L.esri.basemapLayer(esriTheme, options);
   } else if (basemap.type === 'tiled'){
-    bootleaf.basemapLayer = L.tileLayer(basemap.url);
+    bootleaf.basemapLayer = L.tileLayer(basemap.url, options);
   } else if (basemap.type === 'bing'){
     var options = {
       "bingMapsKey": config.bing_key,
       "imagerySet": basemap.id
+    bootleaf.basemapLayer = L.tileLayer(basemap.url, options);
+  } else if (basemap.type === 'mapbox'){
+    var mapboxKey = config.mapboxKey || "";
+    if (mapboxKey === '' || mapboxKey === undefined){
+      $.growl.warning({ title: "Map Box error", message: "Ensure that you have specified a valid MapBox key in the config file"});
     }
-    bootleaf.basemapLayer = L.tileLayer.bing(options);
+    var mapboxTheme = basemap.theme || "streets";
+    bootleaf.basemapLayer = L.tileLayer("http://a.tiles.mapbox.com/v4/mapbox." + mapboxTheme + "/{z}/{x}/{y}.png?access_token=" + mapboxKey, options);
   }
   bootleaf.map.addLayer(bootleaf.basemapLayer)
-  bootleaf.basemapLayer.bringToBack();
+  // bootleaf.basemapLayer.bringToBack();
   bootleaf.currentBasemap = basemap.id;
   $('*[data-basemapId="' + basemap.id + '"]').addClass("active");
 }
