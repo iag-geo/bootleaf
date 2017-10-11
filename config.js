@@ -21,7 +21,7 @@ var config = {
 			"position": "topleft",
 			"placeholder": "Search for a location",
 			"type": "Google", // OpenStreetMap, Google, ArcGIS
-			"suffix": "Australia" // optional keyword to append to every search
+			//"suffix": "Australia" // optional keyword to append to every search
 		},
 		"TOC": {
 			//http://leafletjs.com/reference-1.0.2.html#control-layers-option
