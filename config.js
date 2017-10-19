@@ -3,7 +3,7 @@ var config = {
 	"start": {
 		// "maxZoom": 16,
 		"center": [38.203,-99.799],
-		"zoom": 5,
+		"zoom": 4,
 		"attributionControl": false,
 		"zoomControl": false
 	},
@@ -66,7 +66,7 @@ var config = {
 	"tocCategories": [
 		{
 			"name": "GeoJSON layers",
-			"layers": ["theatres", "museums"]
+			"layers": ["theatres", "museums", "us_density"]
 		},
 		{
 			"name": "ArcGIS Layers",
@@ -74,7 +74,7 @@ var config = {
 		},
 		{
 			"name": "WMS/WFS layers",
-			"layers": ["nearmap", "US_population"],
+			"layers": ["US_population", "countries"],
 			"exclusive": false
 		}
 	],
@@ -91,6 +91,51 @@ var config = {
 		"stroke": true
 	},
 	"layers": [
+	{
+    "id": "theatres",
+    "name": "Theatres",
+    "type": "geoJSON",
+    "cluster": true,
+    "showCoverageOnHover": false,
+    "minZoom": 12,
+    "url": "./data/theatres.geojson",
+    "icon": {
+        "iconUrl": "./img/theater.png",
+        "iconSize": [24,28]
+    },
+    "style": {
+    "stroke": true,
+    "fillColor": "#00FFFF",
+    "fillOpacity": 0.5,
+    "radius": 10,
+    "weight": 0.5,
+    "opacity": 1,
+    "color": '#727272',
+    },
+	  "visible": false
+	},
+	{
+    "id": "museums",
+    "type": "geoJSON",
+    "cluster": true,
+    "showCoverageOnHover": false,
+    "minZoom": 12,
+    "url": "./data/museums.geojson",
+    "style": {
+        "stroke": true,
+        "fillColor": "#00FFFF",
+        "fillOpacity": 0.5,
+        "radius": 10,
+        "weight": 0.5,
+        "opacity": 1,
+        "color": '#727272'
+		  },
+		  "icon": {
+		      "iconUrl": "./img/museum.png",
+		      "iconSize": [24,28]
+		  },
+		  "visible": false
+		},
 		{
 			"id": "trees",
 			"name": "Heritage trees",
@@ -241,7 +286,7 @@ var config = {
 			"id": "US_population",
 			"name": "US Population",
 			"type": "wmsTiledLayer",
-			"url": "https://demo.geo-solutions.it/geoserver/topp/wms",
+			"url": "https://demo.geo-solutions.it/geoserver/wfs",
 			"layers": "topp:states",
       "visible": false,
       "transparent": true,
@@ -267,6 +312,22 @@ var config = {
 				{"name": "FAMILIES", "alias": "No. Families", "thousands": true},
 				{"name": "LAND_KM", "alias": "sq. km", "thousands": true, "decimals": 1, "hidden": true},
 			]
+		},
+		{
+			"id": "countries",
+			"name": "World countries",
+			"type": "WFS",
+			"url": "https://demo.boundlessgeo.com/geoserver/opengeo/wfs",
+			"typeName": "opengeo:countries",
+      "visible": true,
+      "popup": true,
+      "geomField": "the_geom",
+      "outFields": [
+      	{"name": "name", "alias": "Name"},
+      	{"name": "economy", "alias": "Economy"},
+      	{"name": "income_grp", "alias": "Income Group"},
+      	{"name": "pop_est", "alias": "Population estimate", "thousands": true}
+      ]
 		}
 	]
 }

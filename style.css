@@ -52,23 +52,18 @@ div.dataTables_wrapper div.dataTables_paginate {
   left: 35px;
 }
 
-.airbnb {
-  background-color: #0cb9f9;
+.legend {
+  text-align: left;
+  line-height: 18px;
+  color: #555;
+  background-color: #727272;
+  padding: 10px;
 }
 
-.airbnb div.cluster-25 {
-  background-color: rgba(12, 185, 249, 0.5);
-  margin-top: -2px !important;
-}
-
-.airbnb div.cluster-35 {
-  background-color: rgba(18, 127, 168, 0.5);
-}
-
-.airbnb div.cluster-45 {
-  background-color: rgba(14, 91, 119, 0.5);
-}
-
-.airbnb div.cluster-55 {
-  background-color: rgba(14, 91, 119, 0.5);
+.legend i {
+  width: 18px;
+  height: 18px;
+  float: left;
+  margin-right: 8px;
+  opacity: 0.7;
 }
