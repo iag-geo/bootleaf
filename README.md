@@ -13,18 +13,18 @@ BootLeaf
 
 ### Introduction
 
-This is an update to the excellent [Bootleaf](https://github.com/bmcbride/bootleaf) code written by [Bryan McBride](https://github.com/bmcbride), which incorporates the responsive framework [Bootstrap](http://getbootstrap.com) with the [Leaflet](http://leafletjs.com) mapping API.
+This is an update to the excellent [Bootleaf](https://github.com/bmcbride/bootleaf) code written by [Bryan McBride](https://github.com/bmcbride), which incorporates the responsive framework [Bootstrap](http://getbootstrap.com) with the lightweight [Leaflet](http://leafletjs.com) mapping API.
 
 This update decouples the application logic from the map contents, and so provides a framework for rapid creation of new maps by simply updating a configuration file.
 
 ![bootleaf screenshot](https://i.imgur.com/DZbDs86.png)
 
 Support is provided for:
- - ArcGIS Server feature, dynamic and tiled layers
- - clustering of WFS, GeoJSON and ArcGIS Server feature layers
  - WMS tiled layers
  - WFS layers
  - GeoJSON layers
+ - ArcGIS Server feature, dynamic and tiled layers
+ - Clustering of WFS, GeoJSON and ArcGIS Server feature layers
 
 Note - WMS and WFS layers have been tested in GeoServer only. [CORS](http://suite.opengeo.org/docs/latest/sysadmin/cors/index.html) and [jsonp](https://www.gaiaresources.com.au/json-with-geoserver-and-leaflet/) should be enabled on GeoServer for best results.
 
@@ -32,36 +32,36 @@ Additional functionality includes:
  - [Table of Contents](https://github.com/ismyrnow/Leaflet.groupedlayercontrol) with support for groups and radio buttons
  - Identify function for WMS and ArcGIS Dynamic layers
  - Query Widget, for finding features within ArcGIS Feature and Dynamic layers
- - spatial Bookmarks
- - address search using [OpenStreetMap](https://nominatim.openstreetmap.org/), Google or ArcGIS
- - ability to share the map with current location and visible layers
- - tooltips and info-windows
+ - Spatial Bookmarks
+ - Address search using [OpenStreetMap](https://nominatim.openstreetmap.org/), Google or ArcGIS
+ - Ability to share the map with current location and visible layers
+ - Tooltips and info-windows
 
 The application comprises:
  - `index.html` - defines the elements on the page, including the map, sidebar, navigation, buttons, etc. References all of the other files
- - `config.js` - configuration file, which personalises each map. Specify the starting extent, basemap, controls, and layers
- - `style.css` - over-write the default styles to personalise this map
- - `custom.js` - add custom functionality to personalise this map
+ - `config.js` - configuration file, which personalises each map. Specifies the starting extent, basemap, controls, and layers
+ - `style.css` - over-writes the default styles to personalise the map
+ - `custom.js` - adds custom functionality to personalise the map
  - `src/...` - the directory containing the core Bootleaf functionality
- - `data` - stores any local GeoJSON datasets which are not hosted in a GIS server
+ - `data` - stores any local GeoJSON datasets which are not hosted on a server
 
 ## [Installation](#installation)
 
 Use these steps to create a map based on the current version of the Bootleaf template:
 
-- download the code from [here](https://github.com/iag-geo/bootleaf/archive/master.zip)
-- unzip the file into a temp directory
-- copy the _bootleaf_ directory into a suitable directory on your server
-- rename the *bootleaf* folder to the name of your app (*your_app*)
-- open your application via http://your_server/path/your_app and verify that it works correctly
+1. download the code from [here](https://github.com/iag-geo/bootleaf/archive/master.zip)
+2. unzip the file into a temp directory
+3. copy the _bootleaf_ directory into a suitable directory on your server
+4. rename the *bootleaf* folder to the name of your app (*your_app*)
+5. open your application via http://your_server/path/your_app and verify that it works correctly
 
 **Deployment and upgrades**
 - to deploy your app to another server, copy the *your_app* directory to the server. This will include both the Bootleaf code (in the _src_ directory) and your custom app as a stand-alone package
-- in the future, to update your app to the latest version of the Bootleaf template, download the code again and replace the _src_ in your local version with the _src_ latest version (ensuring that you don't over-write your custom config file)
+- in the future, to update your app to the latest version of the Bootleaf template, download the code again and replace the _src_ in your local version with the _src_ latest version (ensuring you don't over-write your custom config file)
 
 ## [Customisation](#customisation)
 
-All configuration options for the map are controlled via the *config.js* file, so open this file in your code editor.
+All configuration options for the map are controlled via the *config.js* file, so open this file in your code editor and go for it!
 
 The format of this file is JSON, which uses key/value pairs holding parameters and their values, eg:
 
@@ -76,19 +76,19 @@ The format of this file is JSON, which uses key/value pairs holding parameters a
 }
 ```
 
-When editing these values, ensure that the key *names* are quoted. *Textual values* should be quoted, but *numerical values and booleans* should not be BOM river region namequoted. Un-needed parameters may be commented out using /\* ... \*/ notation around the entire parameter.
+When editing these values, ensure that the key *names* are quoted. *Textual values* should be quoted, but *numerical values and booleans* should not be quoted. Un-needed parameters may be commented out using /\* ... \*/ notation around the entire parameter.
 
 #### Parameter explanations
 
 - `title` : displayed in the header of the browser
 - `start` : used to set the inital map extent, and other Leaflet [initiation parameters](http://leafletjs.com/reference-1.0.2.html#map-factory)
 - `about` : displayed in the map's About panel
-- `bing_key` : a license key to use Bing Maps
-- `controls` : used to configure individual map controls. If a control is commented out, it will not be shown. Valid position entries are *topleft*, *topright*, *bottomleft*, *bottomright*
+- `bing_key` : a license key to use Bing Maps basemap tiles
+- `controls` : used to configure individual map controls. If a control is commented out, it will not be shown. Valid positions are *topleft*, *topright*, *bottomleft*, *bottomright*
 	- `zoom` : specify the location of the zoom in/out buttons
 	- `leafletGeocoder` : configure the [geocoder](https://github.com/perliedman/leaflet-control-geocoder)
 		- `type`: `Google/OpenStreetMap/ArcGIS`
-		- `suffix`: an optional keyword to append to every search transparently to the user. eg, use "Australia" to tell the geocoder to search within Australia only
+		- `suffix`: an optional keyword to filter each search. eg, use "Australia" to tell the geocoder to search within Australia only
 	- `TOC` : configure the default [table of contents](https://github.com/ismyrnow/Leaflet.groupedlayercontrol) (see below for further configuration options)
 	- `history` : display next/previous buttons on the map, to enable moving forward/back through the extent history
 	- `bookmarks` : spatial bookmarks may be saved to the config file, or added via the UI. In the latter case they're accessible via cookies on the current user's machine. Follow the pattern of the sample bookmarks to create new instances
@@ -337,7 +337,7 @@ The sample file includes code to demonstrate how to use a user-defined query str
 
 ## [Known issues and other problems](#issues)
 
-- the `exclusive` option in the Table of Contents doesn't always work well when the map first opens - it may be out of synch with what's displayed on the map. The workaround is to have all layers switched off by default when they're inside an exclusive TOC group. Once a layer has been checked on in the TOC, the behaviour reverts to normal.
+- the `exclusive` option in the Table of Contents doesn't always work well when the map first opens - it may be out of sync with what's displayed on the map. The workaround is to have all layers switched off by default when they're inside an exclusive TOC group. Once a layer has been checked on in the TOC, the behaviour reverts to normal.
 - related to the above, the Identify tool may not work against the correct layers if the Identify tool is active when the map loads with exclusive TOC groups. The workaround is to not have the Identify tool active when the map loads, when using an exclusive TOC group. Once the Identify tool is enabled using the > Tools > Identify option, the behaviour reverts to normal.
 
-Contact [Steve](https://github.com/slead) if you encouter any problems, and/or log bugs using the [Issues](https://github.com/bootleafcl/geo_web/issues) link on GitHub.
+Contact [Steve](https://github.com/slead) if you encounter any problems, and/or log bugs using the [Issues](https://github.com/bootleafcl/geo_web/issues) link on GitHub.
