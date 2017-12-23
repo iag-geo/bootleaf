@@ -126,7 +126,7 @@ Various basemaps may be included on the map, by listing the basemap IDs as shown
 - `MapboxSatellite`
 - `MapboxSatelliteStreets`
 - `MapboxHighContrast`
- 
+
 (MapBox Basemaps require a valid `mapboxKey` parameter in the config file)
 
 [Bing basemaps](https://developers.arcgis.com/javascript/3/jsapi/vetiledlayer-amd.html):
@@ -142,7 +142,7 @@ Various basemaps may be included on the map, by listing the basemap IDs as shown
 ![basemaps screenshot](https://i.imgur.com/ja3Z9q1.png)
 
 If no basemaps are listed in the config file, all basemaps will be available on the map.
- 
+
 ## [Layers](#layers)
 
 Support for various layer types is included in this Bootleaf update, including ArcGIS Server (feature, dynamic and tiled), WMS tiled and GeoJSON, with more types to be added in future.
@@ -226,7 +226,7 @@ Other parameters (as described in the Supported Layer Types links above) may be 
 
 ## [Table of Contents](#table-of-contents)
 
-The [table of contents](http://leafletjs.com/reference-1.0.2.html#control-layers-option) may optionally be used to allow users to switch layers on/off. 
+The [table of contents](http://leafletjs.com/reference-1.0.2.html#control-layers-option) may optionally be used to allow users to switch layers on/off.
 
 ![Table of Contents screenshot](https://i.imgur.com/V9Ssnke.png)
 
@@ -243,12 +243,15 @@ Include `TOC` in the `controls` section to enable this option. By default the TO
 		"name": "Group name 2",
 		"layers": ["layerID3","layerID4"]
 	}
-]
+],
+"toggleAll": true
 ```
 
 Create groups using the syntax `{"name": "X"}` and add layers to this group using the syntax `{"layers": [list of layer IDs]}`, where the layer IDs match the IDs set up in the Layer Configuration section below.
 
 The `exclusive` flag applies radio buttons to layers within that group, such that only one layer may be visible at any time. This replaces the default checkbox functionality.
+
+The `toggleAll` flag adds buttons to the top of the Table of Contents, allowing all layers to be toggled on/off quickly.
 
 *Note: this Table of Contents widget does not have the ability to control the layer draw order, so the last layer checked on always draws on top of other layers. This will be improved upon in the future.*
 
@@ -309,7 +312,7 @@ To enable this, add the `queryWidget` object as an option under an ArcGIS Dynami
 		{"name": "AREASQKM", "alias": "Area (sq km)", "decimals": 2},
 		{"name": "OBJECTID", "hidden": true}
 	]
-}	
+}
 ```
 
 #### Query Widget Parameters
