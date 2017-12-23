@@ -23,7 +23,7 @@ var bootleaf = {
     {"id": "MapboxSatelliteStreets", "type": "mapbox", "theme": "streets-satellite", "label": "Streets with Satellite (MapBox)"},
     {"id": "MapboxHighContrast", "type": "mapbox", "theme": "high-contrast", "label": "High-contrast (MapBox)"},
     {"id": "esriStreets", "type": "esri", "theme": "Streets", "label": "Streets (ArcGIS)"},
-    {"id": "esriGray", "type": "esri", "theme": "Gray", "label": "Light gray (ArcGIS)"}, 
+    {"id": "esriGray", "type": "esri", "theme": "Gray", "label": "Light gray (ArcGIS)"},
     {"id": "esriTopographic", "type": "esri", "theme": "Topograhic", "label": "Topographics (ArcGIS)"},
     {"id": "esriImagery", "type": "esri", "theme": "Imagery", "label": "Satellite (ArcGIS)"},
     {"id": "esriShadedRelief", "type": "esri", "theme": "ShadedRelief", "label": "Shaded relief (ArcGIS)"},
@@ -133,7 +133,7 @@ $(document).ready(function(){
           return marker;
         };
       }
-      
+
       if (layerType === "agsFeatureLayer") {
 
         // If the config file includes 'outFields', convert it to 'fields' - a simple listing of field names
@@ -256,7 +256,7 @@ $(document).ready(function(){
         }
         layer.layerConfig = layerConfig;
         bootleaf.wfsLayers.push(layer);
-        
+
       } else if (layerType === "tileLayer") {
         layer = L.tileLayer(layerConfig.url, layerConfig);
       } else if (layerType === "geoJSON") {
@@ -296,7 +296,7 @@ $(document).ready(function(){
                 jqXHR.layer.addData(data);
               });
             }
-            
+
             jqXHR.layer.layerConfig = jqXHR.layerConfig;
             addLayer(jqXHR.layer);
 
@@ -326,13 +326,13 @@ $(document).ready(function(){
           query.layerId = layerConfig.id;
           queries.push(query);
         }
-        bootleaf.queryTasks.push({"layerName": layerConfig.name, "layerId": layerConfig.id, "queries": queries});                    
+        bootleaf.queryTasks.push({"layerName": layerConfig.name, "layerId": layerConfig.id, "queries": queries});
       }
 
       if (layer !== undefined) {
         // Persist the layer's config options with the layer itself
         layer.layerConfig = layerConfig;
-        if (!layerConfig.hidden) {addLayer(layer);} 
+        if (!layerConfig.hidden) {addLayer(layer);}
       }
 
     } catch(err) {
@@ -385,7 +385,7 @@ $(document).ready(function(){
   });
   for (var wkid in bootleaf.projections){
     var def = bootleaf.projections[wkid];
-    proj4.defs('EPSG:' + wkid, def);    
+    proj4.defs('EPSG:' + wkid, def);
   }
 
    /* Highlight layer, used for Identify and Query results */
@@ -430,12 +430,13 @@ $(document).ready(function(){
     if(config.controls.TOC){
       bootleaf.tocOptions['position'] = config.controls.TOC.position || 'topright';
       bootleaf.tocOptions['collapsed'] = config.controls.TOC.collapsed || false;
-      
+      bootleaf.tocOptions['toggleAll'] = config.controls.TOC.toggleAll || false;
+
       bootleaf.TOCcontrol = L.control.groupedLayers(null, bootleaf.layerTOC, bootleaf.tocOptions);
       bootleaf.map.addControl(bootleaf.TOCcontrol);
     }
 
-    // History control  
+    // History control
     if (config.controls.history) {
       try{
         bootleaf.historyControl = new L.HistoryControl(config.controls.history).addTo(bootleaf.map);
@@ -539,8 +540,8 @@ $(document).ready(function(){
 
   } else {
     $("#basemapDropdown").hide();
-  } 
-  
+  }
+
   // Hide the loading indicator
   // TODO - show the loading indicator when something happens
   $("#loading").hide();
@@ -561,7 +562,7 @@ $(document).ready(function(){
       if (bootleaf.identifyLayers && bootleaf.identifyLayers.length > 0){
         configureIdentifyTool();
       }
-     
+
     } else if (config.activeTool === 'coordinates') {
       configureCoordinatesTool();
     } else if (config.activeTool === 'queryWidget'){
@@ -673,7 +674,7 @@ function addLayer(layer){
   if (layer.tocState === undefined){
     layer.tocState = "off";
   }
-  bootleaf.layers.push(layer);   
+  bootleaf.layers.push(layer);
 
 }
 
@@ -794,7 +795,7 @@ function formatValue(value, field){
       } catch(err) {
         console.log("Please ensure that Moment.js has been included");
       }
-      
+
     }
     if (field.thousands !== undefined) {
       value = addThousandsSeparator(value);
@@ -896,14 +897,14 @@ function configureQueryWidget(){
         } else {
           $("#drawQueryWidget").hide();
           bootleaf.queryPolygon.clearLayers()
-        }    
+        }
       });
       $('#chkQueryWithinMapExtent').change(function() {
         if($(this).is(":checked")) {
           $("#chkQueryWithinPolygon").attr('checked', false);
           $("#drawQueryWidget").hide();
           bootleaf.queryPolygon.clearLayers()
-        }    
+        }
       });
 
     } else {
@@ -916,7 +917,7 @@ function configureQueryWidget(){
     $("#sidebarContents").html("<p><span class='info'>There are no query-able layers in the map</span></p>");
     $("#btnRunQuery").off('click', runQueryWidget);
     $("#liQueryWidget").addClass('disabled');
-  }  
+  }
 
   // Update the query field names when the query layer selection changes
   $("#queryWidgetLayer").off("change")
@@ -955,9 +956,9 @@ function updateQueryFields(layerId){
         var option = '<option value="' + fieldName + '" data-fieldtype="' + fieldType + '"';
         if (j===0){
           option += " selected='selected'";
-        }  
+        }
         option += '>' + fieldAlias + "</option>"
-        
+
         fieldOptions.push(option);
       }
     }
@@ -970,7 +971,7 @@ function updateQueryFields(layerId){
   $("#queryWidgetField").on("change", function(){
     updateQueryOperator(this.options[this.selectedIndex]);
   });
-}  
+}
 
 function updateQueryOperator(option){
   // Update the Operators dropdown on the Query widget with the applicable options for this field type
@@ -1020,7 +1021,7 @@ function runQueryWidget() {
   for(var layerIdx=0; layerIdx < config.layers.length; layerIdx++){
     var layer = config.layers[layerIdx];
     if (layer.id === layerId){
-      
+
       if (layer.type === 'agsFeatureLayer'){
         if(layer.url[layer.url.length - 1] === "/") {
           queryUrl = layer.url + "query?";
@@ -1104,7 +1105,7 @@ function runQueryWidget() {
     if (fieldType === 'numeric'){
       query = fieldName + operator + queryText;
     } else {
-      
+
       if(queryText === "*" || queryText === "") {
         if (where === undefined) {
           query = "1=1";
@@ -1166,7 +1167,7 @@ function runQueryWidget() {
       },
       error: function(jqXHR, textStatus, error) {
         handleQueryError("There was a problem running the query")
-        
+
       }
     });
 
@@ -1188,7 +1189,7 @@ function runQueryWidget() {
         queryData['propertyName'] += "," + outFields[oIdx].name;
       }
     }
-    
+
     var query;
     if (fieldType === 'numeric'){
       query = fieldName + operator + queryText;
@@ -1250,9 +1251,9 @@ function runQueryWidget() {
       },
       error: function() {
         handleQueryError("There was a problem running the query")
-        
+
       }
-    }); 
+    });
 
   }
 
@@ -1280,7 +1281,7 @@ function handleQueryResults(data, layerConfig, outFields){
   }
 
   // Add the column names to the output table
-  var thead = "<thead><tr>" 
+  var thead = "<thead><tr>"
   thead += $.map(outFields, function( field, i ) {
     var name = field.alias || field.name;
     return "<th>" + name + "</th>";
@@ -1333,7 +1334,7 @@ function handleQueryResults(data, layerConfig, outFields){
               feature.properties[field.alias] = val;
               if (feature.properties[field.name] !== undefined){
                 delete feature.properties[field.name];
-              } 
+              }
             }
           }
         }
@@ -1356,7 +1357,7 @@ function handleQueryResults(data, layerConfig, outFields){
   try{
     var dtConfig = {
       "dom": '<"top"if<"clear">>rt<"bottom"p<"clear">>',
-      "bFilter" : false,               
+      "bFilter" : false,
       "bLengthChange": false,
       "searching": true,
       "language": {
@@ -1398,7 +1399,7 @@ function handleQueryResults(data, layerConfig, outFields){
               extend: 'csvHtml5',
               text: 'Download results as CSV'
           }]
-      }); 
+      });
     table.buttons( 0, null ).containers().appendTo( $('#exportButtons') );
   } catch(err){
     console.log("There was a problem enabling Data Tables for the Query Widget buttons", err)
@@ -1420,7 +1421,7 @@ function resetQueryOutputTable(){
 /**************************************************************************************************/
 
 function configureIdentifyTool(){
-  
+
   resetSidebar("Identify results");
   $("#sidebar").show("slow");
   switchOffTools();
@@ -1460,7 +1461,7 @@ function runIdentifies(evt) {
     $("#liIdentify").addClass("disabled");
     $("#ajaxLoading").hide();
     return;
-  } 
+  }
   $("#sidebarContents").html('<span id="ajaxLoading"></span>');
   $("#ajaxLoading").show();
   // There is an option not to show the Identify marker
@@ -1652,7 +1653,7 @@ function displayIdentifyResult(layerId, layerName, layerConfig, result){
   if (outFields.length > 0) {
     Object.keys(outFields).map(function(i, field){
       bootleaf.wantedFields.push(outFields[field]['name']);
-    });                
+    });
   }
   for(var field in result.attributes){
     if (bootleaf.wantedFields.indexOf(field) > -1) {
@@ -1686,19 +1687,19 @@ function displayIdentifyResult(layerId, layerName, layerConfig, result){
   output += "</li>";
   $("#" + layerConfig.id).html(output);
 
-  // When clicking on the Identify result, use the guid to determine the 
+  // When clicking on the Identify result, use the guid to determine the
   $(".identifyResult").on("click", function(evt) {
     $(".identifyResult").removeClass("active");
     $(this).addClass("active");
     var feature = bootleaf.identifyResponse[this.dataset['guid']];
-    showHighlight(feature, true);                  
+    showHighlight(feature, true);
   });
   $(".identifyResult").on("mouseover", function(evt) {
     var feature = bootleaf.identifyResponse[this.dataset['guid']];
-    showHighlight(feature, false);                  
+    showHighlight(feature, false);
   });
   $(".identifyResult").on("mouseout", function() {
-    bootleaf.map.removeLayer(bootleaf.highlightLayer);                 
+    bootleaf.map.removeLayer(bootleaf.highlightLayer);
   });
 }
 
@@ -1841,7 +1842,7 @@ function showHighlight(feature, zoom){
   bootleaf.highlightLayer.addTo(bootleaf.map);
 
   if (zoom){
-    // Generate a popup from the attribute information  
+    // Generate a popup from the attribute information
     var popup = "<table class='table table-condensed'>";
     for (field in feature.attributes){
       var value = feature.attributes[field];
@@ -1884,7 +1885,7 @@ function configureShare(){
   var params = ""
   for (key in bootleaf.shareObj){
     var separator;
-    params.indexOf("?") < 0 ? separator = "?" : separator = "&"; 
+    params.indexOf("?") < 0 ? separator = "?" : separator = "&";
     params += separator + key + "=" + bootleaf.shareObj[key];
   }
 
@@ -2072,7 +2073,7 @@ function wfsAjax(layer){
       }
     }
   });
-    
+
 }
 
 // Used to move a Leaflet control from one parent to another (eg put the Draw control on the Query Widget panel)
@@ -2099,4 +2100,33 @@ function round(value, decimals) {
   } catch(err){
     return value;
   }
+}
+
+function allLayersOn(){
+  $.map( bootleaf.layers, function( layer, i ) {
+    var addLayer = true;
+    var layerConfig = layer.layerConfig;
+    var currentZoom = bootleaf.map.getZoom();
+    if (layerConfig.minZoom && currentZoom < layerConfig.minZoom) {
+      addLayer = false;
+    }
+    if (layerConfig.maxZoomLevel && currentZoom > layerCOnfig.maxZoom) {
+      addLayer = false;
+    }
+    if (addLayer){
+      layer.addTo(bootleaf.map);
+    } else {
+      layer.outsideScaleThreshold = true;
+    }
+  });
+  updateTOCcheckboxes();
+}
+
+function allLayersOff(){
+  bootleaf.map.eachLayer(function(layer){
+    if (layer.layerConfig !== undefined) {
+      bootleaf.map.removeLayer(layer);
+    }
+  });
+  updateTOCcheckboxes();
 }

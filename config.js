@@ -27,7 +27,8 @@ var config = {
 			//http://leafletjs.com/reference-1.0.2.html#control-layers-option
 			"collapsed": false,
 			"uncategorisedLabel": "Layers",
-			"position": "topright"
+			"position": "topright",
+			"toggleAll": true
 		},
 		"history": {
 			"position": "bottomleft"
@@ -156,7 +157,7 @@ var config = {
 				{"name": "YEAR", "alias": "Year"},
 				{"name": "OWNER", "alias": "Owner"},
 				{"name": "NOTES", "alias": "Notes"}
-			],	
+			],
 			"visible": true,
 			"queryWidget": {
 				"queries" : [
@@ -189,7 +190,7 @@ var config = {
 			"visible": false,
 			"useCors": false,
 			"popup": true,
-			"fields": ["FID","RROWNER1","RR_CLASS", "RAILROAD", "ABANDONED"], 
+			"fields": ["FID","RROWNER1","RR_CLASS", "RAILROAD", "ABANDONED"],
 			"style": {
 				"stroke": true,
 		    "radius": 10,
@@ -206,7 +207,7 @@ var config = {
 					{"name": "RROWNER1", "alias": "Owner"}
 				],
 				"maxAllowableOffset": 10
-			}					
+			}
 		},
 		{
 			"id": "counties",

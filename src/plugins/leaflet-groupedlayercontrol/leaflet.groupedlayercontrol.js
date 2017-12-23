@@ -93,7 +93,7 @@ L.Control.GroupedLayers = L.Control.extend({
     L.DomEvent.on(container, 'click', L.DomEvent.stopPropagation);
     L.DomEvent.disableClickPropagation(container);
     L.DomEvent.on(container, 'wheel', L.DomEvent.stopPropagation);
- 
+
     var form = this._form = L.DomUtil.create('form', className + '-list');
 
     if (this.options.collapsed) {
@@ -120,6 +120,9 @@ L.Control.GroupedLayers = L.Control.extend({
       this._expand();
     }
 
+    if (this.options.toggleAll) {
+      this._toggleButtons = L.DomUtil.create('div', className + '-toggleButtons', form);
+    }
     this._baseLayersList = L.DomUtil.create('div', className + '-base', form);
     this._separator = L.DomUtil.create('div', className + '-separator', form);
     this._overlaysList = L.DomUtil.create('div', className + '-overlays', form);
@@ -162,6 +165,9 @@ L.Control.GroupedLayers = L.Control.extend({
       return;
     }
 
+    if (this.options.toggleAll) {
+      this._toggleButtons.innerHTML = '<button type="button" id="btnAllOff" onclick="allLayersOff()" class="btn btn-xs">All off</button><button type="button" id="btnAllOn" onclick="allLayersOn()" class="btn btn-xs">All on</button>';
+    }
     this._baseLayersList.innerHTML = '';
     this._overlaysList.innerHTML = '';
     this._domGroups.length = 0;
@@ -204,7 +210,7 @@ L.Control.GroupedLayers = L.Control.extend({
 
     // Ensure that the basemap layer is the lowest layer
     if (bootleaf.basemapLayer !== undefined){
-      bootleaf.basemapLayer.bringToBack();  
+      bootleaf.basemapLayer.bringToBack();
     }
   },
 
