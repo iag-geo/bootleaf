@@ -1,0 +1,210 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Bootleaf Checker</title>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="css/styles.css" rel="stylesheet">
+	<link href="css/custom.css" rel="stylesheet">
+	
+	<!--Custom Font-->
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+	<!--[if lt IE 9]>
+	<script src="js/html5shiv.js"></script>
+	<script src="js/respond.min.js"></script>
+	<![endif]-->
+</head>
+<body>
+	<nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#"><span>Bootleaf</span>Checker</a>
+			</div>
+		</div><!-- /.container-fluid -->
+	</nav>
+	<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+<!-- 		<div class="profile-sidebar">
+			<div class="profile-usertitle">
+				<div class="profile-usertitle-name">Bootleaf app</div>
+			</div>
+			<div class="clear"></div>
+		</div> -->
+		<div class="divider"></div>
+		<ul id="navDetails" class="nav menu">
+			<li><em class="fa fa-dashboard">&nbsp;</em> Total layers: <span id="intTotalLayers"></span></li>
+			<li id="errorLayers" class="parent"><em class="fa fa-navicon">&nbsp;</em> Layers with errors:
+				<ul id="errorLayerList" class="children">
+					<!-- contents inserted from template -->
+				</ul>
+			</li>
+		</ul>
+	</div><!--/.sidebar-->
+
+	<div id="main" class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
+		<!-- contents inserted programatically -->
+	</div>	<!--/.main-->
+	
+	<script id="main-template" type="text/x-handlebars-template">	
+		<div class="row">
+			<div class="col-lg-12">
+				<h3 class="page-header">Map name: {{this.title}}</h3>
+			</div>
+		</div><!--/.row-->
+
+		<div class="row">
+			<div class="col-lg-12">
+				<h4 class="page-header">Layers:</h4>
+			</div>
+			<div id="layerList">
+				<!--contents inserted programatically -->
+			</div>
+		</div><!--/.row-->
+			
+	</script>
+
+	<script id="main-error" type="text/x-handlebars-template">	
+		<div class="row">
+			<div class="col-lg-12">
+				<h3 class="page-header text-danger">There was a problem loading this map's configuration file</h3>
+			</div>
+		</div><!--/.row-->
+	</script>
+
+	<script id="error-layer-name" type="text/x-handlebars-template">
+		<li class="leftPad25">
+			<a href="#{{this.id}}">
+				<span class="fa fa-arrow-right">&nbsp;</span> {{this.id}}
+			</a>
+		</li>
+	</script>
+
+	<script id="layer-error" type="text/x-handlebars-template">	
+		<div class="row">
+			<div class="col-lg-12">
+				<a class="anchor" name="{{this.id}}">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							ID: {{this.id}}
+						</div>
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-lg-12">
+									Name: {{this.name}}
+								</div>
+								<div class="col-lg-12">
+									Type: {{this.type}}
+								</div>
+								<div class="col-lg-12 bottom-15 text-danger">
+									Invalid URL: {{this.url}}
+								</div>
+							</div>
+						</div>
+					</div>
+				</a>
+			</div>
+		</div><!--/.row-->
+	</script>
+
+	<script id="layer-template" type="text/x-handlebars-template">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="panel panel-default">
+					{{#if this.id}}
+						<div class="panel-heading">
+							Id: {{this.id}}
+						</div>
+					{{else}}
+						<div class="panel-heading error">
+							NO ID FOUND
+						</div>
+					{{/if}}
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-lg-12">
+								Name: {{this.name}}
+							</div>
+							<div class="col-lg-12">
+								Type: {{this.type}}
+							</div>
+							<div class="col-lg-12 bottom-15">
+								URL: {{{link this.url this.url}}}
+							</div>
+						</div>
+						<div id={{this.id}}></div>
+							<!-- inserted via template -->
+						</div>
+					</div>
+				</div>
+			</div>
+		</div><!--/.row-->	
+	</script>
+
+	<script id="outfields-template" type="text/x-handlebars-template">
+		<div class="row">
+			<div class="col-lg-12">
+				outFields:
+				<table id={{this.outFieldsTable}} class="tblFields table table-hover table-striped table-condensed">
+					<thead>
+						<tr>
+							<th class='col-md-4'>Field name</th><th class='col-md-4'>Alias</th><th class='col-md-4'>Exists</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>	
+				</table>
+			</div>
+		</div>
+	</script>
+
+	<script id="querywidget-template" type="text/x-handlebars-template">
+		<div class="row">
+			<div class="col-lg-12">
+				queryWidget outFields:
+				<table id={{this.queryWidgetTable}} class="tblFields table table-hover table-striped table-condensed">
+					<thead>
+						<tr>
+							<th class='col-md-4'>Field name</th><th class='col-md-4'>Alias</th><th class='col-md-4'>Exists</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>	
+				</table>
+			</div>
+		</div>
+	</script>
+
+	<script id="identify-template" type="text/x-handlebars-template">
+		<div class="row">
+			<div class="col-lg-12">
+				identify outFields:
+				<table id={{this.identifyTable}} class="tblFields table table-hover table-striped table-condensed">
+					<thead>
+						<tr>
+							<th class='col-md-4'>Field name</th><th class='col-md-4'>Alias</th><th class='col-md-4'>Exists</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>	
+				</table>
+			</div>
+		</div>
+	</script>
+
+	<script id="field-template" type="text/x-handlebars-template">
+		<tr class={{this.class}}>
+			<td class='col-md-4'>{{this.name}}</td>
+			<td class='col-md-4'>{{this.alias}}</td>
+			<td class='col-md-4'>{{this.exists}}</td>
+		</tr>
+	</script>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous""></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/handlebarsjs/4.0.5/handlebars.min.js"></script>
+	<script src="../config.js"></script>
+	<script src="js/custom.js"></script>
+</body>
+</html>

@@ -93,7 +93,7 @@ L.Control.GroupedLayers = L.Control.extend({
     L.DomEvent.on(container, 'click', L.DomEvent.stopPropagation);
     L.DomEvent.disableClickPropagation(container);
     L.DomEvent.on(container, 'wheel', L.DomEvent.stopPropagation);
-
+ 
     var form = this._form = L.DomUtil.create('form', className + '-list');
 
     if (this.options.collapsed) {
@@ -210,7 +210,7 @@ L.Control.GroupedLayers = L.Control.extend({
 
     // Ensure that the basemap layer is the lowest layer
     if (bootleaf.basemapLayer !== undefined){
-      bootleaf.basemapLayer.bringToBack();
+      bootleaf.basemapLayer.bringToBack();  
     }
   },
 

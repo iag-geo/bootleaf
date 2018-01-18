@@ -253,7 +253,7 @@ input[type=checkbox].leaflet-control-layers-selector {
   padding: 2px 6px;
 }
 
-/* Address search */
+/* Harmony address search */
 #addressSearch {
   z-index: 1001;
   position: absolute;
@@ -362,4 +362,14 @@ div.dt-buttons {
 /* ensure that the clusters are rounded correctly */
 .leaflet-marker-icon.leaflet-interactive, .leaflet-image-layer.leaflet-interactive, .leaflet-pane > svg path.leaflet-interactive {
   border-radius: 100px;
+}
+
+/* Table of Contents tweaks */
+.leaflet-control-layers-toggleButtons {
+  text-align: center;
+}
+
+.leaflet-control-layers-toggleButtons button {
+  margin-left: 5px;
+  margin-right: 5px;
 }

@@ -1,0 +1,27 @@
+#navDetails, #main {
+	display: none;
+}
+
+.error {
+	color: red !important;
+}
+
+.top-15 {
+	margin-top: 15px;
+}
+
+.bottom-15 {
+	margin-bottom: 15px;
+}
+
+.sidebar {
+	padding-left: 15px;
+}
+
+.leftPad25 {
+	padding-left: 25px;
+}
+
+#errorLayers {
+	display: none;
+}
