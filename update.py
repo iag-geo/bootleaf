@@ -29,9 +29,8 @@ for dir in ['src','check']:
                 with open(os.path.join(root, file), 'r') as f:
                     contents = f.read()
 
-                    # Replace the target string
-                    contents = contents.replace('iag', 'bootleaf')
-
-                    # Write the file out again
-                    with open(os.path.join(root, file), 'w') as g:
-                      g.write(contents)
+                    # Replace iag with bootleaf
+                    if (contents.find('iag') > -1):
+                        contents = contents.replace('iag', 'bootleaf')
+                        with open(os.path.join(root, file), 'w') as g:
+                          g.write(contents)
