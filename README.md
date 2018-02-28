@@ -36,7 +36,7 @@ Additional functionality includes:
  - Address search using [OpenStreetMap](https://nominatim.openstreetmap.org/), Google or ArcGIS
  - Ability to share the map with current location and visible layers
  - Tooltips and info-windows
- - simple labels within WFS layers
+ - Simple labels within WFS layers
 
 The application comprises:
  - `index.html` - defines the elements on the page, including the map, sidebar, navigation, buttons, etc. References all of the other files
@@ -84,7 +84,8 @@ When editing these values, ensure that the key *names* are quoted. *Textual valu
 - `title` : displayed in the header of the browser
 - `start` : used to set the inital map extent, and other Leaflet [initiation parameters](http://leafletjs.com/reference-1.0.2.html#map-factory)
 - `about` : displayed in the map's About panel
-- `bing_key` : a license key to use Bing Maps basemap tiles
+- `bing_key` : a license key to use [Bing Maps basemap tiles](https://msdn.microsoft.com/en-us/library/ff428642.aspx)
+- `mapboxKey` : a license key to use [MapBox basemap tiles](https://www.mapbox.com/help/how-access-tokens-work/)
 - `controls` : used to configure individual map controls. If a control is commented out, it will not be shown. Valid positions are *topleft*, *topright*, *bottomleft*, *bottomright*
 	- `zoom` : specify the location of the zoom in/out buttons
 	- `leafletGeocoder` : configure the [geocoder](https://github.com/perliedman/leaflet-control-geocoder)
@@ -135,7 +136,7 @@ Various basemaps may be included on the map, by listing the basemap IDs as shown
  - AerialWithLabels
  - Road
 
-(Bing basemaps require a valid `bing_key` parameter in the config file)
+(Bing and Mapbox basemaps require valid `bing_key` and `mapboxKey` parameters in the config file)
 
 [Leaflet Tiled basemaps](http://leafletjs.com/reference-1.0.2.html#tilelayer):
  - `OpenStreetMap`
