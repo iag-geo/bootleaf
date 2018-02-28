@@ -9,6 +9,7 @@ var bootleaf = {
   "identifyLayers": [],
   "layers": [],
   "wfsLayers": [],
+  "labelLayers": [],
   "identifyLayerHeadings": [],
   "clickTolerance": 5,
   "currentTool": null,
@@ -256,6 +257,41 @@ $(document).ready(function(){
         }
         layer.layerConfig = layerConfig;
         bootleaf.wfsLayers.push(layer);
+
+        // If the layer has labels configured, create an empty label layer. It will be populated later
+        if (layerConfig.label !== undefined){
+          var labelLayer = L.geoJSON(null, {
+            pointToLayer: function(feature,latlng){
+              // _xxxLabelText is calculated once the values are returned from the server. This is a deliberately
+              // obscure variable name in the hope that it doesn't already exist on the layer ;)
+              label = String(feature.properties._xxxLabelText)
+              return new L.CircleMarker(latlng, {
+                radius: 0,
+                opacity: 0
+              }).bindTooltip(label, {permanent: true, opacity: 0.7}).openTooltip();
+            }
+          });
+          labelLayer.layerConfig = Object.assign({}, layerConfig);
+          labelLayer.layerConfig.labelLayer = true;
+          if (layerConfig.label.minZoom !== undefined){
+            labelLayer.layerConfig.minZoom = layerConfig.label.minZoom;
+          }
+          if (layerConfig.label.maxZoom !== undefined){
+            labelLayer.layerConfig.maxZoom = layerConfig.label.maxZoom;
+          }
+          labelLayer.layerConfig.id += "_labels";
+          if (labelLayer.layerConfig.name !== undefined) {
+            labelLayer.layerConfig.name += " labels";
+          } else {
+            labelLayer.layerConfig.name = labelLayer.layerConfig.id + " labels";
+          }
+          addLayer(labelLayer); 
+          bootleaf.labelLayers.push(labelLayer);
+          bootleaf.layers.push(labelLayer);
+
+          //remove the label property from the original layer now that we've created a new label layer
+          // layerConfig.label = undefined; 
+        }
         
       } else if (layerType === "tileLayer") {
         layer = L.tileLayer(layerConfig.url, layerConfig);
@@ -2003,6 +2039,14 @@ function updateTOCcheckboxes(){
 
 // Handle WFS layers
 function fetchWFS(){
+
+  // Clear any label layers
+  for (var i=0; i<bootleaf.labelLayers.length; i++){
+    var labelLayer = bootleaf.labelLayers[i];
+    // console.log("Clearing labels for ", labelLayer.layerConfig.id)
+    labelLayer.clearLayers();
+  }
+
   for (var j=0; j < bootleaf.wfsLayers.length; j++){
     var layer = bootleaf.wfsLayers[j];
     var layerConfig = layer.layerConfig;
@@ -2010,11 +2054,10 @@ function fetchWFS(){
       var elapsed = Date.now() - layer.lastRun;
       if (elapsed < 500) {
         console.log("sequential WFS requests are appearing too soon - rate limiting");
-        return;
+      } else if (layer.tocState === "on"){
+        wfsAjax(layer);
       }
-    }
-
-    if (layer.tocState === "on"){
+    } else if (layer.tocState === "on"){
       wfsAjax(layer);
     }
   }
@@ -2097,7 +2140,13 @@ function wfsAjax(layer){
             layer.addData(data);
             layer.lastRun = null;
           }
+
+          // Display labels if configured for this layer
+          if (layer.layerConfig.label !== undefined){
+            createLabels(layer.layerConfig, data)
+          }
         }
+
       }
     },
     error: function(err){
@@ -2108,6 +2157,36 @@ function wfsAjax(layer){
     }
   });
     
+}
+
+function createLabels(layerConfig, data){
+  // Create labels for WFS layers
+  // TODO- hook this up for GeoJSON layer too
+  try{
+    for (var i=0; i<bootleaf.labelLayers.length; i++){
+      var labelLayer = bootleaf.labelLayers[i];
+      if (bootleaf.labelLayers[i].layerConfig.id === layerConfig.id + "_labels"){
+        if (bootleaf.map.hasLayer(labelLayer)){
+
+          // Manually force the creation of the label attribute, specified in the layerConfig.layer.name variable
+          for (var f=0; f<data.features.length; f++){
+            try{
+              var feature = data.features[f];
+              feature.properties["_xxxLabelText"] = feature.properties[layerConfig.label.name];
+            } catch(err){
+
+            }
+          }
+          labelLayer.addData(data);
+          labelLayer.lastRun = Date.now();
+          labelLayer.lastBounds = bootleaf.map.getBounds().toBBoxString();
+        }
+      }
+    }
+  } catch(err){
+    console.log("There was a problem generating labels for ", layerConfig.id);
+  }
+
 }
 
 // Used to move a Leaflet control from one parent to another (eg put the Draw control on the Query Widget panel)

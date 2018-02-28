@@ -36,6 +36,7 @@ Additional functionality includes:
  - Address search using [OpenStreetMap](https://nominatim.openstreetmap.org/), Google or ArcGIS
  - Ability to share the map with current location and visible layers
  - Tooltips and info-windows
+ - simple labels within WFS layers
 
 The application comprises:
  - `index.html` - defines the elements on the page, including the map, sidebar, navigation, buttons, etc. References all of the other files
@@ -184,7 +185,8 @@ To begin adding layers, find the `"layers": []` section of the config file, and 
 - `cluster` : `true/false` - cluster point features. Applies to WFS, ArcGIS Feature and GeoJSON layers. Additional options are described on the [Leaflet cluster](https://github.com/Leaflet/Leaflet.markercluster) page
 - `hidden` : `true/false` - when true, the layer will not be shown in the Table of Contents or on the map, but can still be used in the Query Widget. This can be useful to allow querying of a complex layer which can't easily be drawn on the map
 - `showOnTop` : `true:false` - when true, this layer will be drawn on top of other layers. This can be used to ensure that points draw on top of polygons, etc. (Note that When multiple layers have this option set, there is the potential that they will overlap _each other_.)
-- `geomField` - applies to GeoServer layers. The name of the geometry field.
+- `geomField` - applies to GeoServer layers. The name of the geometry field
+- `label`: `{"name": "field_name","minZoom": 10, maxZoom: 16}` - this option creates a simple text label layer based on the specified field name, with the label layer switching on/off based on the current map scale. Applies to WFS layers only
 
 **Specifying and formatting fields**
 
