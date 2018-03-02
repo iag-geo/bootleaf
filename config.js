@@ -113,7 +113,11 @@ var config = {
     "opacity": 1,
     "color": '#727272',
     },
-	  "visible": false
+	  "visible": false,
+	  "label": {
+	  	"name": "NAME",
+	  	"minZoom": 14
+	  }
 	},
 	{
     "id": "museums",
@@ -135,7 +139,11 @@ var config = {
 		      "iconUrl": "./img/museum.png",
 		      "iconSize": [24,28]
 		  },
-		  "visible": false
+		  "visible": false,
+		  "label": {
+		  	"name": "NAME",
+		  	"minZoom": 14
+		  }
 		},
 		{
 			"id": "trees",

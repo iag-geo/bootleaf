@@ -260,37 +260,7 @@ $(document).ready(function(){
 
         // If the layer has labels configured, create an empty label layer. It will be populated later
         if (layerConfig.label !== undefined){
-          var labelLayer = L.geoJSON(null, {
-            pointToLayer: function(feature,latlng){
-              // _xxxLabelText is calculated once the values are returned from the server. This is a deliberately
-              // obscure variable name in the hope that it doesn't already exist on the layer ;)
-              label = String(feature.properties._xxxLabelText)
-              return new L.CircleMarker(latlng, {
-                radius: 0,
-                opacity: 0
-              }).bindTooltip(label, {permanent: true, opacity: 0.7}).openTooltip();
-            }
-          });
-          labelLayer.layerConfig = Object.assign({}, layerConfig);
-          labelLayer.layerConfig.labelLayer = true;
-          if (layerConfig.label.minZoom !== undefined){
-            labelLayer.layerConfig.minZoom = layerConfig.label.minZoom;
-          }
-          if (layerConfig.label.maxZoom !== undefined){
-            labelLayer.layerConfig.maxZoom = layerConfig.label.maxZoom;
-          }
-          labelLayer.layerConfig.id += "_labels";
-          if (labelLayer.layerConfig.name !== undefined) {
-            labelLayer.layerConfig.name += " labels";
-          } else {
-            labelLayer.layerConfig.name = labelLayer.layerConfig.id + " labels";
-          }
-          addLayer(labelLayer); 
-          bootleaf.labelLayers.push(labelLayer);
-          bootleaf.layers.push(labelLayer);
-
-          //remove the label property from the original layer now that we've created a new label layer
-          // layerConfig.label = undefined; 
+          buildLabelLayer(layerConfig);
         }
         
       } else if (layerType === "tileLayer") {
@@ -306,6 +276,12 @@ $(document).ready(function(){
             jqXHR.layerConfig = layerConfig;
           },
           success: function(data, textStatus, jqXHR) {
+
+            // If the layer has labels configured, create an empty label layer. It will be populated later
+            if (jqXHR.layerConfig.label !== undefined){
+              buildLabelLayer(jqXHR.layerConfig);
+            }
+
             // Handle cluster/normal layers differently
 
             if (jqXHR.layerConfig.icon !== undefined){
@@ -335,6 +311,12 @@ $(document).ready(function(){
             
             jqXHR.layer.layerConfig = jqXHR.layerConfig;
             addLayer(jqXHR.layer);
+
+            // Display labels if configured for this layer
+            if (jqXHR.layer.layerConfig.label !== undefined){
+              createLabels(jqXHR.layer.layerConfig, data)
+            }
+
 
           },
           error: function(jqXHR, textStatus, error) {
@@ -641,7 +623,6 @@ function reorderLayers(){
 function addLayer(layer){
 
   // Once the layer has been created, add it to the map and the applicable TOC category
-
   var layerConfig = layer.layerConfig;
   layer.name = layerConfig.name || layerConfig.id || "unknown layer name";
 
@@ -2040,11 +2021,12 @@ function updateTOCcheckboxes(){
 // Handle WFS layers
 function fetchWFS(){
 
-  // Clear any label layers
+  // Clear any WFS label layers (geoJSON label layers aren't reset on pan/zoom)
   for (var i=0; i<bootleaf.labelLayers.length; i++){
     var labelLayer = bootleaf.labelLayers[i];
-    // console.log("Clearing labels for ", labelLayer.layerConfig.id)
-    labelLayer.clearLayers();
+    if (labelLayer.layerConfig.type === 'WFS'){
+      labelLayer.clearLayers();
+    }
   }
 
   for (var j=0; j < bootleaf.wfsLayers.length; j++){
@@ -2160,27 +2142,34 @@ function wfsAjax(layer){
 }
 
 function createLabels(layerConfig, data){
-  // Create labels for WFS layers
-  // TODO- hook this up for GeoJSON layer too
+  // Create labels for WFS and GeoJSON layers
   try{
+
+    // De-duplicate any coincident labels
+    // TODO: take into account the current map scale and perform some rudimentary collision avoidance
+    var newData = {
+      features: [],
+      latLngs: []
+    };
+    for(var j=0; j<data.features.length; j++){
+      var feature = data.features[j];
+      var lat = feature.geometry.coordinates[0];
+      var lng = feature.geometry.coordinates[1];
+      var latLng = lat + "|" + lng;
+      if (newData.latLngs.indexOf(latLng) === -1) {
+        newData.latLngs.push(latLng);
+        // Manually force the creation of the label attribute, specified in the layerConfig.layer.name variable
+        feature.properties["_xxxLabelText"] = feature.properties[layerConfig.label.name];
+        newData.features.push(feature);
+      }
+    }
+
     for (var i=0; i<bootleaf.labelLayers.length; i++){
       var labelLayer = bootleaf.labelLayers[i];
       if (bootleaf.labelLayers[i].layerConfig.id === layerConfig.id + "_labels"){
-        if (bootleaf.map.hasLayer(labelLayer)){
-
-          // Manually force the creation of the label attribute, specified in the layerConfig.layer.name variable
-          for (var f=0; f<data.features.length; f++){
-            try{
-              var feature = data.features[f];
-              feature.properties["_xxxLabelText"] = feature.properties[layerConfig.label.name];
-            } catch(err){
-
-            }
-          }
-          labelLayer.addData(data);
+          labelLayer.addData(newData);
           labelLayer.lastRun = Date.now();
           labelLayer.lastBounds = bootleaf.map.getBounds().toBBoxString();
-        }
       }
     }
   } catch(err){
@@ -2242,4 +2231,36 @@ function allLayersOff(){
     }
   });
   updateTOCcheckboxes();
+}
+
+function buildLabelLayer(layerConfig) {
+  var labelLayer = L.geoJSON(null, {
+    pointToLayer: function(feature,latlng){
+      // _xxxLabelText is calculated once the values are returned from the server. This is a deliberately
+      // obscure variable name in the hope that it doesn't already exist on the layer ;)
+      label = String(feature.properties._xxxLabelText)
+      return new L.CircleMarker(latlng, {
+        radius: 0,
+        opacity: 0
+      }).bindTooltip(label, {permanent: true, opacity: 0.7}).openTooltip();
+    }
+  });
+  labelLayer.layerConfig = Object.assign({}, layerConfig);
+  labelLayer.layerConfig.labelLayer = true;
+  if (layerConfig.label.minZoom !== undefined){
+    labelLayer.layerConfig.minZoom = layerConfig.label.minZoom;
+  }
+  if (layerConfig.label.maxZoom !== undefined){
+    labelLayer.layerConfig.maxZoom = layerConfig.label.maxZoom;
+  }
+  if (labelLayer.layerConfig.name !== undefined) {
+    labelLayer.layerConfig.name += " labels";
+  } else {
+    labelLayer.layerConfig.name = labelLayer.layerConfig.id + " labels";
+  }
+  labelLayer.layerConfig.id += "_labels";
+  addLayer(labelLayer); 
+  bootleaf.labelLayers.push(labelLayer);
+  bootleaf.layers.push(labelLayer);
+
 }
