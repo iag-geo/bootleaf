@@ -1294,6 +1294,9 @@ function handleQueryResults(data, layerConfig, outFields){
   }
   if (data.spatialReference !== undefined && data.spatialReference.wkid !== undefined){
     bootleaf.queryResults["wkid"] = data.spatialReference.wkid;
+  } else if (data.crs !== undefined && data.crs.properties !== undefined && data.crs.properties.name !== undefined) {
+    var crs = data.crs.properties.name;
+    bootleaf.queryResults["wkid"] = parseInt(crs.substr(crs.length - 4));
   }
 
   // Add the column names to the output table
@@ -1603,6 +1606,10 @@ function runIdentifies(evt) {
       if (idLayer.layerConfig.CQL_FILTER !== undefined){
         data['CQL_FILTER'] = idLayer.layerConfig.CQL_FILTER;
       }
+
+      if (idLayer.layerConfig.styles !== undefined){
+        data['styles'] = idLayer.layerConfig.styles;
+      }
       var url = idLayer.layerConfig.url;
 
       $.when(
@@ -1870,6 +1877,11 @@ function showHighlight(feature, zoom){
     jsonGeometry = {
       "type": "LineString",
       "coordinates": [geometry.paths[0]]
+    };
+  } else if (geometryType === 'MultiLineString') {
+    jsonGeometry = {
+      "type": "LineString",
+      "coordinates": [geometry.coordinates[0]]
     };
   }
 
