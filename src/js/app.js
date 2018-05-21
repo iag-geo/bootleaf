@@ -969,12 +969,10 @@ function updateQueryFields(layerId){
         var fieldName = query.name;
         var fieldAlias = query.alias || fieldName;
         var fieldType = query.type || "text";
-        var option = '<option value="' + fieldName + '" data-fieldtype="' + fieldType + '"';
-        if (j===0){
-          option += " selected='selected'";
-        }  
-        option += '>' + fieldAlias + "</option>"
-        
+        var fieldDefaultOperator = query.defaultOperator || "=";
+        var option = '<option value="' + fieldName + '" data-fieldtype="';
+        option += fieldType + '" + data-defaultoperator ="' + fieldDefaultOperator + '"';
+        option += '>' + fieldAlias + "</option>"        
         fieldOptions.push(option);
       }
     }
@@ -983,7 +981,7 @@ function updateQueryFields(layerId){
 
   // Update the query operator when the query field selection changes
   updateQueryOperator($("#queryWidgetField option:selected")[0]);
-   $("#queryWidgetField").off("change");
+  $("#queryWidgetField").off("change");
   $("#queryWidgetField").on("change", function(){
     updateQueryOperator(this.options[this.selectedIndex]);
   });
@@ -993,6 +991,7 @@ function updateQueryOperator(option){
   // Update the Operators dropdown on the Query widget with the applicable options for this field type
   $("#queryWidgetOperator").empty();
   $("#queryWidgetValue").val("");
+  var defaultOperator = option.dataset['defaultoperator'] || '=';
 
   var operators = [
     {"value": "=", "alias": "is"},
@@ -1014,7 +1013,12 @@ function updateQueryOperator(option){
 
   var operatorOptions = $.map( operators, function( val, i ) {
     var alias = val.alias || val.value;
-    return '<option value="' + val.value + '">' + alias + "</option>";
+    var opt = '<option value="' + val.value + '"';
+    if (defaultOperator === val.value) {
+      opt += " selected='selected'";
+    }
+    opt += '>' + alias + "</option>"
+    return opt;
   });
   $("#queryWidgetOperator").append(operatorOptions);
 
@@ -1867,11 +1871,15 @@ function showHighlight(feature, zoom){
       "type": "Polygon",
       "coordinates": geometry.rings
     };
-  } else if (geometryType === "MultiPolygon" || geometryType === "Polygon") {
-    // TODO - the below code only fetches the first polygon object. Figure out how to fetch all
+  } else if (geometryType === "Polygon") {
     jsonGeometry = {
       "type": "Polygon",
-      "coordinates": geometry.coordinates[0]
+      "coordinates": geometry.coordinates
+    };
+  } else if (geometryType === "MultiPolygon") {
+   jsonGeometry = {
+      "type": "MultiPolygon",
+      "coordinates": geometry.coordinates
     };
   } else if (geometryType === 'esriGeometryPolyline') {
     jsonGeometry = {

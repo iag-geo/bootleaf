@@ -306,7 +306,7 @@ To enable this, add the `queryWidget` object as an option under an ArcGIS Dynami
 	"layerIndex": 0,
 	"maxAllowableOffset": 0.001,
 	"queries" : [
-		{"name": "NAME", "alias": "Name"},
+		{"name": "NAME", "alias": "Name", "defaultOperator": "contains"},
 		{"name": "POP", "alias": "Population", "type": "numeric"}
 	],
 	"outFields": [
@@ -323,10 +323,11 @@ To enable this, add the `queryWidget` object as an option under an ArcGIS Dynami
 - `layerIndex` - the layer's index according to its REST URL. Applies to ArcGIS Dynamic layers only
 - `maxAllowableOffset` - this parameter allows the query results to be returned faster, by generalising the output geometry by the specified amount. The units are whatever units the dataset is stored in (eg decimal degrees, metres, etc). This applies to ArcGIS layers only
 - `queries` - an array of query objects, consisting of:
-    - `name` - the name of the field to query
-    - `alias` - an optional alias to display in the widget
+  - `name` - the name of the field to query
+  - `alias` - an optional alias to display in the widget
 	- `type` - defaults to text, or use `numeric` to allow the correct syntax for numerical fields. Other field types may be added in future.
-- `outFields` - the list of field objectss to be returned in the query results section. If `outFields` is not specified against the `queryWidget` object, the layer's `outFields` will be used. See the `outFields` section above for more information on the field specification. (TODO - this isn't hooked up yet)
+	- `defaultOperator` - the default optional query operator for this query. Options are "=", "starts with", "ends with", "contains", "<", ">"
+- `outFields` - the list of field objectss to be returned in the query results section. If `outFields` is not specified against the `queryWidget` object, the layer's `outFields` will be used. See the `outFields` section above for more information on the field specification.
 
 Use the Within Current Map Extent or Within Polygon options to restrict the query to the specified extent. Use the Download As CSV option to download the results for processing in Excel.
 
