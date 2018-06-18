@@ -193,6 +193,8 @@ $(".mapTools").click(function(){
       } else if (this.dataset["tool"] === 'queryWidget') {
         configureQueryWidget();
       }
+    } else {
+      $("#sidebar").hide("slow");
     }
   }
   // return false; //uncomment this line to keep the menu open when a tool is chosen

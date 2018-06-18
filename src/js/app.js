@@ -898,7 +898,7 @@ function configureQueryWidget(){
       });
 
       var html = bootleaf.queryTemplate(layerNames);
-      resetSidebar("Query Widget", html);
+      resetSidebar("Query", html);
 
       // Seed the query field dropdown based on the selected layer
       updateQueryFields($("#queryWidgetLayer option:selected" ).val());
@@ -1509,7 +1509,7 @@ function runIdentifies(evt) {
       var layers = idLayer.layerConfig.layers || [];
 
       var data = {
-        "sr": bootleaf.mapWkid || 4326,
+        "srs": bootleaf.mapWkid || 4326,
         "tolerance": bootleaf.clickTolerance || 5,
         "maxAllowableOffset": idLayer.layerConfig.identify.maxAllowableOffset || 0.1,
         "returnGeometry": true,
@@ -1649,6 +1649,9 @@ function runIdentifies(evt) {
                   result.layerId = layerId;
                   result.layerName = layerName;
                   result.attributes = result.properties;
+                  if (data.crs !== undefined && data.crs.properties !== undefined && data.crs.properties.name !== undefined){
+                    result.crs = data.crs.properties.name;
+                  }
                   var value = JSON.stringify(result.attributes);
                   if (bootleaf.identifyResponse[layerId][value] === undefined) {
                     if (layerConfig.identify.maxFeatures !== undefined){
@@ -1696,10 +1699,20 @@ function displayIdentifyResult(layerId, layerName, layerConfig, result){
   }
 
   // Store the relevant details for this result against the identifyResponse object
+  var geometryType;
+  if (result.geometryType !== undefined) {
+    geometryType = result.geometryType;
+  } else if (result.geometry.type !== undefined) {
+    geometryType = result.geometry.type;
+  }
   var outFeature = {
     "geometry": result.geometry,
     "attributes": [],
-    "geometryType": result.geometryType
+    "geometryType": geometryType
+  }
+
+  if (result.crs !== undefined) {
+    outFeature.geometry.crs = result.crs;
   }
 
   bootleaf.wantedFields = [];
@@ -1853,6 +1866,8 @@ function showHighlight(feature, zoom){
   var wkid = bootleaf.mapWkid;
   if (feature.geometry.spatialReference && feature.geometry.spatialReference.wkid){
     wkid = feature.geometry.spatialReference.wkid;
+  } else if (feature.geometry.crs !== undefined) {
+    wkid = feature.geometry.crs.substr(feature.geometry.crs.length - 4);
   }
   var jsonGeometry;
 
