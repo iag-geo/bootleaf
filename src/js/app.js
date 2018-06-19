@@ -579,24 +579,27 @@ $(document).ready(function(){
   // Set the active tool, if applicable and supported by the current layers
   if (config.activeTool !== undefined){
     $(".liMapTools").removeClass("active");
-    $('*[data-tool="' +  config.activeTool + '"]').addClass("active");
 
     if (config.activeTool === 'identify') {
       if (bootleaf.identifyLayers && bootleaf.identifyLayers.length > 0){
         configureIdentifyTool();
+        $('*[data-tool="' +  config.activeTool + '"]').addClass("active");
       }
      
     } else if (config.activeTool === 'coordinates') {
       configureCoordinatesTool();
+      $('*[data-tool="' +  config.activeTool + '"]').addClass("active");
     } else if (config.activeTool === 'queryWidget'){
       if (bootleaf.queryTasks && bootleaf.queryTasks.length > 0){
         configureQueryWidget();
+        $('*[data-tool="' +  config.activeTool + '"]').addClass("active");
       }
     }
     // TODO - add more tools here, with corresponding configureXXXtool functions
 
   } else {
     $("#sidebar").hide("slow");
+    $(".liMapTools").removeClass("active");
   }
 
   // Run custom code after the map has loaded
