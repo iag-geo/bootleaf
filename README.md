@@ -179,7 +179,7 @@ To begin adding layers, find the `"layers": []` section of the config file, and 
 - `attribution` : `"text to appear in the attribution widget"`
 - `layers` : `[1, 2, 3]` - applies to ArcGIS Dynamic layer, and specifies the visible layers
 - `typeName` : applies to WFS layers, and specifies the GeoServer layer to draw
-- `popup` : true/false` - applies to WFS and ArcGIS Feature layers, and determines whether to show a popup when clicking on the feature
+- `popup` : `true/false` - applies to WFS and ArcGIS Feature layers, and determines whether to show a popup when clicking on the feature
 - `where` : a [SQL clause](http://resources.arcgis.com/en/help/main/10.2/index.html#/SQL_reference_for_query_expressions_used_in_ArcGIS/00s500000033000000/) to limit the features returned. Applies to WFS, wmsTiledLayer and ArcGIS Feature layers. Note that when using a `where` clause with a GeoServer layer, and also using the Identify functionality, only simple `where` clauses are supported (eg `where`: `fieldName = 'value'`)
 - `layerDefs` : a [query](https://esri.github.io/esri-leaflet/api-reference/layers/dynamic-map-layer.html) to limit the features returned, in the format `{3:"STATE_NAME='Kansas'", 2:"POP2007>25000"}`. Applies to ArcGIS Dynamic layers
 - `viewParams` : a query to limit the features return from a WMS/WFS layer. This requires that the layer has been [appropriately configured as a SQL View](http://docs.geoserver.org/stable/en/user/data/database/sqlview.html) in GeoServer
