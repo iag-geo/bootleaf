@@ -169,7 +169,7 @@ var config = {
 			"visible": true,
 			"queryWidget": {
 				"queries" : [
-					{"name": "COMMON_NAM", "alias": "Common name", "defaultOperator": "starts with", "defaultQuery": "A"},
+					{"name": "COMMON_NAM", "alias": "Common name", "defaultOperator": "starts with"},
 					{"name": "SCIENTIFIC", "alias": "Scientific name"}
 				],
 				"outFields": [
