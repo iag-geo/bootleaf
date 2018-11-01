@@ -2,7 +2,7 @@ BootLeaf
 ========
 
  - [Installation](#installation)
- - [Customisation](#customisation)
+ - [Configuration](#configuration)
  - [Basemaps](#basemaps)
  - [Layers](#layers)
  - [Table of Contents](#table-of-contents)
@@ -60,7 +60,7 @@ Use these steps to create a map based on the current version of the Bootleaf tem
 - to deploy your app to another server, copy the *your_app* directory to the server. This will include both the Bootleaf code (in the _src_ directory) and your custom app as a stand-alone package
 - in the future, to update your app to the latest version of the Bootleaf template, download the code again and replace the _src_ in your local version with the _src_ latest version (ensuring you don't over-write your custom config file)
 
-## [Customisation](#customisation)
+## [Configuration](#configuration)
 
 All configuration options for the map are controlled via the *config.js* file, so open this file in your code editor and go for it!
 
