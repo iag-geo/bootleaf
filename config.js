@@ -20,7 +20,7 @@ var config = {
 			"collapsed": false,
 			"position": "topleft",
 			"placeholder": "Search for a location",
-			"type": "Google", // OpenStreetMap, Google, ArcGIS
+			"type": "OpenStreetMap", // OpenStreetMap, Google, ArcGIS
 			"suffix": "Australia", // optional keyword to append to every search
 			"key": "AIzaS....sbW_E", // when using the Google geocoder, include your Google Maps API key (https://developers.google.com/maps/documentation/geocoding/start#get-a-key)
 		},
