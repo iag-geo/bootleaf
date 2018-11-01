@@ -468,8 +468,9 @@ module.exports = {
 				address: query
 			};
 
-			if (this._key && this._key.length) {
-				params.key = this._key;
+			// SL. This section wasn't working in the original code so I modified it to suit the Google Maps key setting in the Bootleaf config file
+			if (this._key && this._key.key) {
+				params.key = this._key.key;
 			}
 
 			params = L.Util.extend(params, this.options.geocodingQueryParams);

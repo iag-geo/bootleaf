@@ -91,6 +91,7 @@ When editing these values, ensure that the key *names* are quoted. *Textual valu
 	- `leafletGeocoder` : configure the [geocoder](https://github.com/perliedman/leaflet-control-geocoder)
 		- `type`: `Google/OpenStreetMap/ArcGIS`
 		- `suffix`: an optional keyword to filter each search. eg, use "Australia" to tell the geocoder to search within Australia only
+		- `key`: when using the Google Maps option, specify your API key (https://developers.google.com/maps/documentation/geocoding/start#get-a-key)
 	- `TOC` : configure the default [table of contents](https://github.com/ismyrnow/Leaflet.groupedlayercontrol) (see below for further configuration options)
 	- `history` : display next/previous buttons on the map, to enable moving forward/back through the extent history
 	- `bookmarks` : spatial bookmarks may be saved to the config file, or added via the UI. In the latter case they're accessible via cookies on the current user's machine. Follow the pattern of the sample bookmarks to create new instances
