@@ -137,7 +137,7 @@ Various basemaps may be included on the map, by listing the basemap IDs as shown
  - AerialWithLabels
  - Road
 
-(Bing and Mapbox basemaps require valid `bing_key` and `mapboxKey` parameters in the config file)
+(Bing basemaps require a valid `bing_key` parameter in the config file)
 
 [Leaflet Tiled basemaps](http://leafletjs.com/reference-1.0.2.html#tilelayer):
  - `OpenStreetMap`
