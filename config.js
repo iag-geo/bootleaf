@@ -39,11 +39,10 @@ var config = {
 			"places": [
 				{
 				"latlng": [
-					22.245598601926222,
-					114.17609095573425
+					40.7916, -73.9924
 				],
-				"zoom": 5,
-				"name": "Ocean Park",
+				"zoom": 12,
+				"name": "Manhattan",
 				"id": "a148fa354ba3",
 				"editable": true,
 				"removable": true
@@ -115,10 +114,10 @@ var config = {
     "color": '#727272',
     },
 	  "visible": false,
-	  "label": {
-	  	"name": "NAME",
-	  	"minZoom": 14
-	  }
+	  // "label": {
+	  // 	"name": "NAME",
+	  // 	"minZoom": 14
+	  // }
 	},
 	{
     "id": "museums",
@@ -141,14 +140,14 @@ var config = {
 		      "iconSize": [24,28]
 		  },
 		  "visible": false,
-		  "label": {
-		  	"name": "NAME",
-		  	"minZoom": 14
-		  }
+		  // "label": {
+		  // 	"name": "NAME",
+		  // 	"minZoom": 14
+		  // }
 		},
 		{
 			"id": "trees",
-			"name": "Heritage trees",
+			"name": "Heritage trees (feature)",
 			"type": "agsFeatureLayer",
 			"cluster": true,
 			"showCoverageOnHover": false,
@@ -193,7 +192,7 @@ var config = {
 		},
 		{
 			"id": "railways",
-			"name": "USA Railways",
+			"name": "USA Railways (feature)",
 			"type": "agsFeatureLayer",
 			"url": "https://services.arcgis.com/rOo16HdIMeOBI4Mb/ArcGIS/rest/services/USA_Rail_Network/FeatureServer/0",
 			"visible": false,
@@ -220,7 +219,7 @@ var config = {
 		},
 		{
 			"id": "counties",
-			"name": "Counties",
+			"name": "Counties (dynamic)",
 			"type": "agsDynamicLayer",
 			"url": "https://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Demographics/ESRI_Census_USA/MapServer/",
 			"layers": [3],
@@ -256,7 +255,7 @@ var config = {
 		},
 		{
 			"id": "us_states",
-			"name": "US States",
+			"name": "US States (dynamic)",
 			"type": "agsDynamicLayer",
 			"url": "https://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Demographics/ESRI_Census_USA/MapServer/",
 			"layers": [5],
@@ -294,11 +293,12 @@ var config = {
 		},
 		{
 			"id": "US_population",
-			"name": "US Population",
+			"name": "US Population (WMS)",
 			"type": "wmsTiledLayer",
 			"url": "https://demo.geo-solutions.it/geoserver/wfs",
 			"layers": "topp:states",
       "visible": false,
+      "format": 'image/png',
       "transparent": true,
       "geomField": "the_geom",
       "queryWidget": {
@@ -325,7 +325,7 @@ var config = {
 		},
 		{
 			"id": "countries",
-			"name": "World countries",
+			"name": "World countries (WFS)",
 			"type": "WFS",
 			"url": "https://demo.boundlessgeo.com/geoserver/opengeo/wfs",
 			"typeName": "opengeo:countries",
