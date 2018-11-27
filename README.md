@@ -189,6 +189,7 @@ To begin adding layers, find the `"layers": []` section of the config file, and 
 - `showOnTop` : `true:false` - when true, this layer will be drawn on top of other layers. This can be used to ensure that points draw on top of polygons, etc. (Note that When multiple layers have this option set, there is the potential that they will overlap _each other_.)
 - `geomField` - applies to GeoServer layers. The name of the geometry field
 - `label`: `{"name": "field_name","minZoom": 10, maxZoom: 16}` - this option creates a simple text label layer based on the specified field name, with the label layer switching on/off based on the current map scale. Coincident labels are de-duplicated. Applies to WFS and GeoJson layers only
+- `outputFormat` : for WFS layers, override the default `text/javascript` output format type, eg using `application/json` or `text/json` as required by the GeoServer instance
 
 **Specifying and formatting fields**
 
