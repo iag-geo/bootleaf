@@ -4,8 +4,13 @@ Certain HTTP requests require the presence of a reverse proxy, which acts as a g
 
 # Installation and configuration
 
-## Windows: Download nginx for windows from http://nginx.org/en/docs/windows.html then open the config file under `\conf\nginx.conf`.
-## Mac: Use [Homebrew](https://coderwall.com/p/dgwwuq/installing-nginx-in-mac-os-x-maverick-with-homebrew) to install nginx then open the config file at `/usr/local/etc/nginx/nginx.conf`
+## Windows
+
+Download nginx for windows from http://nginx.org/en/docs/windows.html then open the config file under `\conf\nginx.conf`.
+
+## Mac
+
+Use [Homebrew](https://coderwall.com/p/dgwwuq/installing-nginx-in-mac-os-x-maverick-with-homebrew) to install nginx then open the config file at `/usr/local/etc/nginx/nginx.conf`
 
 Under the server section, specify the port on which to listen (eg 8080) and the name of the server:
 

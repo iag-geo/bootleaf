@@ -171,6 +171,8 @@ To begin adding layers, find the `"layers": []` section of the config file, and 
 - `tileLayer` : [tiled layers](http://leafletjs.com/reference-1.0.3.html#tilelayer) which follow the pattern 'http://{s}.somedomain.com/blabla/{z}/{x}/{y}{r}.png'
 - `WFS` : [WFS](http://www.opengeospatial.org/standards/wfs) layers (Note: to date, testing has only been done on WFS as provided by GeoServer in GeoJSON format.)
 
+Note - it may be necessary to use a [reverse proxy](https://github.com/iag-geo/bootleaf/blob/master/reverseProxy.md) in order to access data from GeoServer.
+
 #### Other layer options
 
 - `visible` : `true/false`
