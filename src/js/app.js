@@ -2121,10 +2121,11 @@ function wfsAjax(layer){
     "version":"1.0.0",
     "request":"GetFeature",
     "typeName": layerConfig.typeName,
-    "outputFormat":"text/javascript",
     "format_options":"callback:" + callback,
     "CQL_FILTER": whereClause
   }
+
+  data["outputFormat"] = layer.layerConfig.outputFormat || "text/javascript";
 
   // Restrict the fields which are returned by the query. Ensure that the geometry field is included
   if (layerConfig.fields && layerConfig.fields.length && layerConfig.fields.length > 0) {
