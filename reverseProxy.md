@@ -2,7 +2,7 @@ This article explains how to set up a reverse proxy, using the free web server n
 
 Certain HTTP requests require the presence of a reverse proxy, which acts as a go-between for the web browser and the server. This may be the case when requesting data from GeoServer.
 
-# Installation and configuration
+# Installation
 
 ## Windows
 
@@ -11,6 +11,8 @@ Download nginx for windows from http://nginx.org/en/docs/windows.html then open 
 ## Mac
 
 Use [Homebrew](https://coderwall.com/p/dgwwuq/installing-nginx-in-mac-os-x-maverick-with-homebrew) to install nginx then open the config file at `/usr/local/etc/nginx/nginx.conf`
+
+# Configuration
 
 Under the server section, specify the port on which to listen (eg 8080) and the name of the server:
 
