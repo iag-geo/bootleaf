@@ -353,7 +353,9 @@ $(document).ready(function(){
       if (layer !== undefined) {
         // Persist the layer's config options with the layer itself
         layer.layerConfig = layerConfig;
-        if (!layerConfig.hidden) {addLayer(layer);}
+        if (!layerConfig.hidden && layerConfig.type !== 'geoJSON') {
+          addLayer(layer);
+        }
       }
 
     } catch(err) {
