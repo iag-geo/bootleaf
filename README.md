@@ -351,4 +351,4 @@ The sample file includes code to demonstrate how to use a user-defined query str
 - the `exclusive` option in the Table of Contents doesn't always work well when the map first opens - it may be out of sync with what's displayed on the map. The workaround is to have all layers switched off by default when they're inside an exclusive TOC group. Once a layer has been checked on in the TOC, the behaviour reverts to normal.
 - related to the above, the Identify tool may not work against the correct layers if the Identify tool is active when the map loads with exclusive TOC groups. The workaround is to not have the Identify tool active when the map loads, when using an exclusive TOC group. Once the Identify tool is enabled using the > Tools > Identify option, the behaviour reverts to normal.
 
-Contact [Steve](https://github.com/slead) if you encounter any problems, and/or log bugs using the [Issues](https://github.com/bootleafcl/geo_web/issues) link on GitHub.
+Contact [Steve](https://github.com/slead) if you encounter any problems, and/or log bugs using the [Issues](https://github.com/iag-geo/bootleaf/issues) link on GitHub.
