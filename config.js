@@ -4,7 +4,7 @@ var config = {
 		// "maxZoom": 16,
 		"center": [38.203,-99.799],
 		"zoom": 4,
-		"attributionControl": false,
+		"attributionControl": true,
 		"zoomControl": false
 	},
 	"about": {
