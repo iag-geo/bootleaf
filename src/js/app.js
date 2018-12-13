@@ -722,6 +722,9 @@ function setBasemap(basemap){
     var esriTheme = basemap.theme || "Streets";
     bootleaf.basemapLayer = L.esri.basemapLayer(esriTheme, options);
   } else if (basemap.type === 'tiled'){
+    if (basemap.id === 'OpenStreetMap') {
+      options.attribution = "<a href='http://www.openstreetmap.org/copyright' target='_blank'>© OpenStreetMap</a>";
+    }
     bootleaf.basemapLayer = L.tileLayer(basemap.url, options);
   } else if (basemap.type === 'mapbox'){
     options["attribution"] = "<a target='_blank' href='https://www.mapbox.com/about/maps/'>© Mapbox</a>, <a href='http://www.openstreetmap.org/copyright' target='_blank'>© OpenStreetMap</a>, <a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a>"
