@@ -346,6 +346,8 @@ The sample file includes code to demonstrate how to use a user-defined query str
 
 ![Custom code screenshot](https://i.imgur.com/6YLfiHz.png)
 
+Additional [Leaflet plugins](https://leafletjs.com/plugins.html) may also be added to Bootleaf. Download the relevant plugin into the `/src/plugins` directory then add a reference to the plugin in the `index.html` file, following the pattern of the existing plugins. Then use the plugin as required in the `custom.js` file.
+
 ## [Known issues and other problems](#issues)
 
 - the `exclusive` option in the Table of Contents doesn't always work well when the map first opens - it may be out of sync with what's displayed on the map. The workaround is to have all layers switched off by default when they're inside an exclusive TOC group. Once a layer has been checked on in the TOC, the behaviour reverts to normal.
