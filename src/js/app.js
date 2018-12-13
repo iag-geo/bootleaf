@@ -713,7 +713,7 @@ function setBasemap(basemap){
   var options = {
     "maxZoomLevel": 23,
     "maxZoom": 23,
-    "maxNativeZoom": 19,
+    "maxNativeZoom": 19
   }
   if (basemap.type === "esri") {
     if ($.inArray(basemap.id, ["esriGray", "esriDarkGray"]) > -1) {
@@ -724,6 +724,7 @@ function setBasemap(basemap){
   } else if (basemap.type === 'tiled'){
     bootleaf.basemapLayer = L.tileLayer(basemap.url, options);
   } else if (basemap.type === 'mapbox'){
+    options["attribution"] = "<a target='_blank' href='https://www.mapbox.com/about/maps/'>© Mapbox</a>, <a href='http://www.openstreetmap.org/copyright' target='_blank'>© OpenStreetMap</a>, <a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a>"
     var mapboxKey = config.mapboxKey || "";
     if (mapboxKey === '' || mapboxKey === undefined){
       $.growl.warning({ title: "Map Box error", message: "Ensure that you have specified a valid MapBox key in the config file"});
@@ -733,7 +734,8 @@ function setBasemap(basemap){
   } else if (basemap.type === 'bing'){
     var options = {
       "bingMapsKey": config.bing_key,
-      "imagerySet": basemap.id
+      "imagerySet": basemap.id,
+      "attribution": "<a href='https://www.microsoft.com/en-us/maps/ target='_blank'>Bing</a>"
     }
     bootleaf.basemapLayer = L.tileLayer.bing(options);
   }
