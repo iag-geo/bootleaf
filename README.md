@@ -23,7 +23,7 @@ Support is provided for:
  - WMS tiled layers
  - WFS layers
  - GeoJSON layers
- - ArcGIS Server feature, dynamic and tiled layers
+ - ArcGIS Server feature, dynamic and tiled layers (please note the [Esri usage terms](https://github.com/esri/esri-leaflet#terms))
  - Clustering of WFS, GeoJSON and ArcGIS Server feature layers
 
 Note - WMS and WFS layers have been tested in GeoServer only. [CORS](http://suite.opengeo.org/docs/latest/sysadmin/cors/index.html) and [jsonp](https://www.gaiaresources.com.au/json-with-geoserver-and-leaflet/) should be enabled on GeoServer for best results.
