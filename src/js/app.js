@@ -723,7 +723,7 @@ function setBasemap(basemap){
     bootleaf.basemapLayer = L.esri.basemapLayer(esriTheme, options);
   } else if (basemap.type === 'tiled'){
     if (basemap.id === 'OpenStreetMap') {
-      options.attribution = "<a href='http://www.openstreetmap.org/copyright' target='_blank'>© OpenStreetMap</a>";
+      options.attribution = "<a href='http://www.openstreetmap.org/copyright' target='_blank'>© OpenStreetMap contributors</a>";
     }
     bootleaf.basemapLayer = L.tileLayer(basemap.url, options);
   } else if (basemap.type === 'mapbox'){
