@@ -28,7 +28,7 @@ Support is provided for:
 
 Note - WMS and WFS layers have been tested in GeoServer only. [CORS](http://suite.opengeo.org/docs/latest/sysadmin/cors/index.html) and [jsonp](https://www.gaiaresources.com.au/json-with-geoserver-and-leaflet/) should be enabled on GeoServer for best results.
 
-Note - the demo app uses the Esri-Leaflet plugin. Please note the [Esri usage terms](https://github.com/esri/esri-leaflet#terms) before using this.
+Note - Bootleaf uses the Esri-Leaflet plugin, in order to support ArcGIS layers and display Esri basemaps. Please note the [Esri usage terms](https://github.com/esri/esri-leaflet#terms) before using this.
 
 Additional functionality includes:
  - [Table of Contents](https://github.com/ismyrnow/Leaflet.groupedlayercontrol) with support for groups and radio buttons
