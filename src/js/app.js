@@ -1315,11 +1315,13 @@ function handleQueryResults(data, layerConfig, outFields){
   if (data.geometryType !== undefined) {
     bootleaf.queryResults["geometryType"] = data.geometryType;
   }
+
+  // Figure out the spatial reference of the returned object
   if (data.spatialReference !== undefined && data.spatialReference.wkid !== undefined){
     bootleaf.queryResults["wkid"] = data.spatialReference.wkid;
   } else if (data.crs !== undefined && data.crs.properties !== undefined && data.crs.properties.name !== undefined) {
     var crs = data.crs.properties.name;
-    bootleaf.queryResults["wkid"] = parseInt(crs.substr(crs.length - 4));
+    bootleaf.queryResults["wkid"] = parseInt(crs.substr(crs.lastIndexOf(":") + 1));
   }
 
   // Add the column names to the output table
