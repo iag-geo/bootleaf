@@ -1257,7 +1257,7 @@ function runQueryWidget() {
     // Search within the map extent or a polygon
     if($("#chkQueryWithinMapExtent").is(':checked')) {
       var bounds = bootleaf.map.getBounds();
-      queryData.CQL_FILTER += "and BBOX(" + geomField + "," + bounds._southWest.lng + "," + bounds._southWest.lat + "," +  bounds._northEast.lng + "," + bounds._northEast.lat + ")"
+      queryData.CQL_FILTER += "and BBOX(" + geomField + "," + bounds._southWest.lng + "," + bounds._southWest.lat + "," +  bounds._northEast.lng + "," + bounds._northEast.lat + ",'EPSG:" + bootleaf.mapWkid + "')"
     } else if($("#chkQueryWithinPolygon").is(':checked')) {
       var vertices = bootleaf.queryPolygon.toGeoJSON().features[0].geometry.coordinates[0];
       var polygon = vertices[0][0] + " " + vertices[0][1]
