@@ -1262,7 +1262,7 @@ function runQueryWidget() {
       var vertices = bootleaf.queryPolygon.toGeoJSON().features[0].geometry.coordinates[0];
       var polygon;
 
-      // Reproject the polygon into the source layer's SRS if necessary
+      // Reproject the polygon into the source layer's SRS if necessary (code provided by https://github.com/SchroeC)
       if (layer.geoserverEPSG === undefined || layer.geoserverEPSG === bootleaf.mapWkid) {
         for (var vIdx = 1; vIdx < vertices.length; vIdx ++){
           polygon += "," + vertices[vIdx][0] + " " + vertices[vIdx][1]
