@@ -299,6 +299,7 @@ var config = {
 			"type": "wmsTiledLayer",
 			"url": "https://demo.geo-solutions.it/geoserver/wfs",
 			"layers": "topp:states",
+			'EPSG': 4326,
       "visible": false,
       "format": 'image/png',
       "transparent": true,

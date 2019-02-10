@@ -194,6 +194,7 @@ Note - it may be necessary to use a [reverse proxy](https://github.com/iag-geo/b
 - `geomField` - applies to GeoServer layers. The name of the geometry field
 - `label`: `{"name": "field_name","minZoom": 10, maxZoom: 16}` - this option creates a simple text label layer based on the specified field name, with the label layer switching on/off based on the current map scale. Coincident labels are de-duplicated. Applies to WFS and GeoJson layers only
 - `outputFormat` : for WFS layers, override the default `text/javascript` output format type, eg using `application/json` or `text/json` as required by the GeoServer instance
+- `EPSG` - applies to GeoServer layers. The WKID value for this layer's coordinate system - see http://spatialreference.org/
 
 **Specifying and formatting fields**
 

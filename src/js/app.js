@@ -1263,16 +1263,21 @@ function runQueryWidget() {
       var polygon;
 
       // Reproject the polygon into the source layer's SRS if necessary (code provided by https://github.com/SchroeC)
-      if (layer.geoserverEPSG === undefined || layer.geoserverEPSG === bootleaf.mapWkid) {
+      if (layer.EPSG === undefined || layer.EPSG === bootleaf.mapWkid) {
+        polygon = vertices[0][0] + " " + vertices[0][1]
         for (var vIdx = 1; vIdx < vertices.length; vIdx ++){
           polygon += "," + vertices[vIdx][0] + " " + vertices[vIdx][1]
         }
       } else {
-        var newCoords = proj4('EPSG:' + layer.geoserverEPSG).forward(vertices[0]);
-        polygon = newCoords[0] + " " + newCoords[1];
-        for (var vIdx = 1; vIdx < vertices.length; vIdx ++){
-          newCoords = proj4('EPSG:' + layer.geoserverEPSG).forward(vertices[vIdx]);
-          polygon += "," + newCoords[0] + " " + newCoords[1];
+        try{
+          var newCoords = proj4('EPSG:' + layer.EPSG).forward(vertices[0]);
+          polygon = newCoords[0] + " " + newCoords[1];
+          for (var vIdx = 1; vIdx < vertices.length; vIdx ++){
+            newCoords = proj4('EPSG:' + layer.EPSG).forward(vertices[vIdx]);
+            polygon += "," + newCoords[0] + " " + newCoords[1];
+          }
+        } catch(err) {
+          console.log("Please ensure that ", layer.id, "'s coordinate system is added to config.projections");
         }
       }
 
