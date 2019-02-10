@@ -1260,11 +1260,23 @@ function runQueryWidget() {
       queryData.CQL_FILTER += "and BBOX(" + geomField + "," + bounds._southWest.lng + "," + bounds._southWest.lat + "," +  bounds._northEast.lng + "," + bounds._northEast.lat + ",'EPSG:" + bootleaf.mapWkid + "')"
     } else if($("#chkQueryWithinPolygon").is(':checked')) {
       var vertices = bootleaf.queryPolygon.toGeoJSON().features[0].geometry.coordinates[0];
-      var polygon = vertices[0][0] + " " + vertices[0][1]
-      for (var vIdx = 1; vIdx < vertices.length; vIdx ++){
-        polygon += "," + vertices[vIdx][0] + " " + vertices[vIdx][1]
+      var polygon;
+
+      // Reproject the polygon into the source layer's SRS if necessary
+      if (layer.geoserverEPSG === undefined || layer.geoserverEPSG === bootleaf.mapWkid) {
+        for (var vIdx = 1; vIdx < vertices.length; vIdx ++){
+          polygon += "," + vertices[vIdx][0] + " " + vertices[vIdx][1]
+        }
+      } else {
+        var newCoords = proj4('EPSG:' + layer.geoserverEPSG).forward(vertices[0]);
+        polygon = newCoords[0] + " " + newCoords[1];
+        for (var vIdx = 1; vIdx < vertices.length; vIdx ++){
+          newCoords = proj4('EPSG:' + layer.geoserverEPSG).forward(vertices[vIdx]);
+          polygon += "," + newCoords[0] + " " + newCoords[1];
+        }
       }
-      queryData.CQL_FILTER += "and INTERSECTS(" + geomField + ",POLYGON((" + polygon + ")))";
+
+      queryData.CQL_FILTER += " and INTERSECTS(" + geomField + ", POLYGON((" + polygon + ")))";
     }
 
     if (layer.type === 'wmsTiledLayer'){
