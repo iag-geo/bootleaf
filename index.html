@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <!-- Google Analytics -->
     <!-- Replace UA-XXXXX-X with your Tracking-ID obtained from Google Analytics and remove the comments if you want to use Google Analytics
          If compliance with EU's GDPR is necessary, consider the anonymize_ip parameter and an Opt-Out-Cookie.
@@ -25,23 +25,25 @@
     <title>{myMapTitle}</title>
 
     <!-- required libraries -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css"
+          integrity="sha384-SI27wrMjH3ZZ89r4o+fGIJtnzkAnFs3E4qz9DIYioCQ5l9Rd/7UAa8DHcaL8jkWt" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="./src/plugins/datatables/datatables.min.css"/>
     <link rel="stylesheet" href="./src/plugins/datatables/buttons.dataTables.min.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css">
-    <link rel="stylesheet" href="./src/plugins/growl/stylesheets/jquery.growl.css" />
+    <link rel="stylesheet" href="./src/plugins/growl/stylesheets/jquery.growl.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.css"/>
 
     <link rel="stylesheet" href="./src/css/bootleaf.css">
 
     <!-- optional libraries - comment out any libraries which are not being used to improve page load times -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.Default.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.Default.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.css">
-    <link rel="stylesheet" href="./src/plugins/geocoders/Control.Geocoder.css" />
-    <link rel="stylesheet" href="./src/plugins/bookmarks/leaflet.bookmarks.css" />
-    <link rel="stylesheet" href="./src/plugins/leaflet-history/leaflet-history.css" />
+    <link rel="stylesheet" href="./src/plugins/geocoders/Control.Geocoder.css"/>
+    <link rel="stylesheet" href="./src/plugins/bookmarks/leaflet.bookmarks.css"/>
+    <link rel="stylesheet" href="./src/plugins/leaflet-history/leaflet-history.css"/>
 
     <!-- Customise the styles used in this map -->
     <link rel="stylesheet" href="style.css">
@@ -52,189 +54,214 @@
     <link rel="apple-touch-icon" sizes="152x152" href="./src/img/favicon-152.png">
     <link rel="icon" sizes="196x196" href="./src/img/favicon-196.png">
     <link rel="icon" type="image/x-icon" href="./src/img/favicon.ico">
-  </head>
+</head>
 
-  <body>
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <div class="navbar-icon-container">
-            <a href="#" class="navbar-icon pull-right visible-xs" id="nav-btn"><i class="fa fa-bars fa-lg white"></i></a>
-          </div>
-          <a class="navbar-brand" href="https://bootleaf.xyz">Bootleaf homepage</a>
-        </div>
-        <div class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="about-btn"><i class="fa fa-question-circle white"></i>&nbsp;&nbsp;About</a></li>
-            <li class="dropdown">
-              <a id="toolsDrop" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-wrench white"></i>&nbsp;&nbsp;Tools <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="full-extent-btn"><i class="fa fa-arrows-alt"></i>&nbsp;&nbsp;Zoom To Full Extent</a></li>
-                <li id="liIdentify" class="disabled liMapTools hidden-sm hidden-xs" data-tool="identify"><a href="#" id="identify-btn" class="mapTools" data-tool="identify"><i class="fa fa-info-circle"></i>&nbsp;&nbsp;Identify Features</a></li>
-                <li id="liQueryWidget" class="disabled liMapTools hidden-sm hidden-xs" data-tool="queryWidget"><a href="#" id="queryWidget-btn" class="mapTools" data-tool="queryWidget"><i class="fa fa-question-circle"></i>&nbsp;&nbsp;Query Widget</a></li>
-                <li id="liCoordinates" class="liMapTools hidden-sm hidden-xs" data-tool="coordinates"><a href="#" id="coordinates-btn" class="mapTools" data-tool="coordinates"><i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Get map coordinates</a></li>
-                <li id="liShare" class="liMapTools" data-tool="share"><a href="#" id="share-btn" class="mapTools" data-tool="share"><i class="fa fa-share"></i>&nbsp;&nbsp;Share map</a></li>
-              </ul>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+
+    <a class="navbar-brand" href="https://bootleaf.xyz">
+        Bootleaf homepage
+    </a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="about-btn">
+                    <i class="fa fa-question-circle white"></i>&nbsp;&nbsp;About </a>
             </li>
-
-            <li class="dropdown" id="basemapDropdown">
-              <a id="basemapDrop" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-globe white"></i>&nbsp;&nbsp;Basemaps <b class="caret"></b></a>
-                <ul class="dropdown-menu" id="ulBasemap">
-                  <!--contents are inserted programatically based on the specified basemaps -->
-                </ul>
-            </li>
-
-          </ul>
-        </div><!--/.navbar-collapse -->
-      </div>
-    </div>
-
-    <div id="container">
-      <div id="sidebar" class="hidden-xs hidden-sm">
-        <div class="sidebar-wrapper">
-          <div class="panel panel-default" id="pnlSidebar">
-            <div class="panel-heading">
-              <h2 class="panel-title"><span id="sidebarTitle">Sidebar</span>
-                <button type="button" class="btn btn-xs btn-default pull-right" id="sidebar-hide-btn">
-                  <i class="fa fa-chevron-left"></i>
-                </button>
-              </h2>
-            </div>
-            <div class="panel-body">
-              <div class="row">
-                <div id="sidebarContents" class="col-xs-12 col-md-12">
-                  <!-- contents are inserted programatically by the current active tool -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="toolsDrop" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-wrench white"></i>&nbsp;&nbsp;Tools</b>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="toolsDrop">
+                    <a href="#" class="dropdown-item" data-toggle="collapse" data-target=".navbar-collapse.in"
+                       id="full-extent-btn"><i class="fa fa-arrows-alt"></i>&nbsp;&nbsp;Zoom To Full Extent</a></a>
+<!--                    <li id="liIdentify" class="disabled liMapTools hidden-sm hidden-xs" data-tool="identify">-->
+                    <a href="#" id="identify-btn" class="dropdown-item mapTools" data-tool="identify">
+                        <i class="fa fa-info-circle"></i>&nbsp;&nbsp;Identify Features</a>
+                    <a href="#" id="queryWidget-btn" class="dropdown-item mapTools" data-tool="queryWidget"><i
+                            class="fa fa-question-circle"></i>&nbsp;&nbsp;Query Widget</a>
+                    <a href="#" id="coordinates-btn" class="dropdown-item mapTools" data-tool="coordinates"><i
+                            class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Get map coordinates</a>
+                    <a href="#" id="share-btn" class="dropdown-item mapTools" data-tool="share"><i
+                            class="fa fa-share"></i>&nbsp;&nbsp;Share map</a>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id="map"></div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="basemapDropdown" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-globe white"></i>&nbsp;&nbsp;Basemaps
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown" id="ulBasemap">
+
+                </div>
+            </li>
+        </ul>
     </div>
-    <div id="loading">
-      <div class="loading-indicator">
+</nav>
+
+<div id="container">
+    <div id="sidebar" class="hidden-xs hidden-sm">
+        <div class="sidebar-wrapper">
+            <div class="card" id="pnlSidebar">
+                <div class="card-header">
+                    <h5 class="card-title"><span id="sidebarTitle">Sidebar</span>
+                        <button type="button" class="btn btn-xs btn-default pull-right" id="sidebar-hide-btn">
+                            <i class="fa fa-chevron-left"></i>
+                        </button>
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div id="sidebarContents" class="col-xs-12 col-md-12">
+                            <!-- contents are inserted programatically by the current active tool -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="map"></div>
+</div>
+<div id="loading">
+    <div class="loading-indicator">
         <div class="progress progress-striped active">
-          <div class="progress-bar progress-bar-info progress-bar-full"></div>
+            <div class="progress-bar progress-bar-info progress-bar-full"></div>
         </div>
-      </div>
     </div>
+</div>
 
-    <div class="modal fade" id="aboutModal" tabindex="-1" role="dialog">
-      <div class="modal-dialog modal-lg">
+<div class="modal fade" id="aboutModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
-          <div class="modal-header">
-            <button class="close" type="button" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 id="aboutTitle" class="modal-title">About this map</h4>
-          </div>
-          <div id="aboutContents" class="modal-body">
-            <p>{information about this map}</p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+            <div class="modal-header">
+                 <h5 id="aboutTitle" class="modal-title">About this map</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-hidden="true">&times;</button>
 
-    <div class="modal fade" id="shareModal" tabindex="-1" role="dialog">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title">Share URL</h4>
-          </div>
-          <div class="modal-body">
-            <div class="row">
-              <div class="col-md-12">
-                <span id="shareURL"></span>
-              </div>
             </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          </div>
+            <div id="aboutContents" class="modal-body">
+                <p>{information about this map}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+            </div>
         </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
-    <!-- handlebars templates -->
-    <script id="query-template" type="text/x-handlebars-template">
-      <div id="frmQueryWidget" class="well well-sm">
+<div class="modal fade" id="shareModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Share URL</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <span id="shareURL"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- handlebars templates -->
+<script id="query-template" type="text/x-handlebars-template">
+    <div id="frmQueryWidget" class="well well-sm">
         <div class="form-group">
-          <label for="queryWidgetLayer">Layer</label>
-          <select id="queryWidgetLayer" class="form-control">
-            {{#each this}}
-              <option value={{this.id}}>{{this.name}}</option>
-            {{/each}}
-          </select>
-          <label for="queryWidgetField">Field</label>
-          <select id="queryWidgetField" class="form-control">
-          </select>
-          <label for="queryWidgetOperator">Operator</label>
-          <select id="queryWidgetOperator" class="form-control">
-          </select>
-          <label for="queryWidgetValue">Value</label>
-          <input id="queryWidgetValue" type="text" class="form-control queryTask" placeholder="Enter the value to search for">
-          <div id="btnRunQuery" class="btn btn-warning">Run Query</div>
-          <div class="checkbox" id="chkQueryExtent">
-            <label>
-              <input type="checkbox" id="chkQueryWithinMapExtent"> Within current map extent
-            </label>
-          </div>
-          <div class="checkbox" id="chkQueryPolygon">
-            <label>
-              <input type="checkbox" id="chkQueryWithinPolygon"> Within polygon
-            </label>
-            <div id="drawQueryWidget">
-              <span id="queryDrawControl"></span>
-              <span id="queryDrawControlHelp" class="info"> &larr; Activate the polygon tool then draw a shape on the map</span>
+            <label for="queryWidgetLayer">Layer</label>
+            <select id="queryWidgetLayer" class="form-control">
+                {{#each this}}
+                <option value={{this.id}}>{{this.name}}</option>
+                {{/each}}
+            </select>
+            <label for="queryWidgetField">Field</label>
+            <select id="queryWidgetField" class="form-control">
+            </select>
+            <label for="queryWidgetOperator">Operator</label>
+            <select id="queryWidgetOperator" class="form-control">
+            </select>
+            <label for="queryWidgetValue">Value</label>
+            <input id="queryWidgetValue" type="text" class="form-control queryTask"
+                   placeholder="Enter the value to search for">
+            <div id="btnRunQuery" class="btn btn-warning">Run Query</div>
+            <div class="checkbox" id="chkQueryExtent">
+                <label>
+                    <input type="checkbox" id="chkQueryWithinMapExtent"> Within current map extent
+                </label>
             </div>
-          </div>
+            <div class="checkbox" id="chkQueryPolygon">
+                <label>
+                    <input type="checkbox" id="chkQueryWithinPolygon"> Within polygon
+                </label>
+                <div id="drawQueryWidget">
+                    <span id="queryDrawControl"></span>
+                    <span id="queryDrawControlHelp" class="info"> &larr; Activate the polygon tool then draw a shape on the map</span>
+                </div>
+            </div>
         </div>
-      </div>
-      <div id="queryResults"></div>
+    </div>
+    <div id="queryResults"></div>
 
-    </script>
+</script>
 
-    <!-- required libraries -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/esri-leaflet/2.1.4/esri-leaflet.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/esri-leaflet-renderers/2.0.6/esri-leaflet-renderers.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
+<!-- required libraries -->
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>-->
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/js/bootstrap.min.js"
+        integrity="sha384-3qaqj0lc6sV/qpzrc1N5DC6i1VRn/HyX4qdPaiEFbn54VjQBEU341pvjz7Dv3n6P"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/esri-leaflet/2.1.4/esri-leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/esri-leaflet-renderers/2.0.6/esri-leaflet-renderers.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
 
-    <!-- Plugins. Comment out any unused libaries to improve the page load times -->
-    <script src="./src/plugins/bing/leaflet-bing-layer.min.js"></script>
-    <script src="./src/plugins/geocoders/Control.Geocoder.js"></script>
-    <script src="./src/plugins/geocoders/Control.Geocoder.harmony.js"></script>
-    <script src="./src/plugins/leaflet-history/leaflet-history.js"></script>
-    <script src="./src/plugins/leaflet-groupedlayercontrol/leaflet.groupedlayercontrol.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/leaflet.markercluster.js"></script>
-    <script src="./src/plugins/esri-leaflet-cluster/esri-leaflet-cluster.js"></script>
-    <script src="./src/plugins/bookmarks/Leaflet.Bookmarks.js"></script>
-    <script src="./src/plugins/WFST/Leaflet-WFST.min.js"></script>
-    <script src="./src/plugins/datatables/datatables.min.js"></script>
-    <script src="./src/plugins/datatables/buttons.html5.min.js"></script>
-    <script src="./src/plugins/datatables/dataTables.buttons.min.js"></script>
-    <script src="./src/plugins/datatables/buttons.bootstrap.min.js"></script>
-    <script src="./src/plugins/moment/moment.js"></script>
-    <script src="./src/plugins/proj4js/proj4.js"></script>
-    <script src="./src/plugins/proj4js/proj4leaflet.js"></script>
-    <script src="./src/plugins/growl/javascripts/jquery.growl.js"></script>
+<!-- Plugins. Comment out any unused libaries to improve the page load times -->
+<script src="./src/plugins/bing/leaflet-bing-layer.min.js"></script>
+<script src="./src/plugins/geocoders/Control.Geocoder.js"></script>
+<script src="./src/plugins/geocoders/Control.Geocoder.harmony.js"></script>
+<script src="./src/plugins/leaflet-history/leaflet-history.js"></script>
+<script src="./src/plugins/leaflet-groupedlayercontrol/leaflet.groupedlayercontrol.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/leaflet.markercluster.js"></script>
+<script src="./src/plugins/esri-leaflet-cluster/esri-leaflet-cluster.js"></script>
+<script src="./src/plugins/bookmarks/Leaflet.Bookmarks.js"></script>
+<script src="./src/plugins/WFST/Leaflet-WFST.min.js"></script>
+<script src="./src/plugins/datatables/datatables.min.js"></script>
+<script src="./src/plugins/datatables/buttons.html5.min.js"></script>
+<script src="./src/plugins/datatables/dataTables.buttons.min.js"></script>
+<script src="./src/plugins/datatables/buttons.bootstrap.min.js"></script>
+<script src="./src/plugins/moment/moment.js"></script>
+<script src="./src/plugins/proj4js/proj4.js"></script>
+<script src="./src/plugins/proj4js/proj4leaflet.js"></script>
+<script src="./src/plugins/growl/javascripts/jquery.growl.js"></script>
 
-    <!-- this app's code -->
-    <script src="./src/js/app.js"></script>
-    <script src="./src/js/listeners.js"></script>
+<!-- this app's code -->
+<script src="./src/js/app.js"></script>
+<script src="./src/js/listeners.js"></script>
 
-    <!-- optional - custom functionality -->
-    <script src="custom.js"></script>
+<!-- optional - custom functionality -->
+<script src="custom.js"></script>
 
-    <!-- the configuration file holding this app's customisations -->
-    <script src="config.js"></script>
+<!-- the configuration file holding this app's customisations -->
+<script src="config.js"></script>
 
-  </body>
+</body>
 </html>

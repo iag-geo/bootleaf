@@ -166,7 +166,7 @@ L.Control.GroupedLayers = L.Control.extend({
     }
 
     if (this.options.toggleAll) {
-      this._toggleButtons.innerHTML = '<button type="button" id="btnAllOff" onclick="allLayersOff()" class="btn btn-xs">All off</button><button type="button" id="btnAllOn" onclick="allLayersOn()" class="btn btn-xs">All on</button>';
+      this._toggleButtons.innerHTML = '<button type="button" id="btnAllOff" onclick="allLayersOff()" class="btn btn-sm btn-light">All off</button><button type="button" id="btnAllOn" onclick="allLayersOn()" class="btn btn-sm btn-light">All on</button>';
     }
     this._baseLayersList.innerHTML = '';
     this._overlaysList.innerHTML = '';
