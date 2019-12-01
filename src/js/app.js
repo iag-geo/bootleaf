@@ -584,7 +584,6 @@ $(document).ready(function(){
 
   // Set the active tool, if applicable and supported by the current layers
   if (config.activeTool !== undefined){
-    debugger;
     $(".mapTools").removeClass("active");
 
     if (config.activeTool === 'identify') {
@@ -1431,7 +1430,7 @@ function handleQueryResults(data, layerConfig, outFields){
       },
       "columnDefs": [],
       "fnDrawCallback":function(){
-        if ( $('.dataTables_paginate .paginate_button').size() && $('.dataTables_paginate .paginate_button').size() > 3) {
+        if ( $('.dataTables_paginate .paginate_button').length && $('.dataTables_paginate .paginate_button').length > 3) {
           $(".dataTables_paginate").show();
         } else {
           $(".dataTables_paginate").hide();
@@ -1460,7 +1459,8 @@ function handleQueryResults(data, layerConfig, outFields){
       buttons: [
           {
               extend: 'csvHtml5',
-              text: 'Download results as CSV'
+              text: 'Download results as CSV',
+              className: "btn-outline-dark"
           }]
       });
     table.buttons( 0, null ).containers().appendTo( $('#exportButtons') );
