@@ -4,7 +4,7 @@ html, body, #container {
   overflow: hidden;
 }
 body {
-  padding-top: 50px;
+  padding-top: 63px;
 }
 input[type="radio"], input[type="checkbox"] {
   margin: 0;

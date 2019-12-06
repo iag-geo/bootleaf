@@ -522,8 +522,9 @@ $(document).ready(function(){
   // Add basemaps to the dropdown. If the basemaps option is used in the config file, only load those basemaps, otherwise load them all
   $.map( bootleaf.basemaps || [], function( basemap, i ) {
     if(config.basemaps === undefined || $.inArray(basemap.id, config.basemaps) > -1){
-      var html = '<li data-basemapId="' + basemap.id + '">';
-      html += '<a href="#" data-toggle="collapse" data-target=".navbase-collapse.in" class="liBasemap" data-type="' + basemap.type + '" data-theme="' + basemap.theme + '"';
+      var html = '<li>';
+      html += '<a href="#" data-toggle="collapse" data-target=".navbase-collapse.in" class="dropdown-item liBasemap" data-type="' + basemap.type + '" data-theme="'
+          + basemap.theme + '"' +  'data-basemapId="' + basemap.id + '"';
       if(basemap.url){
         html += 'data-url="' + basemap.url + '"';
       }
@@ -552,7 +553,7 @@ $(document).ready(function(){
     // Change the basemap when the user changes the dropdown
     $(".liBasemap").click(function(evt) {
       // Update the Active class for this basemap
-      $("#ulBasemap li").removeClass("active");
+      $("#ulBasemap a").removeClass("active");
       $('*[data-basemapId="' + this.id + '"]').addClass("active");
       var basemap = {
         "type": this.dataset['type'],
@@ -583,7 +584,7 @@ $(document).ready(function(){
 
   // Set the active tool, if applicable and supported by the current layers
   if (config.activeTool !== undefined){
-    $(".liMapTools").removeClass("active");
+    $(".mapTools").removeClass("active");
 
     if (config.activeTool === 'identify') {
       if (bootleaf.identifyLayers && bootleaf.identifyLayers.length > 0){
@@ -604,7 +605,7 @@ $(document).ready(function(){
 
   } else {
     $("#sidebar").hide("slow");
-    $(".liMapTools").removeClass("active");
+    $(".mapTools").removeClass("active");
   }
 
   // Run custom code after the map has loaded
@@ -1429,7 +1430,7 @@ function handleQueryResults(data, layerConfig, outFields){
       },
       "columnDefs": [],
       "fnDrawCallback":function(){
-        if ( $('.dataTables_paginate .paginate_button').size() && $('.dataTables_paginate .paginate_button').size() > 3) {
+        if ( $('.dataTables_paginate .paginate_button').length && $('.dataTables_paginate .paginate_button').length > 3) {
           $(".dataTables_paginate").show();
         } else {
           $(".dataTables_paginate").hide();
@@ -1458,7 +1459,8 @@ function handleQueryResults(data, layerConfig, outFields){
       buttons: [
           {
               extend: 'csvHtml5',
-              text: 'Download results as CSV'
+              text: 'Download results as CSV',
+              className: "btn-outline-dark"
           }]
       });
     table.buttons( 0, null ).containers().appendTo( $('#exportButtons') );

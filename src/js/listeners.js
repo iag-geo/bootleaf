@@ -129,7 +129,7 @@ $("#sidebar-toggle-btn").click(function() {
 
 $("#sidebar-hide-btn").click(function() {
   switchOffTools();
-  $(".liMapTools").removeClass("active"); 
+  $(".mapTools").removeClass("active");
   animateSidebar();
   return false;
 });
@@ -172,19 +172,19 @@ function resetSidebar(title,contents){
 
 $(".mapTools").click(function(){
   // Enable/Disable the tools as appropriate
-  if ($(this).parent().hasClass("disabled")) {
+  if ($(this).hasClass("disabled")) {
     return false;
   };
-  if ($(this).parent().hasClass("active")) {
+  if ($(this).hasClass("active")) {
     setMapCursor('auto');
     switchOffTools();
-    $(".liMapTools").removeClass("active");
+    $(".mapTools").removeClass("active");
     bootleaf.activeTool = null;
     resetSidebar();
     $("#sidebar").hide("slow");
   } else {
-    $(".liMapTools").removeClass("active");
-    $(this).parent().addClass("active");
+    $(".mapTools").removeClass("active");
+    $(this).addClass("active");
     if (this.dataset["tool"] !== undefined){
       if (this.dataset["tool"] === 'identify') {
         configureIdentifyTool();
