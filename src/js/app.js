@@ -32,7 +32,7 @@ var bootleaf = {
     {"id": "esriDarkGray", "type": "esri", "theme": "DarkGray", "label": "Dark gray (ArcGIS)"},
     {"id": "esriNationalGeographic", "type": "esri", "theme": "NationalGeographic", "label": "National Geographic (ArcGIS)"},
     {"id": "esriOceans", "type": "esri", "theme": "Oceans", "label": "Oceans (ArcGIS)"},
-    {"id": "OpenStreetMap", "type": "tiled", "label": "OpenStreetMap", "url": "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"},
+    {"id": "OpenStreetMap", "type": "tiled", "label": "OpenStreetMap", "url": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"},
     {"id": "Aerial", "type": "bing", "label": "Bing satellite"},
     {"id": "AerialWithLabels", "type": "bing", "label": "Bing satellite labels"},
     {"id": "Road", "type": "bing", "label": "Bing streets"}
@@ -98,7 +98,7 @@ $(document).ready(function(){
     "dashArray": '3'
   };
 
-  // Override the default icon if an icon is specified. See http://leafletjs.com/reference-1.1.0.html#icon-default
+  // Override the default icon if an icon is specified. See https://leafletjs.com/reference-1.1.0.html#icon-default
   if (config.defaultIcon !== undefined){
     var options = ["imagePath", "iconUrl", "iconSize", "iconAnchor", "popupAnchor", "shadowUrl", "shadowSize", "shadowAnchor"];
     for (var o = 0; o < options.length; o++){
@@ -724,17 +724,17 @@ function setBasemap(basemap){
     bootleaf.basemapLayer = L.esri.basemapLayer(esriTheme, options);
   } else if (basemap.type === 'tiled'){
     if (basemap.id === 'OpenStreetMap') {
-      options.attribution = "<a href='http://www.openstreetmap.org/copyright' target='_blank'>© OpenStreetMap contributors</a>";
+      options.attribution = "<a href='https://www.openstreetmap.org/copyright' target='_blank'>© OpenStreetMap contributors</a>";
     }
     bootleaf.basemapLayer = L.tileLayer(basemap.url, options);
   } else if (basemap.type === 'mapbox'){
-    options["attribution"] = "<a target='_blank' href='https://www.mapbox.com/about/maps/'>© Mapbox</a>, <a href='http://www.openstreetmap.org/copyright' target='_blank'>© OpenStreetMap</a>, <a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a>"
+    options["attribution"] = "<a target='_blank' href='https://www.mapbox.com/about/maps/'>© Mapbox</a>, <a href='https://www.openstreetmap.org/copyright' target='_blank'>© OpenStreetMap</a>, <a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a>"
     var mapboxKey = config.mapboxKey || "";
     if (mapboxKey === '' || mapboxKey === undefined){
       $.growl.warning({ title: "Map Box error", message: "Ensure that you have specified a valid MapBox key in the config file"});
     }
     var mapboxTheme = basemap.theme || "streets";
-    bootleaf.basemapLayer = L.tileLayer("http://a.tiles.mapbox.com/v4/mapbox." + mapboxTheme + "/{z}/{x}/{y}.png?access_token=" + mapboxKey, options);
+    bootleaf.basemapLayer = L.tileLayer("https://a.tiles.mapbox.com/v4/mapbox." + mapboxTheme + "/{z}/{x}/{y}.png?access_token=" + mapboxKey, options);
   } else if (basemap.type === 'bing'){
     var options = {
       "bingMapsKey": config.bing_key,

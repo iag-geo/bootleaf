@@ -6,7 +6,7 @@ Certain HTTP requests require the presence of a reverse proxy, which acts as a g
 
 ## Windows
 
-Download nginx for windows from http://nginx.org/en/docs/windows.html then open the config file under `\conf\nginx.conf`.
+Download nginx for windows from https://nginx.org/en/docs/windows.html then open the config file under `\conf\nginx.conf`.
 
 ## Mac
 
@@ -26,7 +26,7 @@ Specify that all requests on this machine should pass via the reverse proxy to t
 
 ```
   location / {
-    proxy_pass http://localhost:80/;
+    proxy_pass https://localhost:80/;
   }
 ```
 
@@ -38,7 +38,7 @@ Add the following to your nginx.conf file:
 
 ```
   location /proxied_geoserver/ {
-    proxy_pass http://path.to.your.geoserver:8080/geoserver/;
+    proxy_pass https://path.to.your.geoserver:8080/geoserver/;
   }
 ```
 
@@ -54,4 +54,4 @@ Then within your Bootleaf application's config.js file, specify the URL to GeoSe
   }
 ```
 
-Access your Bootleaf app via port 8080 in order to send the above requests via the reverse-proxy, eg http://localhost:8080/bootleaf/
+Access your Bootleaf app via port 8080 in order to send the above requests via the reverse-proxy, eg https://localhost:8080/bootleaf/
