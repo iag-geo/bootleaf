@@ -41,6 +41,20 @@ var bootleaf = {
 
 $(document).ready(function(){
 
+  // The beforeMapLoads function allows for insertion of custom properties to manipulate the config file, or other operations
+  // which need to occur, without requiring any modificaiton to the core Bootleaf codebase.
+  // Call the loadMap function at the end of beforeMapLoads
+  try{
+    beforeMapLoads();
+  } catch (error){
+    $.growl.error({message: "There was a problem running the BeforeMapLoads custom code: " + error.message, fixed: true});
+  }
+
+});
+
+function loadMap(){
+  console.log("Load map function");
+
   if (typeof config === 'undefined') {
     $.growl.error({message: "Error - the configuration file is not found!", fixed: true});
     return null
@@ -64,13 +78,6 @@ $(document).ready(function(){
   // If the basemap is specified in the URL, it's handled in the basemap creation function
   if(getURLParameter("basemap") !== null){
     bootleaf.defaultBasemap = getURLParameter("basemap");
-  }
-
-  // Allows for insertion of custom properties to manipulate the config file
-  try{
-    beforeMapLoads();
-  } catch (error){
-    $.growl.error({message: "There was a problem running the BeforeMapLoads custom code: " + error.message, fixed: true});
   }
 
   // Set the page title
@@ -615,7 +622,7 @@ $(document).ready(function(){
     $.growl.error({ message: "There was a problem running the AfterMapLoads custom code: " + error.message});
   }
 
-});
+}
 
 function reorderLayers(){
 

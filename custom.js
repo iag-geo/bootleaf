@@ -1,6 +1,7 @@
 // Enter your custom JavaScript code here
 
 function beforeMapLoads(){
+	console.log("Before map loads function");
 
 	// // This function is called before the map loads, and is useful for manipulating the config object, eg
 	// // to add a new custom layer.
@@ -36,10 +37,15 @@ function beforeMapLoads(){
 	// 	bootleaf.layerParams.push(statesConfig.id);
 	// }
 
+	// Continue to load the map
+	loadMap();
+
 }
 
 function afterMapLoads(){
 	// This function is run after the map has loaded. It gives access to bootleaf.map, bootleaf.TOCcontrol, etc
+
+	console.log("After map loads function");
 
 	// Check to see whether the Gray basemap is chosen, and the user has zoomed in too far. In this case,
 	// switch to the Streets basemap
