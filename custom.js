@@ -11,7 +11,7 @@ function beforeMapLoads(){
 	// 	"id": "us_states",
 	// 	"name": "States",
 	// 	"type": "agsDynamicLayer",
-	// 	"url": "http://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Demographics/ESRI_Census_USA/MapServer/",
+	// 	"url": "https://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Demographics/ESRI_Census_USA/MapServer/",
 	// 	"layers": [5],
 	// 	"useCors": false,
 	// 	"visible": true
@@ -40,8 +40,8 @@ function beforeMapLoads(){
 
 function afterMapLoads(){
 	// This function is run after the map has loaded. It gives access to bootleaf.map, bootleaf.TOCcontrol, etc
-	
-	// Check to see whether the Gray basemap is chosen, and the user has zoomed in too far. In this case, 
+
+	// Check to see whether the Gray basemap is chosen, and the user has zoomed in too far. In this case,
 	// switch to the Streets basemap
 	bootleaf.map.on("zoomend", function(evt){
 		if (bootleaf.currentBasemap === 'Gray'){

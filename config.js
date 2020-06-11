@@ -25,7 +25,7 @@ var config = {
 			//"key": "AIzaS....sbW_E", // when using the Google geocoder, include your Google Maps API key (https://developers.google.com/maps/documentation/geocoding/start#get-a-key)
 		},
 		"TOC": {
-			//http://leafletjs.com/reference-1.0.2.html#control-layers-option
+			//https://leafletjs.com/reference-1.0.2.html#control-layers-option
 			"collapsed": false,
 			"uncategorisedLabel": "Layers",
 			"position": "topright",
@@ -55,7 +55,7 @@ var config = {
 	"bing_key": "enter your Bing Maps key",
 	"mapboxKey": "enter your MapBox key",
 	// "defaultIcon": {
-	// 	"imagePath": "http://leafletjs.com/examples/custom-icons/",
+	// 	"imagePath": "https://leafletjs.com/examples/custom-icons/",
 	// 	"iconUrl": "leaf-green.png",
 	// 	"shadowUrl": "leaf-shadow.png",
 	// 	"iconSize":     [38, 95],

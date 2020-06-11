@@ -25,7 +25,7 @@ module.exports = {
 				option: {source: "GNAF"}
 			};
 
-			// Determine the best Harmony search to use: http://uatcra04:30083/HRAWeb/hra/demo
+			// Determine the best Harmony search to use: https://uatcra04:30083/HRAWeb/hra/demo
 			query = query.toLowerCase().trim();
 			var tokens = query.replace(",", "").split(" ");
 			var wordCount = tokens.length;
@@ -113,7 +113,7 @@ module.exports = {
 						if(loc.latitude && loc.longitude){
 							// The response only includes the center point, so it's necessary to buffer the point to generate a bbox
 							latLng = L.latLng([loc.latitude, loc.longitude]);
-							latLngBounds = L.latLngBounds(L.latLng([parseFloat(loc.latitude) + 0.01, parseFloat(loc.longitude) + 0.01]), 
+							latLngBounds = L.latLngBounds(L.latLng([parseFloat(loc.latitude) + 0.01, parseFloat(loc.longitude) + 0.01]),
 								L.latLng([parseFloat(loc.latitude) - 0.01, parseFloat(loc.longitude) - 0.01]));
 
 							// Format the label nicely, avoiding unecessary junk like lot and unit numbers
