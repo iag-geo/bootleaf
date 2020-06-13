@@ -376,3 +376,22 @@ div.dt-buttons {
   margin-left: 5px;
   margin-right: 5px;
 }
+
+/* ArcGIS Online authentication form */
+#frmArcGISOnline {
+  display: none;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  padding: 25px;
+  border: 2px solid #333;
+  background: #fff;
+  font-size: 1.15em;
+  z-index: 1000;
+  margin-top: 50px;
+}
+
+.form-component {
+  margin-bottom: 15px;
+}
+

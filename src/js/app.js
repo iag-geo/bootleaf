@@ -41,9 +41,14 @@ var bootleaf = {
 
 $(document).ready(function(){
 
+  // Listen for the ArcGIS Online login button. If used, this function will obtain a token
+  // then call the loadMap function to continue loading
+  $("#btnArcGISOnline").click(authoriseArcGIS);
+
   // The beforeMapLoads function allows for insertion of custom properties to manipulate the config file, or other operations
-  // which need to occur, without requiring any modificaiton to the core Bootleaf codebase.
-  // Call the loadMap function at the end of beforeMapLoads
+  // which need to occur, without requiring any modification to the core Bootleaf codebase.
+  // Call the loadMap function at the end of beforeMapLoads (unless you're using the authoriseArcGIS method, which
+  // already calls loadMap once it has obtained a token)
   try{
     beforeMapLoads();
   } catch (error){
@@ -126,6 +131,16 @@ function loadMap(){
       var layerConfig = config.layers[layerIdx];
       var layerType = layerConfig.type;
       var layerId = layerConfig.id || "unknown layer";
+
+      // Append the token if applicable
+      if (layerConfig.tokenRequired){
+        if (config.token !== undefined) {
+          layerConfig.token = config.token;
+          console.log("appending token to layer", layerConfig)
+        } else {
+          $.growl.error({ message: "A token is required for this layer but was not provided"});
+        }
+      }
 
       // If a style has been specified, run a pointToLayer function to allow it to work
       if (layerConfig.style){
@@ -2346,4 +2361,39 @@ function buildLabelLayer(layerConfig) {
   bootleaf.labelLayers.push(labelLayer);
   bootleaf.layers.push(labelLayer);
 
+}
+
+// function to make request to server
+function serverAuth (server, username, password, callback) {
+  L.esri.post(server, {
+    username: username,
+    password: password,
+    f: 'json',
+    expiration: 86400,
+    client: 'referer',
+    referer: window.location.origin
+  }, callback);
+}
+
+// function to run when form submitted
+function authoriseArcGIS (e) {
+  // prevent page from refreshing
+  e.preventDefault();
+
+  // get values from form
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+
+  // generate token from server and add service from callback function
+  serverAuth(config.tokenUrl, username, password, function (error, response) {
+    if (error) {
+      $.growl.error({message: "There was a problem logging in to ArcGIS Online", fixed: true});
+      return;
+    }
+    config.token = response.token;
+    console.log("Your ArcGIS Online token is ", config.token);
+    $.growl.notice({message: "Successfully signed in to ArcGIS Online"});
+    loadMap();
+    $("#frmArcGISOnline").fadeOut();
+  });
 }

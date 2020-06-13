@@ -129,7 +129,22 @@
             </div>
         </div>
     </div>
-    <div id="map"></div>
+    <div id="map">
+        <!-- form to generate a token using ArcGIS Online -->
+        <div id="frmArcGISOnline" class="form-container">
+          <form id="securedServicesForm">
+            <div class="form-component">
+              <label for="username">User Name</label>
+              <input type="text" id="username" />
+            </div>
+            <div class="form-component">
+              <label for="password">Password</label>
+              <input type="password" id="password">
+            </div>
+            <button id="btnArcGISOnline" type="submit">Log in to ArcGIS Online</button>
+          </form>
+        </div>
+    </div>
 </div>
 <div id="loading">
     <div class="loading-indicator">

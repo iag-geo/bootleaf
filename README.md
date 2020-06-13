@@ -9,6 +9,7 @@ BootLeaf
  - [Identify](#identify)
  - [Query](#query)
  - [Custom code](#custom-code)
+ - [ArcGIS authorisation](#authorisation)
  - [Known issues](#issues)
 
 ### Introduction
@@ -342,6 +343,7 @@ If the query layer uses a projection other than lat/long, the layer's coordinate
 
 *Note: the Query Tool is only enabled if there are queryable layers on the map.*
 
+
 ## [Custom code](#custom-code)
 The file custom.js can be used to personalise the map by writing additional functionality. This file contains 2 functions, `beforeMapLoads()` and `afterMapLoads()`, which allow you to perform customisations as required.
 
@@ -349,7 +351,20 @@ The sample file includes code to demonstrate how to use a user-defined query str
 
 ![Custom code screenshot](https://i.imgur.com/6YLfiHz.png)
 
+Once the `beforeMapLoads` function has completed, the `loadMap` function is called to continue loading the layers and configuring other properties.
+
 Additional [Leaflet plugins](https://leafletjs.com/plugins.html) may also be added to Bootleaf. Download the relevant plugin into the `/src/plugins` directory then add a reference to the plugin in the `index.html` file, following the pattern of the existing plugins. Then use the plugin as required in the `custom.js` file.
+
+## [ArcGIS authorisation](#authorisation)
+If you are using authorised/restricted services from ArcGIS Online, there is an option to log the user in using oAuth.
+
+Within `styles.css`, set `display: block;` on the element `frmArcGISOnline`. This will display a popup window allowing the user to log in to ArcGIS Online.
+
+In the config.js file, add the option `tokenRequired: true;` to any ArcGIS Online layers which require authentication. You must ensure that the layers are shared appropriately within the approriate group within ArcGIS Online.
+
+Once the token has been retrieved, the `loadMap` function will be called any any secure layers will have the token applied as they are built.
+
+Within the `config.js` file, add the parameter `tokenRequired: true` to any ArcGIS services which require authentication.
 
 ## [Known issues and other problems](#issues)
 

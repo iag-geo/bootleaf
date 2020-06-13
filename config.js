@@ -1,4 +1,5 @@
 var config = {
+	"tokenUrl": 'https://www.arcgis.com/sharing/generateToken', // ArcGIS Online token generation URL
 	"title": "Bootleaf template map",
 	"start": {
 		// "maxZoom": 16,
@@ -50,6 +51,7 @@ var config = {
 			]
 		}
 	},
+
 	// "activeTool": "identify", // options are identify/coordinates/queryWidget
 	"basemaps": ['esriGray', 'esriDarkGray', 'esriStreets', 'OpenStreetMap', "Aerial"],
 	"bing_key": "enter your Bing Maps key",
