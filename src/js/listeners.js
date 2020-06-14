@@ -68,7 +68,7 @@ $(document).on("mouseover", ".feature-row", function(e){
 });
 
 // Login modal listeners
-$("#btnArcGISOnline").click(authoriseArcGIS);``
+$("#btnArcGISOnline").click(authoriseArcGIS);
 $('#loginModal').on('hide.bs.modal', function (e) {
   console.log("login modal was just closed");
   if (config.token === undefined) {

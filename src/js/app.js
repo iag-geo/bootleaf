@@ -2384,6 +2384,7 @@ function serverAuth (server, username, password, callback) {
 function authoriseArcGIS (e) {
   // prevent page from refreshing
   e.preventDefault();
+  $("#btnArcGISOnline").prop("disabled", true);
 
   // get values from form
   const username = document.getElementById('username').value;
