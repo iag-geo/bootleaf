@@ -356,13 +356,13 @@ Once the `beforeMapLoads` function has completed, the `loadMap` function is call
 Additional [Leaflet plugins](https://leafletjs.com/plugins.html) may also be added to Bootleaf. Download the relevant plugin into the `/src/plugins` directory then add a reference to the plugin in the `index.html` file, following the pattern of the existing plugins. Then use the plugin as required in the `custom.js` file.
 
 ## [ArcGIS authorisation](#authorisation)
-If you are using authorised/restricted services from ArcGIS Online, there is an option to log the user in.
+If you are using authorised/restricted services from ArcGIS Online, ArcGIS Server or Portal for ArcGIS, there is an option to log the user in.
 
-Within the config file, set the option `requireArcGISLogin: true`. This will display a popup window allowing the user to log in to ArcGIS Online or ArcGIS Server. Specify the [ArcGIS token generation URL](https://developers.arcgis.com/rest/services-reference/generate-token.htm) in the `tokenUrl` parameter - the default value is for ArcGIS Online tokens.
+Within the config file, set the option `requireArcGISLogin: true`. This will display a popup window allowing the user to log in to ArcGIS. Specify the [ArcGIS token generation URL](https://developers.arcgis.com/rest/services-reference/generate-token.htm) in the `tokenUrl` parameter - the default value is for ArcGIS Online tokens.
 
-In the config.js file, add the option `tokenRequired: true;` to any ArcGIS Online layers which require authentication. You must ensure that the layers are shared appropriately within the approriate group within ArcGIS Online.
+In the config.js file, add the option `tokenRequired: true;` to any ArcGIS layers which require authentication. You must ensure that the layers are shared appropriately within the approriate group within ArcGIS.
 
-Once the token has been retrieved, the `loadMap` function will be called any any secure layers will have the token applied as they are built.
+Once the token has been retrieved, the `loadMap` function will be called and any secure layers will have the token applied as they are built.
 
 ## [Known issues and other problems](#issues)
 
