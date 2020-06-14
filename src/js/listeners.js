@@ -15,7 +15,7 @@ if ( !("ontouchstart" in window) ) {
   $(document).on("click", ".feature-row", function(e) {
     bootleaf.map.removeLayer(bootleaf.highlightLayer);
 
-    // Retrieve the feature's geometry from the queryResults dict, then send it to the 
+    // Retrieve the feature's geometry from the queryResults dict, then send it to the
     // showHighlight function. Tweak the parameters to match the identifyResults format
     try{
       var feature = bootleaf.queryResults[parseInt(e.target.dataset['idx'])];
@@ -31,7 +31,7 @@ if ( !("ontouchstart" in window) ) {
       feature.geometryType = bootleaf.queryResults.geometryType;
       feature.geometry['spatialReference']= {"wkid": bootleaf.queryResults.wkid};
       showHighlight(feature, true);
-      
+
     } catch(err) {
       if(err.message !== undefined){
         console.log(err.message);
@@ -49,14 +49,14 @@ $(document).on("mouseout", ".feature-row", function(e){
 $(document).on("mouseover", ".feature-row", function(e){
   bootleaf.map.removeLayer(bootleaf.highlightLayer);
 
-  // Retrieve the feature's geometry from the queryResults dict, then send it to the 
+  // Retrieve the feature's geometry from the queryResults dict, then send it to the
   // showHighlight function. Tweak the parameters to match the identifyResults format
   try{
     var feature = bootleaf.queryResults[parseInt(e.target.dataset['idx'])];
     feature.geometryType = bootleaf.queryResults.geometryType;
     feature.geometry['spatialReference']= {"wkid": bootleaf.queryResults.wkid};
     showHighlight(feature, false);
-    
+
   } catch(err) {
     if(err.message !== undefined){
       console.log(err.message);
@@ -65,6 +65,16 @@ $(document).on("mouseover", ".feature-row", function(e){
     }
   }
 
+});
+
+// Login modal listeners
+$("#btnArcGISOnline").click(authoriseArcGIS);``
+$('#loginModal').on('hide.bs.modal', function (e) {
+  console.log("login modal was just closed");
+  if (config.token === undefined) {
+    $.growl.error({message: "There was a problem logging in to ArcGIS", fixed: true});
+    $("#loading").hide();
+  }
 });
 
 $("#about-btn").click(function() {
@@ -106,7 +116,7 @@ $("#share-btn").click(function() {
     shareURL = hostname + ":" + port + path + params;
   } else {
     shareURL = hostname + path + params;
-  }   
+  }
   $("#shareURL").html("<a target='_blank' href=" + shareURL+ ">Link to this map</a>");
   $("#shareModal").modal("show");
   $(".navbar-collapse.in").collapse("hide");

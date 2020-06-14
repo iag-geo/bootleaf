@@ -130,20 +130,7 @@
         </div>
     </div>
     <div id="map">
-        <!-- form to generate a token using ArcGIS Online -->
-        <div id="frmArcGISOnline" class="form-container">
-          <form id="securedServicesForm">
-            <div class="form-component">
-              <label for="username">User Name</label>
-              <input type="text" id="username" />
-            </div>
-            <div class="form-component">
-              <label for="password">Password</label>
-              <input type="password" id="password">
-            </div>
-            <button id="btnArcGISOnline" type="submit">Log in to ArcGIS Online</button>
-          </form>
-        </div>
+
     </div>
 </div>
 <div id="loading">
@@ -153,6 +140,31 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                 <h5 class="modal-title">Login to ArcGIS</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form class="form-signin">
+                  <label for="username" class="sr-only">Email address</label>
+                  <input type="text" id="username" class="form-control" placeholder="ArcGIS username" required="" autofocus="">
+                  <label for="password" class="sr-only">Password</label>
+                  <input type="password" id="password" class="form-control" placeholder="Password" required="">
+
+                  <button id="btnArcGISOnline" class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 
 <div class="modal fade" id="aboutModal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg">

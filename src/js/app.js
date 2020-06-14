@@ -41,16 +41,21 @@ var bootleaf = {
 
 $(document).ready(function(){
 
-  // Listen for the ArcGIS Online login button. If used, this function will obtain a token
-  // then call the loadMap function to continue loading
-  $("#btnArcGISOnline").click(authoriseArcGIS);
-
-  // The beforeMapLoads function allows for insertion of custom properties to manipulate the config file, or other operations
-  // which need to occur, without requiring any modification to the core Bootleaf codebase.
-  // Call the loadMap function at the end of beforeMapLoads (unless you're using the authoriseArcGIS method, which
-  // already calls loadMap once it has obtained a token)
   try{
-    beforeMapLoads();
+
+    // The beforeMapLoads function allows for insertion of custom properties to manipulate the config file, or other operations
+    // which need to occur, without requiring any modification to the core Bootleaf codebase.
+
+    // If the config file specifies requireArcGISLogin: true, show the login modal. Once the user
+    // has successfully logged in, the beforeMapLoads function will be called.
+    if (config.requireArcGISLogin) {
+      $("#loading").hide();
+      $("#loginModal").modal("show");
+    } else {
+      // Otherwise just call the beforeMapLoads function now
+      beforeMapLoads();
+    }
+
   } catch (error){
     $.growl.error({message: "There was a problem running the BeforeMapLoads custom code: " + error.message, fixed: true});
   }
@@ -2393,7 +2398,7 @@ function authoriseArcGIS (e) {
     config.token = response.token;
     console.log("Your ArcGIS Online token is ", config.token);
     $.growl.notice({message: "Successfully signed in to ArcGIS Online"});
-    loadMap();
-    $("#frmArcGISOnline").fadeOut();
+    beforeMapLoads();
+    $("#loginModal").modal("hide");
   });
 }

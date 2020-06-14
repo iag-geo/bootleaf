@@ -77,9 +77,3 @@ div.dataTables_wrapper div.dataTables_paginate {
 .leaflet-draw-toolbar .leaflet-draw-draw-circlemarker {
   display: none;
 }
-
-/* Display the ArcGIS Online login prompt if there are any layers requiring
-secure login to ArcGIS Online*/
-#frmArcGISOnline {
-  display: block;
-}

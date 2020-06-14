@@ -37,8 +37,8 @@ function beforeMapLoads(){
 	// 	bootleaf.layerParams.push(statesConfig.id);
 	// }
 
-	// Continue to load the map, if you're not using the authoriseArcGIS function
-	// loadMap();
+	// Continue to load the map
+	loadMap();
 
 }
 

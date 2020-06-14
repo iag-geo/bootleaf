@@ -1,5 +1,7 @@
 var config = {
-	"tokenUrl": 'https://www.arcgis.com/sharing/generateToken', // ArcGIS Online token generation URL
+	"requireArcGISLogin": false, // Does the user need to log in to ArcGIS Online or ArcGIS Server?
+	"tokenUrl": 'https://www.arcgis.com/sharing/generateToken', // ArcGIS token generation URL
+
 	"title": "Bootleaf template map",
 	"start": {
 		// "maxZoom": 16,
