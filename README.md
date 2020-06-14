@@ -345,7 +345,9 @@ If the query layer uses a projection other than lat/long, the layer's coordinate
 
 
 ## [Custom code](#custom-code)
-The file custom.js can be used to personalise the map by writing additional functionality. This file contains 2 functions, `beforeMapLoads()` and `afterMapLoads()`, which allow you to perform customisations as required.
+The file custom.js can be used to personalise the map by writing additional functionality which interacts with the Bootleaf map, but without requiring any changes to the Bootleaf source code. This allows for easier upgrading to the latest Bootleaf release without any rework of your custom code.
+
+This file contains 2 functions, `beforeMapLoads()` and `afterMapLoads()`, which allow you to perform customisations as required.
 
 The sample file includes code to demonstrate how to use a user-defined query string to filter a layer on-the-fly:
 
