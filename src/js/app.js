@@ -1111,6 +1111,7 @@ function runQueryWidget() {
           queryUrl = queryUrl.replace(suffix, 'ows');
         }
       }
+
       if(layer.queryWidget != undefined) {
 
         if (layer.queryWidget.maxAllowableOffset !== undefined) {
@@ -1159,6 +1160,11 @@ function runQueryWidget() {
       "returnGeometry": true,
       "maxAllowableOffset": maxAllowableOffset,
       "useCors": false
+    }
+
+    // Append the token if applicable
+    if (layer.token !== undefined) {
+      queryData["token"] = layer.token;
     }
 
     if (outFields.length > 0) {
