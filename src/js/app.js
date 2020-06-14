@@ -1594,6 +1594,11 @@ function runIdentifies(evt) {
         "layers": "all"
       }
 
+      // Append the ArcGIS token if applicable
+      if (idLayer.token !== undefined){
+        data["token"] = idLayer.token;
+      }
+
       try {
         if (idLayer.layerConfig.where !== undefined) {
           data['layerDefs'] = "{" + idLayer.layerConfig.layers[0] + ":" + idLayer.layerConfig.where + "}";
