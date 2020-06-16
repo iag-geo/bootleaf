@@ -377,3 +377,6 @@ div.dt-buttons {
   margin-right: 5px;
 }
 
+#authenticationError {
+  display: none;
+}
