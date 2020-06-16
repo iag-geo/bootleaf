@@ -2404,8 +2404,8 @@ function authoriseArcGIS (e) {
   // generate token from server and add service from callback function
   serverAuth(config.tokenUrl, username, password, function (error, response) {
     if (error) {
-      $.growl.error({message: "There was a problem logging in to ArcGIS Online", fixed: true});
       $(".navbar").hide();
+      $.growl.error({message: "There was a problem logging in to ArcGIS Online", fixed: true});
       return;
     }
     config.token = response.token;
