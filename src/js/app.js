@@ -50,7 +50,7 @@ $(document).ready(function(){
     // has successfully logged in, the beforeMapLoads function will be called.
     if (config.requireArcGISLogin) {
       $("#loading").hide();
-      $("#loginModal").modal("show");
+      $("#loginModal").modal({backdrop: 'static', keyboard: false});
     } else {
       // Otherwise just call the beforeMapLoads function now
       beforeMapLoads();
@@ -2404,7 +2404,7 @@ function authoriseArcGIS (e) {
   // generate token from server and add service from callback function
   serverAuth(config.tokenUrl, username, password, function (error, response) {
     if (error) {
-      $(".navbar").hide();
+      $("#btnArcGISOnline").prop("disabled", false);
       $.growl.error({message: "There was a problem logging in to ArcGIS Online", fixed: true});
       return;
     }
