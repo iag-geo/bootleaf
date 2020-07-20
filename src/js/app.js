@@ -14,7 +14,8 @@ var bootleaf = {
   "clickTolerance": 5,
   "currentTool": null,
   "queryTasks": [],
-  "queryReults": {},
+  "filterTasks": [],
+  "queryResults": {},
   "visibleLayers": [],
   "basemaps": [
     {"id": "MapboxStreets", "type": "mapbox", "theme": "streets", "label": "Streets (MapBox)"},
@@ -379,7 +380,7 @@ function loadMap(){
         });
       }
 
-        // Configure the Query Widget for this layer, if specified in the config
+      // Configure the Query Widget for this layer, if specified in the config
       if (layerConfig.queryWidget !== undefined && layerConfig.queryWidget.queries && layerConfig.queryWidget.queries.length > 0) {
         var queries = []
         for (var queryIdx = 0; queryIdx < layerConfig.queryWidget.queries.length; queryIdx ++){
@@ -388,6 +389,17 @@ function loadMap(){
           queries.push(query);
         }
         bootleaf.queryTasks.push({"layerName": layerConfig.name, "layerId": layerConfig.id, "queries": queries});
+      }
+
+      // Configure the Filter Widget for this layer, if specified in the config
+      if (layerConfig.filterWidget !== undefined && layerConfig.filterWidget.queries && layerConfig.filterWidget.queries.length > 0) {
+        var filters = []
+        for (var filterIdx = 0; filterIdx < layerConfig.filterWidget.queries.length; filterIdx ++){
+          var filter = layerConfig.filterWidget.queries[filterIdx];
+          filter.layerId = layerConfig.id;
+          filters.push(filter);
+        }
+        bootleaf.filterTasks.push({"layerName": layerConfig.name, "layerId": layerConfig.id, "filters": filters});
       }
 
       if (layer !== undefined) {
@@ -614,9 +626,16 @@ function loadMap(){
 
   // Decide whether to enable the queryWidget tool
   if (!bootleaf.queryTasks || bootleaf.queryTasks.length === 0){
-    $("#liQueryWidget").addClass('disabled');
+    $("#queryWidget-btn").hide();
   } else {
-    $("#liQueryWidget").removeClass('disabled');
+    $("#queryWidget-btn").show();
+  }
+
+  // Decide whether to enable the filterWidget tool
+  if (!bootleaf.filterTasks || bootleaf.filterTasks.length === 0){
+    $("#filterWidget-btn").hide();
+  } else {
+    $("#filterWidget-btn").show();
   }
 
   // Enable Identify if any identifiable layers are present

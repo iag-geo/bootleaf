@@ -257,6 +257,18 @@ var config = {
 				],
 				"layerIndex": 3,
 				"maxAllowableOffset": 0.001
+			},
+			"filterWidget": {
+				"queries" : [
+					{"name": "NAME", "alias": "County name"},
+					{"name": "STATE_NAME", "alias": "State name"},
+					{"name": "POP2000", "alias": "Population", "type": "numeric"}
+				],
+				"outFields": [
+					{"name": "NAME", "alias": "County name"},
+					{"name": "STATE_NAME", "alias": "State name"},
+					{"name": "POP2000", "alias": "Population", "thousands": true, "hidden": true}
+				]
 			}
 		},
 		{
@@ -295,7 +307,20 @@ var config = {
 				"layerIndex": 5,
 				"maxAllowableOffset": 0.001,
 			},
-			"maxZoom": 10,
+			"filterWidget": {
+				"queries" : [
+					{"name": "STATE_NAME", "alias": "State name"},
+					{"name": "POP2000", "alias": "Population", "type": "numeric"}
+				],
+				"outFields": [
+					{"name": "STATE_NAME", "alias": "State name"},
+					{"name": "POP2000", "alias": "Population", "thousands": true},
+					{"name": "MALES", "alias": "No. Males", "thousands": true},
+					{"name": "FEMALES", "alias": "No. Females", "thousands": true},
+					{"name": "SQMI", "alias": "Area (sqmi)", "thousands": true, "decimals": 1}
+				]
+			},
+			"maxZoom": 10
 		},
 		{
 			"id": "US_population",

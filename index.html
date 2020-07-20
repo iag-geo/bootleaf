@@ -91,6 +91,9 @@
                     <a href="#" id="queryWidget-btn" class="dropdown-item mapTools" data-tool="queryWidget">
                         <i class="fa fa-question-circle"></i>&nbsp;&nbsp;Query Widget
                     </a>
+                    <a href="#" id="filterWidget-btn" class="dropdown-item mapTools" data-tool="filterWidget">
+                        <i class="fa fa-filter"></i>&nbsp;&nbsp;Filter Widget
+                    </a>
                     <a href="#" id="coordinates-btn" class="dropdown-item mapTools" data-tool="coordinates">
                         <i class="fa fa-dot-circle-o"></i>&nbsp;&nbsp;Get map coordinates
                     </a>
@@ -252,6 +255,30 @@
         </div>
     </div>
     <div id="queryResults" class="dataTables_wrapper"></div>
+
+</script>
+
+<script id="filter-template" type="text/x-handlebars-template">
+    <div id="frmFilterWidget" class="well well-sm">
+        <div class="form-group">
+            <label for="filterWidgetLayer">Layer</label>
+            <select id="filterWidgetLayer" class="form-control">
+                {{#each this}}
+                <option value={{this.id}}>{{this.name}}</option>
+                {{/each}}
+            </select>
+            <label for="filterWidgetField">Field</label>
+            <select id="filterWidgetField" class="form-control">
+            </select>
+            <label for="filterWidgetOperator">Operator</label>
+            <select id="filterWidgetOperator" class="form-control">
+            </select>
+            <label for="filterWidgetValue">Value</label>
+            <input id="filterWidgetValue" type="text" class="form-control filterTask"
+                   placeholder="Enter the value to search for">
+            <div id="btnRunfilter" class="btn btn-warning">Apply filter</div>
+        </div>
+    </div>
 
 </script>
 
