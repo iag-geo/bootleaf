@@ -1545,6 +1545,328 @@ function resetQueryOutputTable(){
 }
 
 /**************************************************************************************************/
+// FILTER WIDGET START
+/**************************************************************************************************/
+
+function configureFilterWidget(){
+  switchOffTools();
+  bootleaf.activeTool = "filterWidget";
+
+  if (bootleaf.filterTasks) {
+    if (bootleaf.filterTasks.length > 0){
+
+      $("#liFilterWidget").removeClass('disabled');
+
+      // Configure the handlebars template for the Filter Widget. The layer names are inserted here,
+      // while the field and operator values are inserted elsewhere
+      var filterSource = $("#filter-template").html();
+      bootleaf.filterTemplate = Handlebars.compile(filterSource);
+
+      var layerNames = $.map(bootleaf.filterTasks, function( val, i ) {
+        var name = val.layerName;
+        if (name === undefined || name === '') {
+          name = val.layerId;
+        }
+
+        var output = {
+          "id": val.layerId,
+          "name": name
+        }
+        return output;
+      });
+
+      var html = bootleaf.filterTemplate(layerNames);
+      resetSidebar("Filter", html);
+
+      // Seed the filter field dropdown based on the selected layer
+      updateFilterFields($("#filterWidgetLayer option:selected" ).val());
+
+      $("#btnRunFilter").on('click', runFilterWidget);
+
+    } else {
+      $("#sidebarContents").html("<p><span class='info'>There are no filter-able layers in the map</span></p>");
+      $("#btnRunFilter").off('click', runFilterWidget);
+      $("#liFilterWidget").addClass('disabled');
+    }
+
+  } else {
+    $("#sidebarContents").html("<p><span class='info'>There are no filter-able layers in the map</span></p>");
+    $("#btnRunFilter").off('click', runFilterWidget);
+    $("#liFilterWidget").addClass('disabled');
+  }
+
+  // Update the filter field names when the filter layer selection changes
+  $("#filterWidgetLayer").off("change")
+  $("#filterWidgetLayer").on("change", function(e){
+    updateFilterFields(e.target.value);
+  });
+
+  $("#sidebar").show("slow");
+
+}
+
+function updateFilterFields(layerId){
+  // Update the Fields dropdown on the Filter widget with the filter fields for this layer
+  $("#filterWidgetField").empty();
+  $("#filterWidgetValue").val("");
+
+  var fieldOptions = [];
+
+  for (var i=0; i < bootleaf.filterTasks.length; i++){
+    var filterTask = bootleaf.filterTasks[i];
+    if (filterTask.layerId === layerId){
+      var filters = filterTask.filters;
+      for (var j=0; j < filters.length; j++){
+        var filter = filters[j];
+        var fieldName = filter.name;
+        var fieldAlias = filter.alias || fieldName;
+        var fieldType = filter.type || "text";
+        var fieldDefaultOperator = filter.defaultOperator || "=";
+        var option = '<option value="' + fieldName + '" data-fieldtype="';
+        option += fieldType + '" + data-defaultoperator ="' + fieldDefaultOperator + '"';
+        option += '>' + fieldAlias + "</option>"
+        fieldOptions.push(option);
+      }
+    }
+  }
+  $("#filterWidgetField").append(fieldOptions);
+
+  // Update the filter operator when the filter field selection changes
+  updateFilterOperator($("#filterWidgetField option:selected")[0]);
+  $("#filterWidgetField").off("change");
+  $("#filterWidgetField").on("change", function(){
+    updateFilterOperator(this.options[this.selectedIndex]);
+  });
+}
+
+function updateFilterOperator(option){
+  // Update the Operators dropdown on the Filter widget with the applicable options for this field type
+  $("#filterWidgetOperator").empty();
+  $("#filterWidgetValue").val("");
+  var defaultOperator = option.dataset['defaultoperator'] || '=';
+
+  var operators = [
+    {"value": "=", "alias": "is"},
+    {"value": "starts with"},
+    {"value": "ends with"},
+    {"value": "contains"}
+  ];
+  if (option !== undefined && option.dataset['fieldtype'] !== undefined){
+    var fieldType = option.dataset["fieldtype"];
+    if (fieldType === 'numeric'){
+      operators = [
+        {"value": "<", "alias": "is less than"},
+        {"value": "=", "alias": "is equal to"},
+        {"value": ">", "alias": "is greater than"}
+      ];
+    }
+    // TODO: add other field types, eg date, etc
+  }
+
+  var operatorOptions = $.map( operators, function( val, i ) {
+    var alias = val.alias || val.value;
+    var opt = '<option value="' + val.value + '"';
+    if (defaultOperator === val.value) {
+      opt += " selected='selected'";
+    }
+    opt += '>' + alias + "</option>"
+    return opt;
+  });
+  $("#filterWidgetOperator").append(operatorOptions);
+
+}
+
+function runFilterWidget() {
+  $("#ajaxLoading").show();
+  var layerId = $("#filterWidgetLayer option:selected").val()
+  var fieldName = $("#filterWidgetField option:selected").val();
+  var fieldType = $("#filterWidgetField option:selected")[0].dataset['fieldtype'];
+  var operator = $("#filterWidgetOperator option:selected").val();
+  var filterText = $("#filterWidgetValue").val().toUpperCase();
+
+  // Obtain the filter URL for this layer
+  var filterUrl;
+  var outFields = '*';
+  var maxAllowableOffset = 0.1;
+  for(var layerIdx=0; layerIdx < config.layers.length; layerIdx++){
+    var layer = config.layers[layerIdx];
+    if (layer.id === layerId){
+
+      if (layer.type === 'agsFeatureLayer'){
+        if(layer.url[layer.url.length - 1] === "/") {
+          filterUrl = layer.url + "filter?";
+        } else {
+          filterUrl = layer.url + "/filter?";
+        }
+      } else if (layer.type === 'agsDynamicLayer'){
+        var layerIndex = layer.filterWidget.layerIndex;
+        if(layer.url[layer.url.length - 1] === "/") {
+          filterUrl = layer.url + layerIndex + "/filter?";
+        } else {
+          filterUrl = layer.url + "/" + layerIndex + "/filter?";
+        }
+      } else if (layer.type === 'wmsTiledLayer' || layer.type === 'WFS') {
+        // Use the WFS form of the URL for filtering. This code ensures that the correct suffix is used.
+        var filterUrl = layer.url;
+        var tokens = filterUrl.split("/");
+        var suffix = tokens[tokens.length - 1];
+        if (suffix !== 'ows') {
+          filterUrl = filterUrl.replace(suffix, 'ows');
+        }
+      }
+
+      if(layer.filterWidget != undefined) {
+
+        if (layer.filterWidget.maxAllowableOffset !== undefined) {
+          maxAllowableOffset = layer.filterWidget.maxAllowableOffset;
+        }
+      }
+      break;
+    }
+  }
+
+  if (filterUrl === undefined){
+    handleFilterError("Unable to find the URL to filter this layer");
+    return null;
+  }
+
+  // Ensure that any hard-coded where clause is honoured here
+  var where;
+  var filter;
+  if (layer.layerDefs !== undefined){
+    for (var key in layer.layerDefs){
+      var layerDefFilter = layer.layerDefs[key];
+      if (where === undefined){
+        where = "(" + layerDefFilter + ")";
+      } else {
+        where += " and (" + layerDefFilter + ")";
+      }
+    }
+  } else if (layer.where !== undefined){
+    where = layer.where;
+  }
+
+  // the FilterWidget may have its own outFields, otherwise use the layer's outFields, otherwise use all fields
+  var outFields = [];
+  if (layer.filterWidget.outFields !== undefined) {
+    outFields = layer.filterWidget.outFields;
+  } else if (layer.outFields !== undefined) {
+    outFields = layer.outFields;
+  }
+
+  // ArcGIS and GeoServer filters use very different syntax, to treat them differently from this point
+  if (layer.type === 'agsDynamicLayer' || layer.type === 'agsFeatureLayer') {
+
+    // Run a filter using this layer's URL and this field name, with the entered filter text
+    var filterData = {
+      "f": "json",
+      "returnGeometry": true,
+      "maxAllowableOffset": maxAllowableOffset,
+      "useCors": false
+    }
+
+    // Append the token if applicable
+    if (layer.token !== undefined) {
+      filterData["token"] = layer.token;
+    }
+
+    if (outFields.length > 0) {
+      filterData['outFields'] = outFields[0].name;
+      for (var qIdx = 0; qIdx < outFields.length; qIdx ++){
+        filterData['outFields'] += "," + outFields[qIdx].name;
+      }
+    }
+
+    // Add or use any filter parameters entered by the user
+    if (fieldType === 'numeric'){
+      filter = fieldName + operator + filterText;
+    } else {
+
+      if(filterText === "*" || filterText === "") {
+        if (where === undefined) {
+          filter = "1=1";
+        }
+      } else if (operator === "starts with"){
+        filter = 'upper(' + fieldName + ") like '" + filterText + "%'";
+      } else if (operator === "ends with"){
+        filter = 'upper(' + fieldName + ") like '%" + filterText + "'";
+      } else if (operator === "contains"){
+        filter = 'upper(' + fieldName + ") like '%" + filterText + "%'";
+      } else {
+        filter = 'upper(' + fieldName + ') ' + operator + "'" + filterText + "'";
+      }
+    }
+
+    if (where === undefined){
+      where = "(" + filter + ")";
+    } else if (filter !== undefined) {
+      where += " and (" + filter + ")";
+    }
+    filterData["where"] = where;
+    //TODO: add other field types, eg date, etc
+
+
+  } else if (layer.type === 'wmsTiledLayer' || layer.type === 'WFS') {
+    var filterData = {
+      service: "WFS",
+      version: "1.0.0",
+      request: "GetFeature",
+      outputFormat: 'application/json',
+      maxFeatures: 1000,
+      sortBy: fieldName
+    }
+    //TODO - make maxFeatures a parameter from the config file
+
+    if (outFields.length > 0){
+      var geomField = layer.geomField || "geom";
+      filterData['propertyName'] = geomField;
+      for (var oIdx=0; oIdx < outFields.length; oIdx ++){
+        filterData['propertyName'] += "," + outFields[oIdx].name;
+      }
+    }
+
+    var filter;
+    if (fieldType === 'numeric'){
+      filter = fieldName + operator + filterText;
+    } else {
+      if(filterText === "*" || filterText === ""){
+        filter = "1=1";
+      } else if (operator === "starts with"){
+        filter = "strToUpperCase(" + fieldName + ") like '" + filterText + "%'";
+      } else if (operator === "ends with"){
+        filter = 'strToUpperCase(' + fieldName + ") like '%" + filterText + "'";
+      } else if (operator === "contains"){
+        filter = 'strToUpperCase(' + fieldName + ") like '%" + filterText + "%'";
+      } else {
+        filter = 'strToUpperCase(' + fieldName + ') ' + operator + "'" + filterText + "'";
+      }
+    }
+    //TODO: add other field types, eg date, etc
+
+    if (where === undefined) {
+      where = filter;
+    } else {
+      where += " and " + filter;
+    }
+    filterData["CQL_FILTER"] = where;
+
+    if (layer.type === 'wmsTiledLayer'){
+      filterData.typeName = layer.layers;
+    } else if (layer.type === 'WFS') {
+      filterData.typeName = layer.typeName;
+    }
+
+  }
+
+}
+
+function handleFilterError(errMessage){
+  $.growl.warning({ title: "Filter Widget", message: errMessage});
+  $("#ajaxLoading").hide();
+  $("#filterResults").html('<p class="info">' + errMessage + '</p>');
+}
+
+/**************************************************************************************************/
 // IDENTIFY TOOL START
 /**************************************************************************************************/
 

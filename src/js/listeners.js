@@ -202,6 +202,8 @@ $(".mapTools").click(function(){
         configureCoordinatesTool();
       } else if (this.dataset["tool"] === 'queryWidget') {
         configureQueryWidget();
+      } else if (this.dataset["tool"] === 'filterWidget') {
+        configureFilterWidget();
       }
     } else {
       $("#sidebar").hide("slow");
