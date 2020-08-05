@@ -54,7 +54,7 @@ var config = {
 		}
 	},
 
-	// "activeTool": "identify", // options are identify/coordinates/queryWidget
+	"activeTool": "filterWidget", // options are identify/coordinates/queryWidget
 	"basemaps": ['esriGray', 'esriDarkGray', 'esriStreets', 'OpenStreetMap', "Aerial"],
 	"bing_key": "enter your Bing Maps key",
 	"mapboxKey": "enter your MapBox key",
@@ -258,18 +258,7 @@ var config = {
 				"layerIndex": 3,
 				"maxAllowableOffset": 0.001
 			},
-			"filterWidget": {
-				"queries" : [
-					{"name": "NAME", "alias": "County name"},
-					{"name": "STATE_NAME", "alias": "State name"},
-					{"name": "POP2000", "alias": "Population", "type": "numeric"}
-				],
-				"outFields": [
-					{"name": "NAME", "alias": "County name"},
-					{"name": "STATE_NAME", "alias": "State name"},
-					{"name": "POP2000", "alias": "Population", "thousands": true, "hidden": true}
-				]
-			}
+			"filter": {"name": "POP2000", "alias": "Population", "type": "numeric"}
 		},
 		{
 			"id": "us_states",
@@ -307,19 +296,7 @@ var config = {
 				"layerIndex": 5,
 				"maxAllowableOffset": 0.001,
 			},
-			"filterWidget": {
-				"queries" : [
-					{"name": "STATE_NAME", "alias": "State name"},
-					{"name": "POP2000", "alias": "Population", "type": "numeric"}
-				],
-				"outFields": [
-					{"name": "STATE_NAME", "alias": "State name"},
-					{"name": "POP2000", "alias": "Population", "thousands": true},
-					{"name": "MALES", "alias": "No. Males", "thousands": true},
-					{"name": "FEMALES", "alias": "No. Females", "thousands": true},
-					{"name": "SQMI", "alias": "Area (sqmi)", "thousands": true, "decimals": 1}
-				]
-			},
+			"filter": {"name": "MED_AGE", "alias": "Median age", "type": "numeric"},
 			"maxZoom": 10
 		},
 		{

@@ -258,7 +258,7 @@
 
 </script>
 
-<script id="filter-template" type="text/x-handlebars-template">
+<script id="filter-widget-template" type="text/x-handlebars-template">
     <div id="frmFilterWidget" class="well well-sm">
         <div class="form-group">
             <label for="filterWidgetLayer">Layer</label>
@@ -267,19 +267,26 @@
                 <option value={{this.id}}>{{this.name}}</option>
                 {{/each}}
             </select>
-            <label for="filterWidgetField">Field</label>
-            <select id="filterWidgetField" class="form-control">
-            </select>
-            <label for="filterWidgetOperator">Operator</label>
-            <select id="filterWidgetOperator" class="form-control">
-            </select>
-            <label for="filterWidgetValue">Value</label>
-            <input id="filterWidgetValue" type="text" class="form-control filterTask"
-                   placeholder="Enter the value to search for">
-            <div id="btnRunfilter" class="btn btn-warning">Apply filter</div>
         </div>
-    </div>
+        <div id="filterSection">
 
+        </div>
+        <button id="btnRunFilter" class="btn btn-warning">Apply filters</button>
+    </div>
+</script>
+
+<script id="filter-template" type="text/x-handlebars-template">
+    <div class="form-group">
+        <label for="filterWidgetField">Field</label>
+        <select id="filterWidgetField" class="form-control">
+        </select>
+        <label for="filterWidgetOperator">Operator</label>
+        <select id="filterWidgetOperator" class="form-control">
+        </select>
+        <label for="filterWidgetValue">Value</label>
+        <input id="filterWidgetValue" type="text" class="form-control filterTask"
+               placeholder="Enter the value to search for">
+    </div>
 </script>
 
 <!-- required libraries -->

@@ -392,14 +392,8 @@ function loadMap(){
       }
 
       // Configure the Filter Widget for this layer, if specified in the config
-      if (layerConfig.filterWidget !== undefined && layerConfig.filterWidget.queries && layerConfig.filterWidget.queries.length > 0) {
-        var filters = []
-        for (var filterIdx = 0; filterIdx < layerConfig.filterWidget.queries.length; filterIdx ++){
-          var filter = layerConfig.filterWidget.queries[filterIdx];
-          filter.layerId = layerConfig.id;
-          filters.push(filter);
-        }
-        bootleaf.filterTasks.push({"layerName": layerConfig.name, "layerId": layerConfig.id, "filters": filters});
+      if (layerConfig.filter !== undefined) {
+        bootleaf.filterTasks.push({"layerName": layerConfig.name, "layerId": layerConfig.id, "filter": layerConfig.filter});
       }
 
       if (layer !== undefined) {
@@ -657,6 +651,11 @@ function loadMap(){
     } else if (config.activeTool === 'queryWidget'){
       if (bootleaf.queryTasks && bootleaf.queryTasks.length > 0){
         configureQueryWidget();
+        $('*[data-tool="' +  config.activeTool + '"]').addClass("active");
+      }
+    } else if (config.activeTool === 'filterWidget'){
+      if (bootleaf.filterTasks && bootleaf.filterTasks.length > 0){
+        configureFilterWidget();
         $('*[data-tool="' +  config.activeTool + '"]').addClass("active");
       }
     }
@@ -1559,8 +1558,8 @@ function configureFilterWidget(){
 
       // Configure the handlebars template for the Filter Widget. The layer names are inserted here,
       // while the field and operator values are inserted elsewhere
-      var filterSource = $("#filter-template").html();
-      bootleaf.filterTemplate = Handlebars.compile(filterSource);
+      var filterSource = $("#filter-widget-template").html();
+      var filterTemplate = Handlebars.compile(filterSource);
 
       var layerNames = $.map(bootleaf.filterTasks, function( val, i ) {
         var name = val.layerName;
@@ -1575,37 +1574,40 @@ function configureFilterWidget(){
         return output;
       });
 
-      var html = bootleaf.filterTemplate(layerNames);
+      var html = filterTemplate(layerNames);
       resetSidebar("Filter", html);
-
-      // Seed the filter field dropdown based on the selected layer
-      updateFilterFields($("#filterWidgetLayer option:selected" ).val());
-
-      $("#btnRunFilter").on('click', runFilterWidget);
 
     } else {
       $("#sidebarContents").html("<p><span class='info'>There are no filter-able layers in the map</span></p>");
-      $("#btnRunFilter").off('click', runFilterWidget);
       $("#liFilterWidget").addClass('disabled');
     }
 
   } else {
     $("#sidebarContents").html("<p><span class='info'>There are no filter-able layers in the map</span></p>");
-    $("#btnRunFilter").off('click', runFilterWidget);
     $("#liFilterWidget").addClass('disabled');
   }
 
   // Update the filter field names when the filter layer selection changes
   $("#filterWidgetLayer").off("change")
   $("#filterWidgetLayer").on("change", function(e){
-    updateFilterFields(e.target.value);
+    addFilter();
   });
 
   $("#sidebar").show("slow");
+  addFilter();
 
 }
 
-function updateFilterFields(layerId){
+function addFilter(){
+  var layerName = $("#filterWidgetLayer").val();
+  var filterSource = $("#filter-template").html();
+  var filterTemplate = Handlebars.compile(filterSource);
+  var html = filterTemplate(filterSource);
+  $("#filterSection").html(html);
+
+  // Seed the filter field dropdown based on the selected layer
+  var layerId = $("#filterWidgetLayer option:selected" ).val();
+
   // Update the Fields dropdown on the Filter widget with the filter fields for this layer
   $("#filterWidgetField").empty();
   $("#filterWidgetValue").val("");
@@ -1614,19 +1616,16 @@ function updateFilterFields(layerId){
 
   for (var i=0; i < bootleaf.filterTasks.length; i++){
     var filterTask = bootleaf.filterTasks[i];
-    if (filterTask.layerId === layerId){
-      var filters = filterTask.filters;
-      for (var j=0; j < filters.length; j++){
-        var filter = filters[j];
-        var fieldName = filter.name;
-        var fieldAlias = filter.alias || fieldName;
-        var fieldType = filter.type || "text";
-        var fieldDefaultOperator = filter.defaultOperator || "=";
-        var option = '<option value="' + fieldName + '" data-fieldtype="';
-        option += fieldType + '" + data-defaultoperator ="' + fieldDefaultOperator + '"';
-        option += '>' + fieldAlias + "</option>"
-        fieldOptions.push(option);
-      }
+    if (filterTask.layerId === layerName) {
+      var filter = filterTask.filter;
+      var fieldName = filter.name;
+      var fieldAlias = filter.alias || fieldName;
+      var fieldType = filter.type || "text";
+      var fieldDefaultOperator = filter.defaultOperator || "=";
+      var option = '<option value="' + fieldName + '" data-fieldtype="';
+      option += fieldType + '" + data-defaultoperator ="' + fieldDefaultOperator + '"';
+      option += '>' + fieldAlias + "</option>"
+      fieldOptions.push(option);
     }
   }
   $("#filterWidgetField").append(fieldOptions);
@@ -1640,6 +1639,7 @@ function updateFilterFields(layerId){
 }
 
 function updateFilterOperator(option){
+
   // Update the Operators dropdown on the Filter widget with the applicable options for this field type
   $("#filterWidgetOperator").empty();
   $("#filterWidgetValue").val("");
