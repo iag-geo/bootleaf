@@ -1610,7 +1610,6 @@ function addFilter(){
 
   // Update the Fields dropdown on the Filter widget with the filter fields for this layer
   $("#filterWidgetField").empty();
-  $("#filterWidgetValue").val("");
 
   var fieldOptions = [];
 
@@ -1636,6 +1635,19 @@ function addFilter(){
   $("#filterWidgetField").on("change", function(){
     updateFilterOperator(this.options[this.selectedIndex]);
   });
+
+  // Set the UI to match any existing filter value
+  var layer = bootleaf.layers.find(x => x.layerConfig.id === layerId);
+  if (layer.layerConfig.filter.value !== undefined) {
+    $("#filterWidgetValue").val(layer.layerConfig.filter.value);
+  } else {
+    $("#filterWidgetValue").val("");
+  }
+  if (layer.layerConfig.filter.operator !== undefined) {
+    $("#filterWidgetOperator").val(layer.layerConfig.filter.value);
+  }
+
+  $("#btnApplyFilter").on('click', applyFilter);
 }
 
 function updateFilterOperator(option){
@@ -1676,7 +1688,7 @@ function updateFilterOperator(option){
 
 }
 
-function runFilterWidget() {
+function applyFilter() {
   $("#ajaxLoading").show();
   var layerId = $("#filterWidgetLayer option:selected").val()
   var fieldName = $("#filterWidgetField option:selected").val();
@@ -1684,186 +1696,83 @@ function runFilterWidget() {
   var operator = $("#filterWidgetOperator option:selected").val();
   var filterText = $("#filterWidgetValue").val().toUpperCase();
 
-  // Obtain the filter URL for this layer
-  var filterUrl;
-  var outFields = '*';
-  var maxAllowableOffset = 0.1;
+  // Obtain the filter syntax for this layer
   for(var layerIdx=0; layerIdx < config.layers.length; layerIdx++){
-    var layer = config.layers[layerIdx];
-    if (layer.id === layerId){
+    var layerConfig = config.layers[layerIdx];
+    if (layerConfig.id === layerId){
 
-      if (layer.type === 'agsFeatureLayer'){
-        if(layer.url[layer.url.length - 1] === "/") {
-          filterUrl = layer.url + "filter?";
+      // Get a handle on the actual layer object
+      var layer = bootleaf.layers.find(x => x.layerConfig.id === layerId);
+
+      // Set the value of the filter, so we can get the UI to match next
+      // time it's loaded
+      layer.layerConfig.filter.value = filterText;
+      layer.layerConfig.filter.operator = operator;
+
+      // Ensure that any hard-coded where clause is honoured here
+      var where;
+      var filter;
+      if (layerConfig.layerDefs !== undefined){
+        for (var key in layerConfig.layerDefs){
+          var layerDefFilter = layerConfig.layerDefs[key];
+          if (where === undefined){
+            where = "(" + layerDefFilter + ")";
+          } else {
+            where += " and (" + layerDefFilter + ")";
+          }
+        }
+      } else if (layerConfig.where !== undefined){
+        where = layerConfig.where;
+      }
+
+      // ArcGIS and GeoServer filters use very different syntax, to treat them differently from this point
+      if (layerConfig.type === 'agsDynamicLayer' || layerConfig.type === 'agsFeatureLayer') {
+
+        // Add or use any filter parameters entered by the user
+        if (fieldType === 'numeric'){
+          filter = fieldName + operator + filterText;
         } else {
-          filterUrl = layer.url + "/filter?";
+
+          if(filterText === "*" || filterText === "") {
+            if (where === undefined) {
+              filter = "1=1";
+            }
+          } else if (operator === "starts with"){
+            filter = 'upper(' + fieldName + ") like '" + filterText + "%'";
+          } else if (operator === "ends with"){
+            filter = 'upper(' + fieldName + ") like '%" + filterText + "'";
+          } else if (operator === "contains"){
+            filter = 'upper(' + fieldName + ") like '%" + filterText + "%'";
+          } else {
+            filter = 'upper(' + fieldName + ') ' + operator + "'" + filterText + "'";
+          }
         }
-      } else if (layer.type === 'agsDynamicLayer'){
-        var layerIndex = layer.filterWidget.layerIndex;
-        if(layer.url[layer.url.length - 1] === "/") {
-          filterUrl = layer.url + layerIndex + "/filter?";
-        } else {
-          filterUrl = layer.url + "/" + layerIndex + "/filter?";
+
+        if (where === undefined){
+          where = "(" + filter + ")";
+        } else if (filter !== undefined) {
+          where += " and (" + filter + ")";
         }
-      } else if (layer.type === 'wmsTiledLayer' || layer.type === 'WFS') {
-        // Use the WFS form of the URL for filtering. This code ensures that the correct suffix is used.
-        var filterUrl = layer.url;
-        var tokens = filterUrl.split("/");
-        var suffix = tokens[tokens.length - 1];
-        if (suffix !== 'ows') {
-          filterUrl = filterUrl.replace(suffix, 'ows');
+
+        if (layerConfig.type === 'agsDynamicLayer') {
+          layer.setLayerDefs({5: where}, handleFilterError);
+        } else if (layerConfig.type === 'agsFeatureLayer') {
+          layer.setWhere(where, handleFilterError);
         }
+
       }
 
-      if(layer.filterWidget != undefined) {
+      console.log("filtering layer", layerId, "where:", where)
 
-        if (layer.filterWidget.maxAllowableOffset !== undefined) {
-          maxAllowableOffset = layer.filterWidget.maxAllowableOffset;
-        }
-      }
-      break;
     }
-  }
-
-  if (filterUrl === undefined){
-    handleFilterError("Unable to find the URL to filter this layer");
-    return null;
-  }
-
-  // Ensure that any hard-coded where clause is honoured here
-  var where;
-  var filter;
-  if (layer.layerDefs !== undefined){
-    for (var key in layer.layerDefs){
-      var layerDefFilter = layer.layerDefs[key];
-      if (where === undefined){
-        where = "(" + layerDefFilter + ")";
-      } else {
-        where += " and (" + layerDefFilter + ")";
-      }
-    }
-  } else if (layer.where !== undefined){
-    where = layer.where;
-  }
-
-  // the FilterWidget may have its own outFields, otherwise use the layer's outFields, otherwise use all fields
-  var outFields = [];
-  if (layer.filterWidget.outFields !== undefined) {
-    outFields = layer.filterWidget.outFields;
-  } else if (layer.outFields !== undefined) {
-    outFields = layer.outFields;
-  }
-
-  // ArcGIS and GeoServer filters use very different syntax, to treat them differently from this point
-  if (layer.type === 'agsDynamicLayer' || layer.type === 'agsFeatureLayer') {
-
-    // Run a filter using this layer's URL and this field name, with the entered filter text
-    var filterData = {
-      "f": "json",
-      "returnGeometry": true,
-      "maxAllowableOffset": maxAllowableOffset,
-      "useCors": false
-    }
-
-    // Append the token if applicable
-    if (layer.token !== undefined) {
-      filterData["token"] = layer.token;
-    }
-
-    if (outFields.length > 0) {
-      filterData['outFields'] = outFields[0].name;
-      for (var qIdx = 0; qIdx < outFields.length; qIdx ++){
-        filterData['outFields'] += "," + outFields[qIdx].name;
-      }
-    }
-
-    // Add or use any filter parameters entered by the user
-    if (fieldType === 'numeric'){
-      filter = fieldName + operator + filterText;
-    } else {
-
-      if(filterText === "*" || filterText === "") {
-        if (where === undefined) {
-          filter = "1=1";
-        }
-      } else if (operator === "starts with"){
-        filter = 'upper(' + fieldName + ") like '" + filterText + "%'";
-      } else if (operator === "ends with"){
-        filter = 'upper(' + fieldName + ") like '%" + filterText + "'";
-      } else if (operator === "contains"){
-        filter = 'upper(' + fieldName + ") like '%" + filterText + "%'";
-      } else {
-        filter = 'upper(' + fieldName + ') ' + operator + "'" + filterText + "'";
-      }
-    }
-
-    if (where === undefined){
-      where = "(" + filter + ")";
-    } else if (filter !== undefined) {
-      where += " and (" + filter + ")";
-    }
-    filterData["where"] = where;
-    //TODO: add other field types, eg date, etc
-
-
-  } else if (layer.type === 'wmsTiledLayer' || layer.type === 'WFS') {
-    var filterData = {
-      service: "WFS",
-      version: "1.0.0",
-      request: "GetFeature",
-      outputFormat: 'application/json',
-      maxFeatures: 1000,
-      sortBy: fieldName
-    }
-    //TODO - make maxFeatures a parameter from the config file
-
-    if (outFields.length > 0){
-      var geomField = layer.geomField || "geom";
-      filterData['propertyName'] = geomField;
-      for (var oIdx=0; oIdx < outFields.length; oIdx ++){
-        filterData['propertyName'] += "," + outFields[oIdx].name;
-      }
-    }
-
-    var filter;
-    if (fieldType === 'numeric'){
-      filter = fieldName + operator + filterText;
-    } else {
-      if(filterText === "*" || filterText === ""){
-        filter = "1=1";
-      } else if (operator === "starts with"){
-        filter = "strToUpperCase(" + fieldName + ") like '" + filterText + "%'";
-      } else if (operator === "ends with"){
-        filter = 'strToUpperCase(' + fieldName + ") like '%" + filterText + "'";
-      } else if (operator === "contains"){
-        filter = 'strToUpperCase(' + fieldName + ") like '%" + filterText + "%'";
-      } else {
-        filter = 'strToUpperCase(' + fieldName + ') ' + operator + "'" + filterText + "'";
-      }
-    }
-    //TODO: add other field types, eg date, etc
-
-    if (where === undefined) {
-      where = filter;
-    } else {
-      where += " and " + filter;
-    }
-    filterData["CQL_FILTER"] = where;
-
-    if (layer.type === 'wmsTiledLayer'){
-      filterData.typeName = layer.layers;
-    } else if (layer.type === 'WFS') {
-      filterData.typeName = layer.typeName;
-    }
-
   }
 
 }
 
 function handleFilterError(errMessage){
-  $.growl.warning({ title: "Filter Widget", message: errMessage});
-  $("#ajaxLoading").hide();
-  $("#filterResults").html('<p class="info">' + errMessage + '</p>');
+  if (errMessage && errMessage.details){
+    $.growl.warning({ title: "Filter Widget", message: errMessage.details});
+  }
 }
 
 /**************************************************************************************************/

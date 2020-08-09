@@ -183,6 +183,7 @@ var config = {
 					{"name": "DIAMETER", "hidden": true}
 				]
 			},
+			"filter": {"name": "HEIGHT", "alias": "Height", "type": "numeric"},
 			"style": {
 				"stroke": true,
 		    "fillColor": "#00FFFF",
@@ -262,13 +263,13 @@ var config = {
 		},
 		{
 			"id": "us_states",
-			"name": "US States (dynamic)",
+			"name": "US States, Pop > 5m (dyn)",
 			"type": "agsDynamicLayer",
 			"url": "https://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Demographics/ESRI_Census_USA/MapServer/",
 			"layers": [5],
 			"format": 'png24',
 			"transparent": true,
-			// "layerDefs": {3:"POP2000 > 1000000"},
+			"layerDefs": {5:"POP2007 > 5000000"},
 			"useCors": false,
 			"visible": true,
 			"identify": {

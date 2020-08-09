@@ -8,6 +8,7 @@ BootLeaf
  - [Table of Contents](#table-of-contents)
  - [Identify](#identify)
  - [Query](#query)
+ - [Filter](#filter)
  - [Custom code](#custom-code)
  - [ArcGIS authorisation](#authorisation)
  - [Known issues](#issues)
@@ -343,6 +344,13 @@ If the query layer uses a projection other than lat/long, the layer's coordinate
 
 *Note: the Query Tool is only enabled if there are queryable layers on the map.*
 
+## [Filter](#filter)
+
+The filter widget allows for dynamic filtering of ArcGIS Feature and Dynamic layers. Currently the filter is limited to a single field, which is specified in the configuration file as:
+
+`"filter": {"name": "<field on which to filter>", "alias": "<field alias>", "type": "<field type>"}`
+
+- `type` - defaults to text, or use `numeric` to allow the correct syntax for numerical fields. Other field types may be added in future.
 
 ## [Custom code](#custom-code)
 The file custom.js can be used to personalise the map by writing additional functionality which interacts with the Bootleaf map, but without requiring any changes to the Bootleaf source code. This allows for easier upgrading to the latest Bootleaf release without any rework of your custom code.
