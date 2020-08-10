@@ -1755,7 +1755,16 @@ function applyFilter() {
         }
 
         if (layerConfig.type === 'agsDynamicLayer') {
-          layer.setLayerDefs({5: where}, handleFilterError);
+          try{
+            // Filter on the first layer in the dynamic layer's layer list. TODO: improve this for all layers??
+            var layerIndex = layerConfig.layers[0];
+            var layerDefs = new Object();
+            layerDefs[layerIndex] = where
+            layer.setLayerDefs(layerDefs);
+          } catch(error) {
+            $.growl.warning({ title: "Filter Widget", message: "There was a problem filtering this layer"});
+            console.error(error)
+          }
         } else if (layerConfig.type === 'agsFeatureLayer') {
           layer.setWhere(where, handleFilterError);
         }

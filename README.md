@@ -294,9 +294,7 @@ To enable this, add the `identify` object as an option under a Dynamic or WMS la
 
 If `outFields` is not specified against the `identify` object, the layer's `outFields` will be used. See the `outFields` section above for more information on the field specification.
 
-Note: If the ArcGIS Server REST API lists an alias against a field, this should be used in place of the field name. Eg in the case of [this layer](https://vmgeospatialdev.erga.aubootleaf.corp/arcgis/rest/services/admin_boundaries/EmbargoRegions_BOM_201506/MapServer/1) the *BNAME* field has an alias, so (somewhat confusingly) the *alias* should actually be specified in the `name` field:
-
-*BNAME ( type: esriFieldTypeString , alias: BOM river region name)*
+Note: If the ArcGIS Server REST API lists an alias against a field, the alias should be used in place of the field name.
 
 When the Identify tool is activated under the > Tools menu, and the layer is visible, clicking on the map will return the value of the `primaryField` at the location clicked. The results for all identify-able layers are shown in the pull-out sidebar.
 
@@ -329,7 +327,7 @@ To enable this, add the `queryWidget` object as an option under an ArcGIS Dynami
 
 #### Query Widget Parameters
 
-- `layerIndex` - the layer's index according to its REST URL. Applies to ArcGIS Dynamic layers only
+- `layerIndex` - Applies to ArcGIS Dynamic layers only (the query widget works best when there is a single layer specified under this dynamic layer, so this parameter holds the layer's index according to its REST URL)
 - `maxAllowableOffset` - this parameter allows the query results to be returned faster, by generalising the output geometry by the specified amount. The units are whatever units the dataset is stored in (eg decimal degrees, metres, etc). This applies to ArcGIS layers only
 - `queries` - an array of query objects, consisting of:
   - `name` - the name of the field to query
