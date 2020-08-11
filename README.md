@@ -350,6 +350,8 @@ The filter widget allows for dynamic filtering of ArcGIS Feature and Dynamic lay
 
 - `type` - defaults to text, or use `numeric` to allow the correct syntax for numerical fields. Other field types may be added in future.
 
+The filter honours any `where` or `layerDefs` clauses which have been previously set in the config file.
+
 ## [Custom code](#custom-code)
 The file custom.js can be used to personalise the map by writing additional functionality which interacts with the Bootleaf map, but without requiring any changes to the Bootleaf source code. This allows for easier upgrading to the latest Bootleaf release without any rework of your custom code.
 
