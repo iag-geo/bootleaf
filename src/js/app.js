@@ -1644,7 +1644,7 @@ function addFilter(){
     $("#filterWidgetValue").val("");
   }
   if (layer.layerConfig.filter.operator !== undefined) {
-    $("#filterWidgetOperator").val(layer.layerConfig.filter.value);
+    $("#filterWidgetOperator").val(layer.layerConfig.filter.operator);
   }
 
   $("#btnApplyFilter").on('click', applyFilter);
@@ -1756,10 +1756,11 @@ function applyFilter() {
 
         if (layerConfig.type === 'agsDynamicLayer') {
           try{
-            // Filter on the first layer in the dynamic layer's layer list. TODO: improve this for all layers??
-            var layerIndex = layerConfig.layers[0];
+            // Filter on the dynamic layer's layer list
             var layerDefs = new Object();
-            layerDefs[layerIndex] = where
+            for (var l = 0; l < layerConfig.layers.length; l++){
+              layerDefs[layerConfig.layers[l]] = where;
+            }
             layer.setLayerDefs(layerDefs);
           } catch(error) {
             $.growl.warning({ title: "Filter Widget", message: "There was a problem filtering this layer"});
