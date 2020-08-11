@@ -1548,6 +1548,7 @@ function resetQueryOutputTable(){
 /**************************************************************************************************/
 
 function configureFilterWidget(){
+  console.log("configure filter widget")
   switchOffTools();
   bootleaf.activeTool = "filterWidget";
 
@@ -1648,6 +1649,7 @@ function addFilter(){
   }
 
   $("#btnApplyFilter").on('click', applyFilter);
+  $("#btnRemoveFilter").on('click', removeFilter);
 }
 
 function updateFilterOperator(option){
@@ -1689,7 +1691,7 @@ function updateFilterOperator(option){
 }
 
 function applyFilter() {
-  $("#ajaxLoading").show();
+  console.log("applying filter")
   var layerId = $("#filterWidgetLayer option:selected").val()
   var fieldName = $("#filterWidgetField option:selected").val();
   var fieldType = $("#filterWidgetField option:selected")[0].dataset['fieldtype'];
@@ -1725,7 +1727,7 @@ function applyFilter() {
         where = layerConfig.where;
       }
 
-      // ArcGIS and GeoServer filters use very different syntax, to treat them differently from this point
+      // ArcGIS and GeoServer filters use very different syntax, so treat them differently from this point
       if (layerConfig.type === 'agsDynamicLayer' || layerConfig.type === 'agsFeatureLayer') {
 
         // Add or use any filter parameters entered by the user
@@ -1772,7 +1774,67 @@ function applyFilter() {
 
       }
 
-      console.log("filtering layer", layerId, "where:", where)
+      console.log("filtering layer", layerId, "where:", where);
+
+    }
+  }
+
+}
+
+function removeFilter() {
+  console.log("Removing filter")
+  var layerId = $("#filterWidgetLayer option:selected").val()
+
+  // Obtain the filter syntax for this layer
+  for(var layerIdx=0; layerIdx < config.layers.length; layerIdx++){
+    var layerConfig = config.layers[layerIdx];
+    if (layerConfig.id === layerId){
+
+      // Get a handle on the actual layer object
+      var layer = bootleaf.layers.find(x => x.layerConfig.id === layerId);
+
+      // Ensure that any hard-coded where clause is honoured here
+      var where;
+      var filter;
+      if (layerConfig.layerDefs !== undefined){
+        for (var key in layerConfig.layerDefs){
+          var layerDefFilter = layerConfig.layerDefs[key];
+          if (where === undefined){
+            where = "(" + layerDefFilter + ")";
+          } else {
+            where += " and (" + layerDefFilter + ")";
+          }
+        }
+      } else if (layerConfig.where !== undefined){
+        where = layerConfig.where;
+      }
+
+      if (where === undefined){
+        where = "1=1";
+      }
+
+      // ArcGIS and GeoServer filters use very different syntax, so treat them differently from this point
+      if (layerConfig.type === 'agsDynamicLayer' || layerConfig.type === 'agsFeatureLayer') {
+
+        if (layerConfig.type === 'agsDynamicLayer') {
+          try{
+            // Filter on the dynamic layer's layer list
+            var layerDefs = new Object();
+            for (var l = 0; l < layerConfig.layers.length; l++){
+              layerDefs[layerConfig.layers[l]] = where;
+            }
+            layer.setLayerDefs(layerDefs);
+          } catch(error) {
+            $.growl.warning({ title: "Filter Widget", message: "There was a problem filtering this layer"});
+            console.error(error)
+          }
+        } else if (layerConfig.type === 'agsFeatureLayer') {
+          layer.setWhere(where, handleFilterError);
+        }
+
+      }
+
+      console.log("removing filter on layer", layerId, "where:", where);
 
     }
   }
