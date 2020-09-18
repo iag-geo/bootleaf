@@ -183,7 +183,9 @@ var config = {
 					{"name": "DIAMETER", "hidden": true}
 				]
 			},
-			"filter": {"name": "HEIGHT", "alias": "Height", "type": "numeric"},
+			"filters": [
+				{"name": "HEIGHT", "alias": "Height", "type": "numeric"}
+			],
 			"style": {
 				"stroke": true,
 		    "fillColor": "#00FFFF",
@@ -259,7 +261,9 @@ var config = {
 				"layerIndex": 3,
 				"maxAllowableOffset": 0.001
 			},
-			"filter": {"name": "POP2000", "alias": "Population", "type": "numeric"}
+			"filters": [
+				{"name": "POP2000", "alias": "Population", "type": "numeric"}
+			]
 		},
 		{
 			"id": "us_states",
@@ -269,7 +273,7 @@ var config = {
 			"layers": [5],
 			"format": 'png24',
 			"transparent": true,
-			"layerDefs": {5:"POP2007 > 5000000"},
+			// "layerDefs": {5:"POP2007 > 5000000"},
 			"useCors": false,
 			"visible": true,
 			"identify": {
@@ -297,7 +301,10 @@ var config = {
 				"layerIndex": 5,
 				"maxAllowableOffset": 0.001,
 			},
-			"filter": {"name": "MED_AGE", "alias": "Median age", "type": "numeric"},
+			"filters": [
+				{"name": "MED_AGE", "alias": "Median age", "type": "numeric"},
+				{"name": "POP2000", "alias": "Population", "type": "numeric"}
+			],
 			"maxZoom": 10
 		},
 		{
