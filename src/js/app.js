@@ -1712,11 +1712,12 @@ function applyFilter() {
 
       // Set the value of the filter, so we can get the UI to match next
       // time it's loaded
-      if (!layer.layerConfig.filter) {
-        layer.layerConfig.filter = {};
+      var filterTask = bootleaf.filterTasks.find(x => x.layerId === layerId);
+      var filter = filterTask.filters.find(x => x.name === fieldName);
+      if (filter){
+        filter.value = filterText;
+        filter.operator = operator;
       }
-      layer.layerConfig.filter.value = filterText;
-      layer.layerConfig.filter.operator = operator;
 
       // Ensure that any hard-coded where clause is honoured here
       var where;
@@ -1799,6 +1800,14 @@ function removeFilter() {
 
       // Get a handle on the actual layer object
       var layer = bootleaf.layers.find(x => x.layerConfig.id === layerId);
+
+      // Reset the value of the filter
+      var filterTask = bootleaf.filterTasks.find(x => x.layerId === layerId);
+      for (var idx in filterTask.filters){
+        var filter = filterTask.filters[idx];
+        delete filter.value;
+        delete filter.operator;
+      }
 
       // Ensure that any hard-coded where clause is honoured here
       var where;
