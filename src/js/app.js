@@ -1657,20 +1657,25 @@ function addFilter(){
 
 
   // Set the UI to match any existing filter value
-  var layer = bootleaf.layers.find(x => x.layerConfig.id === layerId);
-  if (layer.layerConfig.filter && layer.layerConfig.filter.value !== undefined) {
-    $("#filterWidgetValue").val(layer.layerConfig.filter.value);
+  var filterTask = bootleaf.filterTasks.find(x => x.layerId === layerId);
+  var fieldName = $("#filterWidgetField option:selected").val();
+  var filter = filterTask.filters.find(x => x.name === fieldName);
+
+  if (filter) {
+    if (filter.value !== undefined) {
+      $("#filterWidgetValue").val(filter.value);
+    }
+    if (filter.operator !== undefined) {
+      $("#filterWidgetOperator").val(filter.operator);
+    }
   } else {
     $("#filterWidgetValue").val("");
-  }
-  if (layer.layerConfig.filter && layer.layerConfig.filter.operator !== undefined) {
-    $("#filterWidgetOperator").val(layer.layerConfig.filter.operator);
   }
 
 }
 
 function updateFilterParams(control){
-  console.log('Updating filter params for', control)
+  console.log("update filter params", control)
 
   var layerId = $("#filterWidgetLayer option:selected").val()
   var fieldName = $("#filterWidgetField option:selected").val();
@@ -1678,16 +1683,24 @@ function updateFilterParams(control){
   var operator = $("#filterWidgetOperator option:selected").val();
   var filterText = $("#filterWidgetValue").val().toUpperCase();
 
-  // Persist the value of the filter, so we can apply it later
+  // Persist the value of the filter, so we can apply it later. Or apply a pre-existing value
   var filterTask = bootleaf.filterTasks.find(x => x.layerId === layerId);
   var filter = filterTask.filters.find(x => x.name === fieldName);
   if (filter){
-    if (filterText !== "") {
-      filter.value = filterText;
-      filter.operator = operator;
+    if (filter.value !== undefined && filter.operator !== undefined) {
+      if (control !== "value") {$("#filterWidgetValue").val(filter.value);}
+      if (control !== "operator") {
+        // $("#filterWidgetOperator select").val(filter.operator);
+        $('#filterWidgetOperator option[value="' + filter.operator + '"]').attr('selected','selected');
+      }
     } else {
-      delete filter.value;
-      delete filter.operator;
+      if (filterText !== "") {
+        filter.value = filterText;
+        filter.operator = operator;
+      } else {
+        delete filter.value;
+        delete filter.operator;
+      }
     }
   }
 
@@ -1763,7 +1776,8 @@ function applyFilter() {
       // Build the filter where clause from the saved filter
       if (layerConfig.type === 'agsDynamicLayer' || layerConfig.type === 'agsFeatureLayer') {
 
-        // Add or use any filter parameters entered by the user
+        // Add or use any filter parameters entered by the user. This section is pretty
+        // ugly and could be refactored.....
         for (var filterIdx in filterTask.filters) {
           var filterDef = filterTask.filters[filterIdx];
 
@@ -1805,6 +1819,11 @@ function applyFilter() {
               }
             }
           }
+        }
+
+        // trap any errors in the filter
+        if (filter.indexOf("undefined") > -1) {
+          $.growl.warning({ title: "Filter Widget", message: "There was a problem filtering this layer. Please check the parameters"});
         }
 
         if (where === undefined){
