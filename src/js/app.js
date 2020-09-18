@@ -1780,50 +1780,53 @@ function applyFilter() {
         // ugly and could be refactored.....
         for (var filterIdx in filterTask.filters) {
           var filterDef = filterTask.filters[filterIdx];
+          if (filterDef.value !== undefined && filterDef.operator !== undefined){
 
-          if (filterDef.type === 'numeric'){
-            if (filter === undefined){
-              filter = filterDef.name + filterDef.operator + filterDef.value;
-            } else {
-              filter += " AND " + filterDef.name + filterDef.operator + filterDef.value;
-            }
-          } else {
-
-            if(filterDef.value === "*" || filterDef.value === "") {
-              if (where === undefined) {
-                filter = "1=1";
-              }
-            } else if (operator === "starts with"){
-              if (filter === undefined) {
-                filter = 'upper(' + filterDef.name + ") like '" + filterDef.value + "%'";
+            if (filterDef.type === 'numeric'){
+              if (filter === undefined){
+                filter = filterDef.name + filterDef.operator + filterDef.value;
               } else {
-                filter += " AND " + 'upper(' + filterDef.name + ") like '" + filterDef.value + "%'";
-              }
-            } else if (operator === "ends with"){
-              if (filter === undefined) {
-                filter = 'upper(' + filterDef.name + ") like '%" + filterDef.value + "'";
-              } else {
-                filter += " AND " + 'upper(' + filterDef.name + ") like '%" + filterDef.value + "'";
-              }
-            } else if (operator === "contains"){
-              if (filter === undefined) {
-                filter = 'upper(' + filterDef.name + ") like '%" + filterDef.value + "%'";
-              } else {
-                filter += " AND " + 'upper(' + filterDef.name + ") like '%" + filterDef.value + "%'";
+                filter += " AND " + filterDef.name + filterDef.operator + filterDef.value;
               }
             } else {
-              if (filter === undefined) {
-                filter = 'upper(' + filterDef.name + ') ' + filterDef.operator + "'" + filterDef.value + "'";
+
+              if(filterDef.value === "*" || filterDef.value === "") {
+                if (where === undefined) {
+                  filter = "1=1";
+                }
+              } else if (operator === "starts with"){
+                if (filter === undefined) {
+                  filter = 'upper(' + filterDef.name + ") like '" + filterDef.value + "%'";
+                } else {
+                  filter += " AND " + 'upper(' + filterDef.name + ") like '" + filterDef.value + "%'";
+                }
+              } else if (operator === "ends with"){
+                if (filter === undefined) {
+                  filter = 'upper(' + filterDef.name + ") like '%" + filterDef.value + "'";
+                } else {
+                  filter += " AND " + 'upper(' + filterDef.name + ") like '%" + filterDef.value + "'";
+                }
+              } else if (operator === "contains"){
+                if (filter === undefined) {
+                  filter = 'upper(' + filterDef.name + ") like '%" + filterDef.value + "%'";
+                } else {
+                  filter += " AND " + 'upper(' + filterDef.name + ") like '%" + filterDef.value + "%'";
+                }
               } else {
-                filter += " AND " + 'upper(' + filterDef.name + ') ' + filterDef.operator + "'" + filterDef.value + "'";
+                if (filter === undefined) {
+                  filter = 'upper(' + filterDef.name + ') ' + filterDef.operator + "'" + filterDef.value + "'";
+                } else {
+                  filter += " AND " + 'upper(' + filterDef.name + ') ' + filterDef.operator + "'" + filterDef.value + "'";
+                }
               }
             }
           }
         }
 
         // trap any errors in the filter
-        if (filter.indexOf("undefined") > -1) {
+        if (filter === undefined || filter.indexOf("undefined") > -1) {
           $.growl.warning({ title: "Filter Widget", message: "There was a problem filtering this layer. Please check the parameters"});
+          return;
         }
 
         if (where === undefined){
@@ -1922,6 +1925,9 @@ function removeFilter() {
 
     }
   }
+
+  // Clear the UI
+  $("#filterWidgetValue").val("");
 
 }
 
