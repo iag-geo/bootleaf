@@ -75,7 +75,7 @@ var config = {
 		},
 		{
 			"name": "ArcGIS Layers",
-			"layers" : ["trees", "counties", "railways", "us_states"]
+			"layers" : ["cities", "counties", "railways", "us_states"]
 		},
 		{
 			"name": "WMS/WFS layers",
@@ -150,52 +150,50 @@ var config = {
 		  // }
 		},
 		{
-			"id": "trees",
-			"name": "Heritage trees (feature)",
+			"id": "cities",
+			"name": "US cities (feature)",
 			"type": "agsFeatureLayer",
-			"cluster": true,
+			// "cluster": true,
 			"showCoverageOnHover": false,
 			"removeOutsideVisibleBounds": true,
-			"url": "https://services.arcgis.com/rOo16HdIMeOBI4Mb/arcgis/rest/services/Heritage_Trees_Portland/FeatureServer/0",
+			"url": "http://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer/0",
 			"popup": true,
-			"tooltipField": "COMMON_NAM",
+			"tooltipField": "areaname",
 			"outFields": [
-				{"type": "OID",	"name": "FID"},
-				{"name": "COMMON_NAM", "alias": "Common Name"},
-				{"name": "SCIENTIFIC", "alias": "Scientific Name"},
-				{"name": "ADDRESS", "alias": "Address"},
-				{"name": "HEIGHT", "alias": "Height (m)", "decimals": 2},
-				{"name": "CIRCUMFERE", "alias": "Circumerence (m)"},
-				{"name": "YEAR", "alias": "Year"},
-				{"name": "OWNER", "alias": "Owner"},
-				{"name": "NOTES", "alias": "Notes"}
+				{"name": "areaname", "alias": "Name"},
+				{"name": "st", "alias": "State"},
+				{"name": "pop2000", "alias": "Population"},
+				{"name": "class", "alias": "Class"},
+				{"name": "capital", "alias": "Capital", "type": "boolean"},
 			],
 			"visible": true,
 			"queryWidget": {
 				"queries" : [
-					{"name": "COMMON_NAM", "alias": "Common name", "defaultOperator": "starts with"},
-					{"name": "SCIENTIFIC", "alias": "Scientific name"}
+					{"name": "areaname", "alias": "Nname", "defaultOperator": "starts with"},
+					{"name": "pop2000", "alias": "Population", "type": "numeric"},
+					{"name": "capital", "alias": "Capital", "type": "boolean"}
 				],
 				"outFields": [
-					{"name": "COMMON_NAM", "alias": "Name"},
-					{"name": "SCIENTIFIC", "alias": "Sci. name"},
-					{"name": "HEIGHT", hidden: true},
-					{"name": "DIAMETER", "hidden": true}
+					{"name": "areaname", "alias": "Name"},
+					{"name": "st", "alias": "State"},
+					{"name": "pop2000", "alias": "Population"},
+					{"name": "class", "alias": "Class"},
+					{"name": "capital", "alias": "Capital", "type": "boolean"},
 				]
 			},
 			"filters": [
-				{"name": "HEIGHT", "alias": "Height", "type": "numeric"}
+				{"name": "pop2000", "alias": "Population", "type": "numeric"},
 			],
-			"style": {
-				"stroke": true,
-		    "fillColor": "#00FFFF",
-		    "fillOpacity": 0.5,
-		    "radius": 10,
-		    "weight": 0.5,
-		    "opacity": 1,
-		    "color": '#727272'
-		  },
-			"minZoom": 7
+			// "style": {
+			// 	"stroke": true,
+		 //    "fillColor": "#00FFFF",
+		 //    "fillOpacity": 0.5,
+		 //    "radius": 10,
+		 //    "weight": 0.5,
+		 //    "opacity": 1,
+		 //    "color": '#727272'
+		 //  },
+			// "minZoom": 7
 		},
 		{
 			"id": "railways",
