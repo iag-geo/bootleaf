@@ -1592,6 +1592,7 @@ function configureFilterWidget(){
   $("#filterWidgetLayer").off("change")
   $("#filterWidgetLayer").on("change", function(e){
     addFilter();
+    updateFilterParams("layer")
   });
 
   $("#sidebar").show("slow");
@@ -1641,7 +1642,19 @@ function addFilter(){
   $("#filterWidgetField").off("change");
   $("#filterWidgetField").on("change", function(){
     updateFilterOperator(this.options[this.selectedIndex]);
+    updateFilterParams("field")
   });
+
+  $("#filterWidgetValue").off("change");
+  $("#filterWidgetValue").on("change", function(){
+    updateFilterParams("value")
+  });
+
+  $("#filterWidgetOperator").off("change");
+  $("#filterWidgetOperator").on("change", function(){
+    updateFilterParams("operator")
+  });
+
 
   // Set the UI to match any existing filter value
   var layer = bootleaf.layers.find(x => x.layerConfig.id === layerId);
@@ -1652,6 +1665,30 @@ function addFilter(){
   }
   if (layer.layerConfig.filter && layer.layerConfig.filter.operator !== undefined) {
     $("#filterWidgetOperator").val(layer.layerConfig.filter.operator);
+  }
+
+}
+
+function updateFilterParams(control){
+  console.log('Updating filter params for', control)
+
+  var layerId = $("#filterWidgetLayer option:selected").val()
+  var fieldName = $("#filterWidgetField option:selected").val();
+  var fieldType = $("#filterWidgetField option:selected")[0].dataset['fieldtype'];
+  var operator = $("#filterWidgetOperator option:selected").val();
+  var filterText = $("#filterWidgetValue").val().toUpperCase();
+
+  // Persist the value of the filter, so we can apply it later
+  var filterTask = bootleaf.filterTasks.find(x => x.layerId === layerId);
+  var filter = filterTask.filters.find(x => x.name === fieldName);
+  if (filter){
+    if (filterText !== "") {
+      filter.value = filterText;
+      filter.operator = operator;
+    } else {
+      delete filter.value;
+      delete filter.operator;
+    }
   }
 
 }
@@ -1697,10 +1734,6 @@ function updateFilterOperator(option){
 function applyFilter() {
   console.log("applying filter")
   var layerId = $("#filterWidgetLayer option:selected").val()
-  var fieldName = $("#filterWidgetField option:selected").val();
-  var fieldType = $("#filterWidgetField option:selected")[0].dataset['fieldtype'];
-  var operator = $("#filterWidgetOperator option:selected").val();
-  var filterText = $("#filterWidgetValue").val().toUpperCase();
 
   // Obtain the filter syntax for this layer
   for(var layerIdx=0; layerIdx < config.layers.length; layerIdx++){
@@ -1710,18 +1743,10 @@ function applyFilter() {
       // Get a handle on the actual layer object
       var layer = bootleaf.layers.find(x => x.layerConfig.id === layerId);
 
-      // Set the value of the filter, so we can get the UI to match next
-      // time it's loaded
-      var filterTask = bootleaf.filterTasks.find(x => x.layerId === layerId);
-      var filter = filterTask.filters.find(x => x.name === fieldName);
-      if (filter){
-        filter.value = filterText;
-        filter.operator = operator;
-      }
-
       // Ensure that any hard-coded where clause is honoured here
       var where;
       var filter;
+      var filterTask = bootleaf.filterTasks.find(x => x.layerId === layerId);
       if (layerConfig.layerDefs !== undefined){
         for (var key in layerConfig.layerDefs){
           var layerDefFilter = layerConfig.layerDefs[key];
@@ -1735,26 +1760,50 @@ function applyFilter() {
         where = layerConfig.where;
       }
 
-      // ArcGIS and GeoServer filters use very different syntax, so treat them differently from this point
+      // Build the filter where clause from the saved filter
       if (layerConfig.type === 'agsDynamicLayer' || layerConfig.type === 'agsFeatureLayer') {
 
         // Add or use any filter parameters entered by the user
-        if (fieldType === 'numeric'){
-          filter = fieldName + operator + filterText;
-        } else {
+        for (var filterIdx in filterTask.filters) {
+          var filterDef = filterTask.filters[filterIdx];
 
-          if(filterText === "*" || filterText === "") {
-            if (where === undefined) {
-              filter = "1=1";
+          if (filterDef.type === 'numeric'){
+            if (filter === undefined){
+              filter = filterDef.name + filterDef.operator + filterDef.value;
+            } else {
+              filter += " AND " + filterDef.name + filterDef.operator + filterDef.value;
             }
-          } else if (operator === "starts with"){
-            filter = 'upper(' + fieldName + ") like '" + filterText + "%'";
-          } else if (operator === "ends with"){
-            filter = 'upper(' + fieldName + ") like '%" + filterText + "'";
-          } else if (operator === "contains"){
-            filter = 'upper(' + fieldName + ") like '%" + filterText + "%'";
           } else {
-            filter = 'upper(' + fieldName + ') ' + operator + "'" + filterText + "'";
+
+            if(filterDef.value === "*" || filterDef.value === "") {
+              if (where === undefined) {
+                filter = "1=1";
+              }
+            } else if (operator === "starts with"){
+              if (filter === undefined) {
+                filter = 'upper(' + filterDef.name + ") like '" + filterDef.value + "%'";
+              } else {
+                filter += " AND " + 'upper(' + filterDef.name + ") like '" + filterDef.value + "%'";
+              }
+            } else if (operator === "ends with"){
+              if (filter === undefined) {
+                filter = 'upper(' + filterDef.name + ") like '%" + filterDef.value + "'";
+              } else {
+                filter += " AND " + 'upper(' + filterDef.name + ") like '%" + filterDef.value + "'";
+              }
+            } else if (operator === "contains"){
+              if (filter === undefined) {
+                filter = 'upper(' + filterDef.name + ") like '%" + filterDef.value + "%'";
+              } else {
+                filter += " AND " + 'upper(' + filterDef.name + ") like '%" + filterDef.value + "%'";
+              }
+            } else {
+              if (filter === undefined) {
+                filter = 'upper(' + filterDef.name + ') ' + filterDef.operator + "'" + filterDef.value + "'";
+              } else {
+                filter += " AND " + 'upper(' + filterDef.name + ') ' + filterDef.operator + "'" + filterDef.value + "'";
+              }
+            }
           }
         }
 
