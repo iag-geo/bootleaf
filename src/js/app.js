@@ -1646,15 +1646,14 @@ function addFilter(){
   });
 
   $("#filterWidgetValue").off("change");
-  $("#filterWidgetValue").on("change", function(){
-    updateFilterParams("value")
+  $("#filterWidgetValue").on("change", function(evt){
+    updateValue(evt)
   });
 
   $("#filterWidgetOperator").off("change");
-  $("#filterWidgetOperator").on("change", function(){
-    updateFilterParams("operator")
+  $("#filterWidgetOperator").on("change", function(evt){
+    updateOperator(evt);
   });
-
 
   // Set the UI to match any existing filter value
   var filterTask = bootleaf.filterTasks.find(x => x.layerId === layerId);
@@ -1674,6 +1673,28 @@ function addFilter(){
 
 }
 
+function updateOperator(evt){
+  var layerId = $("#filterWidgetLayer").val();
+  var fieldName = $("#filterWidgetField option:selected").val();
+  var filterTask = bootleaf.filterTasks.find(x => x.layerId === layerId);
+  var filter = filterTask.filters.find(x => x.name === fieldName);
+  filter.operator = evt.target.value;
+  console.log("update operator", filter)
+}
+
+function updateValue(evt){
+  var layerId = $("#filterWidgetLayer").val();
+  var fieldName = $("#filterWidgetField option:selected").val();
+  var filterTask = bootleaf.filterTasks.find(x => x.layerId === layerId);
+  var filter = filterTask.filters.find(x => x.name === fieldName);
+  filter.value = evt.target.value;
+  if (filter.operator === undefined) {
+    var operator = $("#filterWidgetOperator option:selected").val();
+    filter.operator = operator;
+  }
+  console.log("update value", filter)
+}
+
 function updateFilterParams(control){
   console.log("update filter params", control)
 
@@ -1688,9 +1709,10 @@ function updateFilterParams(control){
   var filter = filterTask.filters.find(x => x.name === fieldName);
   if (filter){
     if (filter.value !== undefined && filter.operator !== undefined) {
-      if (control !== "value") {$("#filterWidgetValue").val(filter.value);}
+      if (control !== "value") {
+        $("#filterWidgetValue").val(filter.value);
+      }
       if (control !== "operator") {
-        // $("#filterWidgetOperator select").val(filter.operator);
         $('#filterWidgetOperator option[value="' + filter.operator + '"]').attr('selected','selected');
       }
     } else {
