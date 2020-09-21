@@ -1687,7 +1687,7 @@ function updateValue(evt){
   var fieldName = $("#filterWidgetField option:selected").val();
   var filterTask = bootleaf.filterTasks.find(x => x.layerId === layerId);
   var filter = filterTask.filters.find(x => x.name === fieldName);
-  filter.value = evt.target.value;
+  filter.value = evt.target.value.toUpperCase();
   if (filter.operator === undefined) {
     var operator = $("#filterWidgetOperator option:selected").val();
     filter.operator = operator;
@@ -1816,19 +1816,19 @@ function applyFilter() {
                 if (where === undefined) {
                   filter = "1=1";
                 }
-              } else if (operator === "starts with"){
+              } else if (filterDef.operator === "starts with"){
                 if (filter === undefined) {
                   filter = 'upper(' + filterDef.name + ") like '" + filterDef.value + "%'";
                 } else {
                   filter += " AND " + 'upper(' + filterDef.name + ") like '" + filterDef.value + "%'";
                 }
-              } else if (operator === "ends with"){
+              } else if (filterDef.operator === "ends with"){
                 if (filter === undefined) {
                   filter = 'upper(' + filterDef.name + ") like '%" + filterDef.value + "'";
                 } else {
                   filter += " AND " + 'upper(' + filterDef.name + ") like '%" + filterDef.value + "'";
                 }
-              } else if (operator === "contains"){
+              } else if (filterDef.operator === "contains"){
                 if (filter === undefined) {
                   filter = 'upper(' + filterDef.name + ") like '%" + filterDef.value + "%'";
                 } else {

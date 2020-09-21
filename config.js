@@ -153,7 +153,7 @@ var config = {
 			"id": "cities",
 			"name": "US cities (feature)",
 			"type": "agsFeatureLayer",
-			// "cluster": true,
+			"cluster": true,
 			"showCoverageOnHover": false,
 			"removeOutsideVisibleBounds": true,
 			"url": "http://sampleserver6.arcgisonline.com/arcgis/rest/services/USA/MapServer/0",
@@ -164,12 +164,12 @@ var config = {
 				{"name": "st", "alias": "State"},
 				{"name": "pop2000", "alias": "Population"},
 				{"name": "class", "alias": "Class"},
-				{"name": "capital", "alias": "Capital", "type": "boolean"},
+				{"name": "objectid"}
 			],
 			"visible": true,
 			"queryWidget": {
 				"queries" : [
-					{"name": "areaname", "alias": "Nname", "defaultOperator": "starts with"},
+					{"name": "areaname", "alias": "Name", "defaultOperator": "starts with"},
 					{"name": "pop2000", "alias": "Population", "type": "numeric"},
 					{"name": "capital", "alias": "Capital", "type": "boolean"}
 				],
@@ -183,17 +183,17 @@ var config = {
 			},
 			"filters": [
 				{"name": "pop2000", "alias": "Population", "type": "numeric"},
+				{"name": "st", "alias": "State abbreviation"},
 			],
-			// "style": {
-			// 	"stroke": true,
-		 //    "fillColor": "#00FFFF",
-		 //    "fillOpacity": 0.5,
-		 //    "radius": 10,
-		 //    "weight": 0.5,
-		 //    "opacity": 1,
-		 //    "color": '#727272'
-		 //  },
-			// "minZoom": 7
+			"style": {
+				"stroke": true,
+		    "fillColor": "#00FFFF",
+		    "fillOpacity": 0.5,
+		    "radius": 10,
+		    "weight": 0.5,
+		    "opacity": 1,
+		    "color": '#727272'
+		  },
 		},
 		{
 			"id": "railways",
