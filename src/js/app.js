@@ -1980,7 +1980,7 @@ function removeFilter() {
 
   // Clear the UI
   $("#filterWidgetValue").val("");
-
+  updateFilterText();
 }
 
 function handleFilterError(errMessage){
