@@ -1679,7 +1679,8 @@ function updateOperator(evt){
   var filterTask = bootleaf.filterTasks.find(x => x.layerId === layerId);
   var filter = filterTask.filters.find(x => x.name === fieldName);
   filter.operator = evt.target.value;
-  console.log("update operator", filter)
+  console.log("update operator", filter);
+  updateFilterText();
 }
 
 function updateValue(evt){
@@ -1692,7 +1693,8 @@ function updateValue(evt){
     var operator = $("#filterWidgetOperator option:selected").val();
     filter.operator = operator;
   }
-  console.log("update value", filter)
+  console.log("update value", filter);
+  updateFilterText();
 }
 
 function updateFilterParams(control){
@@ -1726,6 +1728,7 @@ function updateFilterParams(control){
     }
   }
 
+  updateFilterText();
 }
 
 function updateFilterOperator(option){
@@ -1763,6 +1766,32 @@ function updateFilterOperator(option){
     return opt;
   });
   $("#filterWidgetOperator").append(operatorOptions);
+
+  updateFilterText();
+}
+
+function updateFilterText(){
+  var layerId = $("#filterWidgetLayer option:selected").val()
+  var filterTask = bootleaf.filterTasks.find(x => x.layerId === layerId);
+  var filterText;
+  for (var i = 0; i < filterTask.filters.length; i++){
+    var filter = filterTask.filters[i];
+    if (filter.operator && filter.value) {
+      if (!filterText) {
+        filterText = filter.alias + " " + filter.operator + " " + filter.value;
+      } else {
+        filterText += " and " + filter.alias + " " + filter.operator + " " + filter.value;
+      }
+      $("#filterText").html(filterText);
+      console.log("update filter text", filter)
+    }
+  }
+
+  if (filterText !== undefined){
+    applyFilter();
+  } else {
+    $("#filterOutput").hide();
+  }
 
 }
 
@@ -1880,6 +1909,7 @@ function applyFilter() {
     }
   }
 
+  $("#filterOutput").show();
 }
 
 function removeFilter() {
