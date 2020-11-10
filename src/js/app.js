@@ -1752,6 +1752,12 @@ function updateFilterOperator(option){
         {"value": "=", "alias": "is equal to"},
         {"value": ">", "alias": "is greater than"}
       ];
+    } else if (fieldType === 'date') {
+      operators = [
+        {"value": "<", "alias": "before"},
+        {"value": "=", "alias": "on"},
+        {"value": ">", "alias": "after"}
+      ]
     }
     // TODO: add other field types, eg date, etc
   }
@@ -1862,6 +1868,25 @@ function applyFilter() {
                   filter = 'upper(' + filterDef.name + ") like '%" + filterDef.value + "%'";
                 } else {
                   filter += " AND " + 'upper(' + filterDef.name + ") like '%" + filterDef.value + "%'";
+                }
+              // date queries
+              } else if (filterDef.type === 'date' && filterDef.operator === "<"){
+                if (filter === undefined) {
+                  filter = filterDef.name + " < '" + filterDef.value + "'";
+                } else {
+                  filter += " AND " + filterDef.name + " < '" + filterDef.value + "'";
+                }
+              } else if (filterDef.type === 'date' && filterDef.operator === ">"){
+                if (filter === undefined) {
+                  filter = filterDef.name + " > '" + filterDef.value + "'";
+                } else {
+                  filter += " AND " + filterDef.name + " > '" + filterDef.value + "'";
+                }
+              } else if (filterDef.type === 'date' && filterDef.operator === "="){
+                if (filter === undefined) {
+                  filter = filterDef.name + " = '" + filterDef.value + "'";
+                } else {
+                  filter += " AND " + filterDef.name + " = '" + filterDef.value + "'";
                 }
               } else {
                 if (filter === undefined) {
